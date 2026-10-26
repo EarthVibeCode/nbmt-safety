@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg"><title>Online Check-in · NBMT Safe Road Save Life</title>
+<meta name="description" content="เช็คอินครบ 8 ข้อ รับบัตรผ่านกลับบ้านชื่อคุณเอง — NBMT Safety Traffic 8 มาตรการขับขี่ปลอดภัย">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --navy: #0b2f6b; --blue: #1559b8; --orange: #ff7a1a; --ink: #13233f; --cream: #fffdf7; --green: #0f8a3c; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Kanit', sans-serif; color: var(--ink); min-height: 100vh;
+    background: linear-gradient(180deg, #0d3a8a 0%, #2a68c9 45%, #f59e5b 85%, #ffcf86 100%) fixed; }
+  .app { max-width: 520px; margin: 0 auto; padding: 14px 14px 28px; }
+  .top { color: #fff; text-align: center; padding: 6px 0 12px; }
+  .top .a { font-family: 'Chakra Petch'; font-weight: 700; font-size: 13px; letter-spacing: 2px; opacity: .9; }
+  .top h1 { font-weight: 900; font-size: 30px; line-height: 1.1; text-shadow: 0 3px 0 #082456; }
+  .top h1 b { color: #ffd36b; }
+  .top .s { font-size: 14px; margin-top: 4px; }
+  .card { background: var(--cream); border-radius: 18px; overflow: hidden; box-shadow: 0 14px 30px rgba(5,20,60,.45); }
+  .hdr { background: linear-gradient(90deg, var(--navy), var(--blue)); color: #fff; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .hdr b { font-weight: 800; font-size: 18px; } .hdr span { font-family: 'Chakra Petch'; font-weight: 700; font-size: 12px; background: #ffd36b; color: var(--navy); padding: 2px 8px; border-radius: 6px; }
+  .body { padding: 12px 14px 14px; }
+  .lbl { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  input[type=text] { width: 100%; font-family: 'Kanit'; font-size: 18px; padding: 10px 12px; border: 2px solid #c6d2e3; border-radius: 12px; outline: none; }
+  input[type=text]:focus { border-color: var(--blue); }
+  .progress { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; font-weight: 700; font-size: 14px; }
+  .progress .bar { flex: 1; height: 10px; border-radius: 6px; background: #e3e9f3; overflow: hidden; }
+  .progress .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--orange), var(--green)); transition: width .25s; }
+  .sec { font-weight: 800; font-size: 13px; color: #fff; display: inline-block; padding: 1px 10px; border-radius: 20px; margin: 10px 0 4px; }
+  .sec.o { background: var(--orange); } .sec.b { background: var(--blue); }
+  .item { display: flex; gap: 10px; align-items: center; padding: 8px; border-radius: 14px; border: 2px solid #e3e9f3; margin-top: 6px; cursor: pointer; transition: all .15s; background: #fff; }
+  .item img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; flex: none; border: 3px solid #e3e9f3; }
+  .item .no { font-family: 'Chakra Petch'; font-weight: 700; font-size: 13px; color: #7a8aa3; }
+  .item .t { font-weight: 700; font-size: 16px; line-height: 1.2; }
+  .item .d { font-size: 13px; color: #50607a; line-height: 1.3; margin-top: 2px; }
+  .item .ck { margin-left: auto; width: 34px; height: 34px; flex: none; border-radius: 9px; border: 3px solid #c6d2e3; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 22px; color: transparent; }
+  .item.on { border-color: var(--green); background: #f1fbf4; }
+  .item.on img { border-color: var(--green); }
+  .item.on .ck { background: var(--green); border-color: var(--green); color: #fff; }
+  .btn { display: block; width: 100%; border: none; border-radius: 14px; padding: 14px; font-family: 'Kanit'; font-weight: 900; font-size: 20px; color: #fff; background: linear-gradient(180deg, #ff8a2a, #e8650c); box-shadow: 0 5px 0 #8a3500; cursor: pointer; margin-top: 14px; }
+  .btn:disabled { background: #b8c2d1; box-shadow: 0 5px 0 #8b95a5; cursor: not-allowed; }
+  .btn.ghost { background: #fff; color: var(--navy); box-shadow: 0 4px 0 #9fb0c8; font-size: 17px; padding: 11px; }
+  .hint { text-align: center; font-size: 13px; color: #50607a; margin-top: 8px; }
+  #result { display: none; }
+  #result.on { display: block; }
+  #pass { width: 100%; border-radius: 14px; box-shadow: 0 12px 26px rgba(5,20,60,.45); display: block; }
+  .msg { text-align: center; color: #fff; font-weight: 700; font-size: 16px; margin: 12px 0 0; text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+  .sos { background: #fff1e6; border: 3px solid #d9480f; border-radius: 14px; padding: 8px 12px; text-align: center; margin-top: 14px; font-size: 14px; }
+  .sos b { color: #b3261e; font-size: 20px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="a">NBMT AIRWAYS · SAFE ROAD SAVE LIFE</div>
+    <h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1>
+    <div class="s">เช็คอินครบ 8 ข้อ รับบัตรผ่านกลับบ้านชื่อคุณเอง</div>
+  </div>
+
+  <div id="form">
+    <div class="card">
+      <div class="hdr"><b>ONLINE CHECK-IN<br><small style="font-weight:500;font-size:14px">เช็คอินออนไลน์</small></b><span style="white-space:nowrap">SAFE 0008</span></div>
+      <div class="body">
+        <div class="lbl">ชื่อผู้โดยสาร (ชื่อเล่นก็ได้)</div>
+        <input type="text" id="name" maxlength="24" placeholder="เช่น เอิร์ท" autocomplete="off">
+        <div class="progress"><span id="cnt">0/8</span><div class="bar"><i id="pbar"></i></div></div>
+        <div id="list"></div>
+        <button class="btn" id="go" disabled>✈ รับบัตรผ่านกลับบ้าน</button>
+        <div class="hint" id="hint">ใส่ชื่อ และแตะให้ครบทั้ง 8 ข้อ</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="result">
+    <canvas id="pass" width="1080" height="1500"></canvas>
+    <div class="msg">กดค้างที่ภาพเพื่อบันทึก หรือแชร์ให้เพื่อนเช็คอินด้วยกัน</div>
+    <button class="btn" id="share">📤 แชร์บัตรผ่าน</button>
+    <button class="btn ghost" id="save">💾 บันทึกรูป</button>
+    <button class="btn ghost" id="back">↻ เช็คอินใหม่</button>
+    <div class="sos">เกิดอุบัติเหตุ โทร <b>1669</b> เจ็บป่วยฉุกเฉิน · <b>191</b> ตำรวจ<br>แจ้ง Safety NBMT โทร. 196, 324</div>
+  </div>
+</div>
+
+<script>
+const ITEMS = [
+  { t: 'เตรียมคน เตรียมรถ ก่อนเดินทาง', d: 'ไม่ดื่ม ไม่กินยาที่ทำให้ง่วง · เช็คเบรก ไฟ ยาง', pre: 1 },
+  { t: 'วางแผนเส้นทางก่อนขับขี่', d: 'ดูเส้นทาง จราจร อากาศ · ออกเผื่อเวลา ไม่รีบ', pre: 1 },
+  { t: 'ปฏิบัติตามกฎจราจร', d: 'ไม่ขับเร็ว · ไม่ใช้มือถือ · เข็มขัด · หมวกรัดคาง' },
+  { t: 'ขับขี่อย่างมีสติ เว้นระยะปลอดภัย', d: 'เว้นระยะคันหน้า ≥ 3 วินาที · ง่วงให้จอดพัก' },
+  { t: 'ชะลอทางแยก ให้สัญญาณล่วงหน้า', d: 'ลดความเร็ว มองรอบด้าน · เปิดไฟเลี้ยวล่วงหน้า' },
+  { t: 'ตรวจจุดอับสายตาก่อนเลี้ยวหรือเปลี่ยนเลน', d: 'มองกระจก แล้วหันมองข้ามไหล่ทุกครั้ง' },
+  { t: 'คาดการณ์ความเสี่ยง พร้อมรับเหตุฉุกเฉิน', d: 'สังเกตถนน รถ คนรอบข้าง · พร้อมเบรก' },
+  { t: 'มีน้ำใจและเคารพเพื่อนร่วมทาง', d: 'หยุดให้คนข้ามทางม้าลาย · ไม่ปาดหน้า' },
+];
+const $ = (id) => document.getElementById(id);
+const on = new Set();
+const SHORT = ['เตรียมคน เตรียมรถ', 'วางแผนเส้นทาง', 'ปฏิบัติตามกฎจราจร', 'มีสติ เว้นระยะ 3 วิ', 'ชะลอทางแยก ให้สัญญาณ', 'ตรวจจุดอับสายตา', 'คาดการณ์ความเสี่ยง', 'มีน้ำใจ เคารพผู้อื่น'];
+const nw = (t) => t.split(' ').map(w => `<span style="white-space:nowrap">${w}</span>`).join(' ');
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+$('list').innerHTML = ITEMS.map((it, i) =>
+  (i === 0 ? '<span class="sec o">ก่อนออกเดินทาง</span>' : i === 2 ? '<br><span class="sec b">ระหว่างทาง</span>' : '') +
+  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp" alt=""><div><div class="no">ข้อ ${i + 1}</div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
+document.querySelectorAll('.item').forEach(el => el.onclick = () => {
+  const i = +el.dataset.i; on.has(i) ? on.delete(i) : on.add(i); el.classList.toggle('on', on.has(i)); upd();
+});
+$('name').value = store.get('nbmt_pax') || '';
+$('name').oninput = upd;
+function upd() {
+  $('cnt').textContent = `${on.size}/8`; $('pbar').style.width = (on.size / 8 * 100) + '%';
+  const ok = on.size === 8 && $('name').value.trim().length > 0;
+  $('go').disabled = !ok;
+  $('hint').textContent = ok ? 'พร้อมแล้ว! กดรับบัตรผ่าน' : !$('name').value.trim() ? 'ใส่ชื่อก่อนนะ' : `เหลืออีก ${8 - on.size} ข้อ`;
+}
+upd();
+
+const load = (src) => new Promise((ok) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = src; });
+function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function cover(c, im, x, y, w, h, fy = .5) { if (!im) return; const s = Math.max(w / im.width, h / im.height); const sw = w / s, sh = h / s; c.drawImage(im, (im.width - sw) / 2, (im.height - sh) * fy, sw, sh, x, y, w, h); }
+
+async function draw() {
+  await document.fonts.ready;
+  const name = $('name').value.trim(); store.set('nbmt_pax', name);
+  const cv = $('pass'), c = cv.getContext('2d'), W = 1080, H = 1500;
+  const [hero, fam, ...st] = await Promise.all(['img/hero.webp', 'img/family.webp', ...[1,2,3,4,5,6,7,8].map(i => `img/s${i}.webp`)].map(load));
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0d3a8a'); g.addColorStop(.5, '#2a68c9'); g.addColorStop(1, '#ffb36b');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  c.fillStyle = '#fff'; c.textAlign = 'center';
+  c.font = '700 30px "Chakra Petch"'; c.fillText('NBMT AIRWAYS · SAFE ROAD SAVE LIFE', W / 2, 70);
+  c.font = '900 64px Kanit'; c.fillText('ทุกเที่ยวไป ', W / 2 - 170, 150); c.fillStyle = '#ffd36b'; c.fillText('ต้องมีเที่ยวกลับ', W / 2 + 190, 150);
+  // ticket
+  const X = 50, Y = 200, TW = W - 100, TH = 1230;
+  c.save(); c.shadowColor = 'rgba(5,20,60,.45)'; c.shadowBlur = 30; c.shadowOffsetY = 14; rr(c, X, Y, TW, TH, 36); c.fillStyle = '#fffdf7'; c.fill(); c.restore();
+  c.save(); rr(c, X, Y, TW, TH, 36); c.clip();
+  const hg = c.createLinearGradient(X, 0, X + TW, 0); hg.addColorStop(0, '#0b2f6b'); hg.addColorStop(1, '#1559b8');
+  c.fillStyle = hg; c.fillRect(X, Y, TW, 110);
+  c.fillStyle = '#fff'; c.textAlign = 'left'; c.font = '800 46px Kanit'; c.fillText('BOARDING PASS', X + 40, Y + 72);
+  c.fillStyle = '#ffd36b'; c.font = '700 34px Kanit'; c.fillText('บัตรผ่านกลับบ้าน', X + 410, Y + 70);
+  // hero photo
+  cover(c, hero, X, Y + 110, 380, 560, .25);
+  // route
+  c.fillStyle = '#0b2f6b'; c.font = '700 84px "Chakra Petch"'; c.fillText('NBMT', X + 420, Y + 220);
+  c.fillText('HOME', X + 420, Y + 400);
+  c.fillStyle = '#50607a'; c.font = '600 28px Kanit'; c.fillText('ที่ทำงาน', X + 425, Y + 258); c.fillText('บ้านของเรา', X + 425, Y + 438);
+  c.strokeStyle = '#ff7a1a'; c.lineWidth = 6; c.setLineDash([16, 12]); c.beginPath(); c.moveTo(X + 470, Y + 278); c.lineTo(X + 470, Y + 330); c.stroke(); c.setLineDash([]);
+  c.fillStyle = '#7a8aa3'; c.font = '700 24px "Chakra Petch"'; c.fillText('PASSENGER · ผู้โดยสาร', X + 420, Y + 510);
+  c.fillStyle = '#13233f'; let fs = 64; c.font = `900 ${fs}px Kanit`; while (c.measureText(name).width > TW - 460 && fs > 30) { fs -= 4; c.font = `900 ${fs}px Kanit`; }
+  c.fillText(name, X + 420, Y + 580);
+  c.fillStyle = '#7a8aa3'; c.font = '700 24px "Chakra Petch"'; c.fillText('FLIGHT', X + 420, Y + 640); c.fillText('ARRIVAL', X + 640, Y + 640);
+  c.fillStyle = '#13233f'; c.font = '800 34px Kanit'; c.fillText('SAFE 0008', X + 420, Y + 680); c.fillStyle = '#0f8a3c'; c.fillText('ปลอดภัย 100%', X + 640, Y + 680);
+  // checklist
+  c.strokeStyle = '#c6d2e3'; c.lineWidth = 4; c.setLineDash([14, 10]); c.beginPath(); c.moveTo(X + 30, Y + 712); c.lineTo(X + TW - 30, Y + 712); c.stroke(); c.setLineDash([]);
+  c.fillStyle = '#0b2f6b'; c.font = '700 32px "Chakra Petch"'; c.fillText('PRE-FLIGHT CHECKLIST  8/8', X + 40, Y + 765);
+  for (let i = 0; i < 8; i++) {
+    const col = i % 2, row = Math.floor(i / 2), bx = X + 40 + col * 495, by = Y + 800 + row * 96;
+    c.save(); c.beginPath(); c.arc(bx + 38, by + 38, 38, 0, Math.PI * 2); c.clip(); cover(c, st[i], bx, by, 76, 76); c.restore();
+    c.fillStyle = '#0f8a3c'; c.beginPath(); c.arc(bx + 70, by + 10, 16, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#fff'; c.font = '900 22px Kanit'; c.textAlign = 'center'; c.fillText('✓', bx + 70, by + 18); c.textAlign = 'left';
+    c.fillStyle = '#13233f'; c.font = '700 28px Kanit';
+    c.fillText(`${i + 1}. ${SHORT[i]}`, bx + 96, by + 48);
+  }
+  c.restore();
+  // stamp
+  c.save(); c.translate(X + TW - 190, Y + 180); c.rotate(-0.14); c.scale(.82, .82);
+  c.strokeStyle = '#0f8a3c'; c.lineWidth = 8; rr(c, -150, -62, 300, 124, 18); c.stroke();
+  c.fillStyle = '#0f8a3c'; c.textAlign = 'center'; c.font = '700 44px "Chakra Petch"'; c.fillText('CHECKED 8/8', 0, 2); c.font = '700 26px Kanit'; c.fillText('ผ่านครบ ได้กลับบ้าน', 0, 42);
+  c.restore();
+  // footer: family + message
+  if (fam) { c.save(); c.beginPath(); c.arc(W / 2 - 250, H - 36, 0.1, 0, 7); c.restore(); }
+  c.fillStyle = '#13233f'; c.textAlign = 'center'; c.font = '800 42px Kanit'; c.fillText('คนที่บ้าน รอคุณอยู่', W / 2, H - 24);
+  const d = new Date(); c.textAlign = 'right'; c.font = '500 22px Kanit'; c.fillStyle = 'rgba(255,255,255,.85)';
+  c.fillText(`เช็คอิน ${d.toLocaleDateString('th-TH')}`, W - 60, Y + TH + 34);
+}
+
+$('go').onclick = async () => { $('go').disabled = true; $('go').textContent = 'กำลังออกบัตร...'; await draw(); $('form').style.display = 'none'; $('result').classList.add('on'); window.scrollTo(0, 0); };
+$('back').onclick = () => { $('result').classList.remove('on'); $('form').style.display = ''; $('go').textContent = '✈ รับบัตรผ่านกลับบ้าน'; upd(); };
+const blob = () => new Promise(ok => $('pass').toBlob(ok, 'image/png'));
+$('save').onclick = async () => { const a = document.createElement('a'); a.href = URL.createObjectURL(await blob()); a.download = 'NBMT-boarding-pass.png'; a.click(); };
+$('share').onclick = async () => {
+  const text = `${$('name').value.trim()} เช็คอินครบ 8 ข้อแล้ว ✈ ทุกเที่ยวไป ต้องมีเที่ยวกลับ — มาเช็คอินด้วยกัน!`;
+  try {
+    const f = new File([await blob()], 'NBMT-boarding-pass.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], text, title: 'NBMT Boarding Pass' }); return; }
+    if (navigator.share) { await navigator.share({ text, url: location.href, title: 'NBMT Boarding Pass' }); return; }
+  } catch (e) { return; }
+  try { await navigator.clipboard.writeText(text + ' ' + location.href); $('share').textContent = '✓ คัดลอกลิงก์แล้ว'; } catch (e) {}
+};
+</script>
+</body>
+</html>

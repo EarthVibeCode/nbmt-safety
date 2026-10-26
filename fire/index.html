@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="icon" href="../favicon.svg"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
+<meta name="description" content="เกม 30 วินาที ช่วยนายอำเภอเอิร์ทจับ 6 ผู้ร้ายจุดไฟในโรงงาน — NBMT Fire Prevention 3ต 3จ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&family=Rye&display=swap" rel="stylesheet">
+<style>
+  :root { --wood: #3f2716; --wood2: #5a3a22; --paper: #f1dcae; --ink: #2b1a0e; --red: #b3261e; --orange: #d9480f; --gold: #ffcf4a; --green: #2f8a3c; --navy: #2c4a6e; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { font-family: 'Kanit', sans-serif; color: var(--ink); overflow: hidden; user-select: none; -webkit-user-select: none;
+    background: radial-gradient(ellipse at 50% 115%, rgba(255,96,20,.55), transparent 60%), repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 2px, transparent 2px 64px), linear-gradient(180deg, var(--wood2), var(--wood) 60%, #2e1a0e); }
+  .app { max-width: 520px; height: 100%; margin: 0 auto; display: flex; flex-direction: column; padding: 10px 14px 14px; position: relative; }
+  .screen { display: none; flex: 1; flex-direction: column; min-height: 0; }
+  .screen.on { display: flex; }
+
+  /* intro */
+  .brand { color: #ffe9c4; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-align: center; }
+  .w { font-family: 'Rye', serif; color: var(--gold); text-shadow: 0 3px 0 #8a2a00, 0 6px 14px rgba(0,0,0,.5); text-align: center; line-height: 1; }
+  .intro .w { font-size: 64px; margin-top: 6px; }
+  .intro h1 { text-align: center; color: #fff; font-weight: 800; font-size: 26px; line-height: 1.2; text-shadow: 0 2px 0 #8a2a00; }
+  .intro h1 b { color: #ff7a1a; background: #fff3d6; padding: 0 8px; border-radius: 8px; text-shadow: none; }
+  .hero { display: flex; gap: 12px; align-items: flex-end; margin: 12px 0 8px; }
+  .hero img { width: 38%; border-radius: 10px; border: 4px solid var(--paper); box-shadow: 0 8px 18px rgba(0,0,0,.5); }
+  .bubble { flex: 1; background: #fff7e3; border: 3px solid #8a2a00; border-radius: 16px; padding: 10px 12px; font-size: 15px; line-height: 1.4; position: relative; margin-bottom: 18px; }
+  .bubble b { color: var(--red); }
+  .bubble::after { content: ''; position: absolute; left: -14px; bottom: 18px; border: 10px solid transparent; border-right-color: #8a2a00; }
+  .rules { background: rgba(255,240,210,.95); border-radius: 12px; padding: 10px 12px; font-size: 14px; line-height: 1.5; }
+  .rules .row { display: flex; align-items: center; gap: 8px; }
+  .rules img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); }
+  .rules img.g { border-color: var(--green); }
+  .btn { display: block; width: 100%; border: none; border-radius: 14px; padding: 14px; font-family: 'Kanit'; font-weight: 900; font-size: 22px; color: #fff; background: linear-gradient(180deg, #ff7a1a, var(--orange)); box-shadow: 0 5px 0 #7a1d00; cursor: pointer; margin-top: 12px; }
+  .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #7a1d00; }
+  .btn.ghost { background: #fff3d6; color: var(--ink); box-shadow: 0 4px 0 #a07c4a; font-size: 18px; padding: 11px; }
+  .best { text-align: center; color: #ffe9c4; font-size: 13px; margin-top: 8px; }
+
+  /* game */
+  .hud { display: flex; justify-content: space-between; align-items: center; color: #fff; gap: 8px; }
+  .hud .pill { background: rgba(0,0,0,.35); border: 2px solid #c9a46a; border-radius: 12px; padding: 4px 10px; font-weight: 800; font-size: 18px; white-space: nowrap; }
+  .hud .pill small { font-weight: 600; font-size: 12px; opacity: .85; margin-right: 4px; }
+  .timebar { height: 8px; border-radius: 6px; background: rgba(0,0,0,.35); margin: 8px 0; overflow: hidden; }
+  .timebar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ffcf4a, #ff7a1a); transition: width .2s linear; }
+  .caught { display: flex; justify-content: center; gap: 6px; margin-bottom: 8px; }
+  .caught span { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px dashed #c9a46a; opacity: .35; filter: grayscale(1); }
+  .caught span.on { opacity: 1; filter: none; border: 2px solid #ffcf4a; }
+  .caught img { width: 100%; height: 100%; object-fit: cover; }
+  .grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10px; }
+  .hole { position: relative; border-radius: 16px; background: rgba(241,220,174,.12); border: 2px solid rgba(201,164,106,.5); overflow: hidden; display: flex; align-items: flex-end; justify-content: center; }
+  .hole .lab { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font-size: 11px; color: #ffe9c4; opacity: .6; pointer-events: none; }
+  .hole .t { position: absolute; left: 50%; bottom: 14px; width: min(88%, 150px); aspect-ratio: 1; margin-left: calc(min(88%, 150px) / -2); border-radius: 50%; transform: translateY(110%) scale(.8); transition: transform .14s ease-out; cursor: pointer; border: 4px solid var(--red); background: var(--paper); overflow: hidden; box-shadow: 0 6px 14px rgba(0,0,0,.45); }
+  .hole .t.good { border-color: var(--green); }
+  .hole .t.up { transform: translateY(0) scale(1); }
+  .hole .t { transform: translateY(130%) scale(.8); }
+  .hole .t img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  .hole .t.hit { transform: translateY(0) scale(.6) rotate(-20deg); opacity: 0; transition: all .25s; }
+  .pop { position: absolute; z-index: 5; pointer-events: none; font-weight: 900; font-size: 24px; color: #fff; text-shadow: 0 2px 0 #000; animation: up .7s ease-out forwards; }
+  .pop.bad { color: #ff6b6b; }
+  @keyframes up { to { transform: translateY(-50px); opacity: 0; } }
+  .toast { position: absolute; left: 14px; right: 14px; top: 92px; background: #fff7e3; border: 3px solid var(--green); border-radius: 14px; padding: 8px 12px; font-size: 14px; line-height: 1.35; box-shadow: 0 8px 18px rgba(0,0,0,.5); transform: translateY(-20px); opacity: 0; transition: all .2s; z-index: 6; pointer-events: none; }
+  .toast.on { transform: translateY(0); opacity: 1; }
+  .toast.bad { border-color: var(--red); }
+  .toast b { color: var(--green); } .toast.bad b { color: var(--red); }
+
+  /* end */
+  .end { overflow-y: auto; }
+  .end .w { font-size: 40px; }
+  .score { text-align: center; color: #fff; margin: 4px 0 8px; }
+  .score .n { font-weight: 900; font-size: 54px; line-height: 1; color: var(--gold); text-shadow: 0 3px 0 #8a2a00; }
+  .score .s { font-size: 16px; }
+  .rank { text-align: center; background: var(--paper); border-radius: 12px; padding: 8px; font-weight: 800; font-size: 18px; margin-bottom: 8px; }
+  .list { background: rgba(255,240,210,.97); border-radius: 12px; padding: 8px 10px; }
+  .list h3 { font-size: 15px; margin-bottom: 4px; }
+  .list h3 span { color: #fff; border-radius: 6px; padding: 0 6px; margin-right: 4px; }
+  .it { display: flex; gap: 8px; align-items: center; padding: 4px 0; border-top: 1px dashed #c9a46a; font-size: 13px; line-height: 1.3; }
+  .it img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex: none; border: 2px solid var(--red); }
+  .it.ok img { border-color: var(--gold); }
+  .it .x { margin-left: auto; font-weight: 900; font-size: 18px; color: #bbb; } .it.ok .x { color: var(--green); }
+  .foot { text-align: center; color: #ffe9c4; font-size: 12px; margin-top: 8px; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- INTRO -->
+  <section class="screen intro on" id="intro">
+    <div class="brand">NBMT FIRE PREVENTION · 3ต 3จ</div>
+    <div class="w">WANTED</div>
+    <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
+    <div class="hero">
+      <img src="img/sheriff.webp" alt="นายอำเภอเอิร์ท">
+      <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
+    </div>
+    <div class="rules">
+      <div class="row"><img src="img/v2.webp" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
+      <div class="row"><img class="g" src="img/c3.webp" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
+      <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
+    </div>
+    <button class="btn" id="startBtn">▶ เริ่มเกม</button>
+    <div class="best" id="bestTxt"></div>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="game">
+    <div class="hud">
+      <div class="pill"><small>เวลา</small><span id="time">30</span></div>
+      <div class="pill"><small>คะแนน</small><span id="score">0</span></div>
+      <div class="pill"><small>จับได้</small><span id="kinds">0</span>/6</div>
+    </div>
+    <div class="timebar"><i id="bar"></i></div>
+    <div class="caught" id="caughtRow"></div>
+    <div class="grid" id="grid"></div>
+    <div class="toast" id="toast"></div>
+  </section>
+
+  <!-- END -->
+  <section class="screen end" id="end">
+    <div class="w">CASE CLOSED</div>
+    <div class="score"><div class="n" id="final">0</div><div class="s" id="finalSub"></div></div>
+    <div class="rank" id="rank"></div>
+    <div class="list" id="summary"></div>
+    <button class="btn" id="againBtn">↻ เล่นอีกครั้ง</button>
+    <button class="btn ghost" id="shareBtn">📤 แชร์ให้เพื่อนมาเล่น</button>
+    <div class="foot">พบเห็นผู้ร้ายจริงในโรงงาน: <b>หยุดใช้ · แจ้งหัวหน้างาน · ให้ผู้รับผิดชอบแก้ไข</b><br>เกิดเพลิงไหม้: กดสัญญาณแจ้งเหตุ · โทร 199 · Safety NBMT 196, 324</div>
+  </section>
+</div>
+
+<script>
+const V = [
+  { id: 1, g: 'ต', name: 'เจ้าปลั๊กค้าง', how: 'ตรวจสอบการใช้งานและถอดปลั๊กอุปกรณ์ไฟฟ้าหลังใช้งาน', tip: 'เลิกงาน = ปิดสวิตช์ ถอดปลั๊ก' },
+  { id: 2, g: 'ต', name: 'เจ้าสายไฟแตก', how: 'ตรวจสอบ บำรุงรักษาระบบและอุปกรณ์ไฟฟ้าให้พร้อมใช้งานอย่างสม่ำเสมอ', tip: 'สายไฟ ปลั๊ก ตู้ไฟ ต้องไม่แตก ไม่หลวม' },
+  { id: 3, g: 'ต', name: 'เจ้ากล่องขวางทาง', how: 'ตรวจสอบและดูแลอุปกรณ์ป้องกันและระงับอัคคีภัยให้พร้อมใช้งาน', tip: 'ห้ามวางของขวางถังดับเพลิง/ทางออก' },
+  { id: 4, g: 'จ', name: 'เจ้าเศษผ้าน้ำมัน', how: 'จัดพื้นที่ทำงานให้สะอาดเพื่อลดเชื้อเพลิงสะสม', tip: 'ผ้าเปื้อนน้ำมัน ทิ้งถังโลหะมีฝาปิด' },
+  { id: 5, g: 'จ', name: 'เจ้าทินเนอร์เร่ร่อน', how: 'จัดเก็บสารไวไฟให้ถูกที่', tip: 'ปิดฝา เก็บในตู้สารไวไฟ' },
+  { id: 6, g: 'จ', name: 'เจ้าประกายไฟไร้คนเฝ้า', how: 'จัดการงานที่ก่อให้เกิดประกายไฟเป็นไปตามมาตรฐาน Hot work', tip: 'ขอ permit · มีผู้เฝ้าระวังไฟ' },
+];
+const GOOD = [
+  { img: 'c1', name: 'ปลั๊กที่ถอดแล้ว' }, { img: 'c3', name: 'ถังดับเพลิงพร้อมใช้' }, { img: 'c4', name: 'ถังโลหะมีฝาปิด' },
+  { img: 'c5', name: 'ตู้สารไวไฟ' }, { img: 'c6', name: 'ผู้เฝ้าระวังไฟ' }, { img: 'c2', name: 'ช่างตรวจด้วยกล้องความร้อน' },
+];
+const SPOTS = ['ห้องเครื่อง', 'ตู้ไฟ', 'ทางหนีไฟ', 'ไลน์ผลิต', 'ห้องเก็บสาร', 'งานเจียร', 'สำนักงาน', 'โกดัง', 'ลานจอด'];
+const DUR = 30;
+const $ = (id) => document.getElementById(id);
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+let score = 0, left = DUR, caught = new Set(), hits = 0, misses = 0, running = false, tick = null, spawnT = null, toastT = null;
+
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); }
+function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').textContent = b ? `สถิติสูงสุดของคุณ: ${b} คะแนน` : ''; }
+
+function build() {
+  $('grid').innerHTML = SPOTS.map((s, i) => `<div class="hole" data-i="${i}"><span class="lab">${s}</span></div>`).join('');
+  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp" alt=""></span>`).join('');
+}
+
+function toast(html, bad) {
+  const t = $('toast'); t.innerHTML = html; t.classList.toggle('bad', !!bad); t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 1600);
+}
+function popAt(el, txt, bad) {
+  const r = el.getBoundingClientRect(), a = document.querySelector('.app').getBoundingClientRect();
+  const p = document.createElement('div'); p.className = 'pop' + (bad ? ' bad' : ''); p.textContent = txt;
+  p.style.left = (r.left - a.left + r.width / 2 - 20) + 'px'; p.style.top = (r.top - a.top + r.height / 3) + 'px';
+  document.querySelector('.app').appendChild(p); setTimeout(() => p.remove(), 700);
+}
+
+function spawn() {
+  if (!running) return;
+  const holes = [...document.querySelectorAll('.hole')].filter(h => !h.querySelector('.t'));
+  if (holes.length) {
+    const h = holes[Math.floor(Math.random() * holes.length)];
+    const isGood = Math.random() < 0.28;
+    // bias toward villains not yet caught so everyone can finish 6/6
+    let v = V[Math.floor(Math.random() * V.length)];
+    const need = V.filter(x => !caught.has(x.id));
+    if (need.length && Math.random() < 0.55) v = need[Math.floor(Math.random() * need.length)];
+    const g = GOOD[Math.floor(Math.random() * GOOD.length)];
+    const t = document.createElement('div');
+    t.className = 't' + (isGood ? ' good' : '');
+    t.innerHTML = `<img src="img/${isGood ? g.img : 'v' + v.id}.webp" alt="">`;
+    t.dataset.kind = isGood ? 'good' : 'bad'; t.dataset.v = v.id; t.dataset.g = g.name;
+    h.appendChild(t);
+    requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('up')));
+    const elapsed = DUR - left;
+    const stay = Math.max(650, 1300 - elapsed * 22);
+    t._hide = setTimeout(() => { t.classList.remove('up'); setTimeout(() => t.remove(), 160); }, stay);
+    t.addEventListener('pointerdown', (e) => { e.preventDefault(); whack(t); }, { once: true });
+  }
+  const gap = Math.max(380, 820 - (DUR - left) * 16);
+  spawnT = setTimeout(spawn, gap);
+}
+
+function whack(t) {
+  if (!running || !t.classList.contains('up')) return;
+  clearTimeout(t._hide);
+  if (t.dataset.kind === 'bad') {
+    const v = V.find(x => x.id === +t.dataset.v);
+    score += 10; hits++;
+    const first = !caught.has(v.id); caught.add(v.id);
+    $('cr' + v.id).classList.add('on');
+    popAt(t, '+10');
+    toast(`<b>จับ${v.name}ได้!</b> ${v.g}${v.id > 3 ? v.id - 3 : v.id} · ${v.tip}`);
+    if (first && caught.size === 6) { score += 50; setTimeout(() => toast('<b>🎉 ครบ 6 ชนิด! โบนัส +50</b> ปิดคดีทั้งโรงงาน'), 900); }
+    if (navigator.vibrate) navigator.vibrate(30);
+  } else {
+    score = Math.max(0, score - 5); misses++;
+    popAt(t, '−5', true);
+    toast(`<b>อ๊ะ! นั่นของดี</b> ${t.dataset.g} — ไม่ใช่ผู้ร้ายนะ`, true);
+    if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
+  }
+  t.classList.add('hit'); setTimeout(() => t.remove(), 250);
+  $('score').textContent = score; $('kinds').textContent = caught.size;
+}
+
+function start() {
+  score = 0; left = DUR; caught = new Set(); hits = 0; misses = 0; running = true;
+  build(); $('score').textContent = 0; $('kinds').textContent = 0; $('time').textContent = DUR; $('bar').style.width = '100%';
+  show('game');
+  tick = setInterval(() => {
+    left--; $('time').textContent = left; $('bar').style.width = (left / DUR * 100) + '%';
+    if (left <= 0) end();
+  }, 1000);
+  setTimeout(spawn, 400);
+}
+
+function end() {
+  running = false; clearInterval(tick); clearTimeout(spawnT);
+  const best = Math.max(score, +store.get('nbmt_fire_best') || 0); store.set('nbmt_fire_best', best);
+  $('final').textContent = score;
+  $('finalSub').textContent = `จับได้ ${hits} ครั้ง · ครบ ${caught.size}/6 ชนิด · แตะผิด ${misses} · สถิติ ${best}`;
+  const r = caught.size === 6 ? (misses === 0 ? '🏆 นายอำเภอตัวจริง! ไม่พลาดเลย' : '⭐ ปิดคดีครบ 6 ชนิด!') : caught.size >= 4 ? '👍 เก่งมาก ใกล้ครบแล้ว' : '🔥 ผู้ร้ายยังลอยนวล ลองอีกรอบ!';
+  $('rank').textContent = r;
+  const sec = (g, col, label) => `<h3><span style="background:${col}">${g}</span>${label}</h3>` + V.filter(v => v.g === g).map(v =>
+    `<div class="it ${caught.has(v.id) ? 'ok' : ''}"><img src="img/${caught.has(v.id) ? 'c' : 'v'}${v.id}.webp" alt=""><div><b>${v.name}</b><br>${v.how}</div><span class="x">${caught.has(v.id) ? '✓' : '—'}</span></div>`).join('');
+  $('summary').innerHTML = sec('ต', 'var(--navy)', '3ต ตรวจให้พร้อมใช้งาน') + '<div style="height:6px"></div>' + sec('จ', 'var(--green)', '3จ จัดให้ถูกที่ ถูกวิธี');
+  show('end');
+}
+
+$('startBtn').onclick = start;
+$('againBtn').onclick = start;
+$('shareBtn').onclick = async () => {
+  const text = `ฉันช่วยนายอำเภอเอิร์ทจับผู้ร้ายจุดไฟได้ ${score} คะแนน (${caught.size}/6 ชนิด) มาแข่งกัน! 🔥 NBMT Fire Prevention 3ต 3จ`;
+  try { if (navigator.share) { await navigator.share({ title: 'จับ 6 ผู้ร้ายจุดไฟ', text, url: location.href }); return; } } catch (e) { return; }
+  try { await navigator.clipboard.writeText(text + ' ' + location.href); $('shareBtn').textContent = '✓ คัดลอกลิงก์แล้ว'; } catch (e) { prompt('คัดลอกลิงก์นี้:', location.href); }
+};
+bestTxt();
+</script>
+</body>
+</html>
