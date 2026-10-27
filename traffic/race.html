@@ -3,69 +3,101 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Safe Ride Home · NBMT</title>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;800;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:,">
+<title>ถนนนรก กลับบ้าน · NBMT Safe Ride Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;800;900&family=Chakra+Petch:wght@700&family=Bangers&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
   html, body { height: 100%; overflow: hidden; background: #0b2f6b; font-family: 'Kanit', sans-serif; touch-action: none; }
-  canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
-  .hud { position: fixed; left: 0; right: 0; top: 0; padding: calc(10px + env(safe-area-inset-top)) 12px 0; display: flex; flex-direction: column; gap: 6px; pointer-events: none; z-index: 5; }
-  .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
-  .pill { background: rgba(5,20,50,.6); border: 2px solid rgba(255,255,255,.35); color: #fff; border-radius: 12px; padding: 3px 10px; font-weight: 800; font-size: 17px; white-space: nowrap; backdrop-filter: blur(4px); }
-  .pill small { font-weight: 600; font-size: 11px; opacity: .8; margin-right: 4px; }
-  .hearts { font-size: 20px; letter-spacing: 2px; }
-  .trip { position: relative; height: 26px; background: rgba(5,20,50,.55); border-radius: 14px; border: 2px solid rgba(255,255,255,.3); }
+  canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; transition: filter .4s; }
+  .vig { position: fixed; inset: 0; pointer-events: none; z-index: 2; background: radial-gradient(ellipse at 50% 55%, transparent 45%, rgba(0,0,0,.65)); opacity: 0; transition: opacity .5s; }
+  .speed { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0; transition: opacity .3s;
+    background: repeating-conic-gradient(from 0deg at 50% 45%, rgba(255,255,255,.18) 0 1deg, transparent 1deg 9deg); mask: radial-gradient(circle at 50% 45%, transparent 35%, #000 75%); -webkit-mask: radial-gradient(circle at 50% 45%, transparent 35%, #000 75%); }
+  .rain { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0; transition: opacity 1s;
+    background: repeating-linear-gradient(105deg, rgba(200,220,255,.35) 0 2px, transparent 2px 22px); background-size: 100% 200%; animation: rain .35s linear infinite; }
+  @keyframes rain { to { background-position: 0 100%; } }
+  .hud { position: fixed; left: 0; right: 0; top: 0; padding: calc(10px + env(safe-area-inset-top)) 10px 0; display: flex; flex-direction: column; gap: 6px; pointer-events: none; z-index: 5; }
+  .row { display: flex; gap: 6px; align-items: center; justify-content: space-between; }
+  .pill { background: rgba(5,20,50,.62); border: 2px solid rgba(255,255,255,.35); color: #fff; border-radius: 12px; padding: 2px 9px; font-weight: 800; font-size: 17px; white-space: nowrap; backdrop-filter: blur(4px); }
+  .pill small { font-weight: 600; font-size: 11px; opacity: .8; margin-right: 3px; }
+  .hearts { font-size: 18px; letter-spacing: 1px; }
+  .combo { color: #ffd36b; }
+  .trip { position: relative; height: 24px; background: rgba(5,20,50,.55); border-radius: 14px; border: 2px solid rgba(255,255,255,.3); }
   .trip i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 12px; background: linear-gradient(90deg, #ff7a1a, #ffd36b); width: 0; }
-  .trip b { position: absolute; top: 50%; transform: translateY(-50%); font-family: 'Chakra Petch'; font-size: 12px; color: #fff; }
+  .trip b { position: absolute; top: 50%; transform: translateY(-50%); font-family: 'Chakra Petch'; font-size: 11px; color: #fff; }
   .trip .a { left: 8px; } .trip .z { right: 8px; }
-  .trip .me { position: absolute; top: -5px; font-size: 22px; transform: translateX(-50%) scaleX(-1); transition: left .2s linear; }
-  .gap { align-self: center; background: rgba(5,20,50,.65); color: #fff; border-radius: 12px; padding: 3px 12px; font-weight: 800; font-size: 15px; border: 2px solid #2bd46a; display: none; }
-  .gap.on { display: block; } .gap.warn { border-color: #ffcc33; } .gap.bad { border-color: #ff4d4d; }
-  .msg { position: fixed; left: 50%; top: 30%; transform: translate(-50%, -50%) scale(.8); z-index: 6; pointer-events: none; text-align: center; opacity: 0; transition: all .25s; }
-  .msg.on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  .msg div { font-weight: 900; font-size: 30px; color: #fff; text-shadow: 0 3px 0 #000, 0 0 20px rgba(0,0,0,.6); white-space: nowrap; }
-  .msg small { display: block; font-weight: 700; font-size: 16px; color: #ffe9a8; text-shadow: 0 2px 0 #000; }
-  .msg.good div { color: #6dff9b; } .msg.bad div { color: #ff6b6b; }
-  .ctrl { position: fixed; left: 0; right: 0; bottom: 0; padding: 0 12px calc(16px + env(safe-area-inset-bottom)); display: flex; gap: 10px; align-items: flex-end; z-index: 5; }
+  .trip .me { position: absolute; top: -6px; font-size: 22px; transform: translateX(-50%) scaleX(-1); }
+  .meters { display: flex; gap: 6px; }
+  .meter { flex: 1; background: rgba(5,20,50,.6); border-radius: 10px; padding: 2px 8px; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .meter .bar { flex: 1; height: 7px; background: rgba(255,255,255,.2); border-radius: 4px; overflow: hidden; }
+  .meter .bar i { display: block; height: 100%; width: 0; border-radius: 4px; }
+  #sleepBar { background: linear-gradient(90deg, #8fd18f, #ffcc33, #ff4d4d); }
+  #gapBar { background: #2bd46a; }
+  .pop { position: fixed; z-index: 7; pointer-events: none; font-family: 'Bangers', 'Kanit', cursive; font-size: 44px; letter-spacing: 1px; color: #ffd400; -webkit-text-stroke: 3px #1a1a1a; text-shadow: 4px 4px 0 #1a1a1a; transform: translate(-50%, -50%) rotate(-8deg) scale(0); animation: popin 1s ease-out forwards; white-space: nowrap; }
+  .pop.th { font-family: 'Kanit'; font-weight: 900; font-size: 28px; -webkit-text-stroke: 2px #1a1a1a; }
+  .pop.bad { color: #ff4040; } .pop.good { color: #6dff9b; }
+  @keyframes popin { 15% { transform: translate(-50%, -50%) rotate(-8deg) scale(1.25); } 30% { transform: translate(-50%, -50%) rotate(-5deg) scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -90%) rotate(-5deg) scale(1); } }
+  .warn { position: fixed; left: 50%; top: 23%; transform: translateX(-50%); z-index: 6; pointer-events: none; background: #ffcc00; color: #1a1a1a; font-weight: 900; font-size: 20px; padding: 4px 16px; border-radius: 10px; border: 3px solid #1a1a1a; box-shadow: 0 4px 0 #1a1a1a; display: none; animation: blink .4s infinite alternate; white-space: nowrap; }
+  .warn.on { display: block; } @keyframes blink { to { filter: brightness(1.3); transform: translateX(-50%) scale(1.06); } }
+  .ctrl { position: fixed; left: 0; right: 0; bottom: 0; padding: 0 10px calc(14px + env(safe-area-inset-bottom)); display: flex; gap: 10px; align-items: flex-end; z-index: 5; }
   .ctrl button { font-family: 'Kanit'; font-weight: 900; color: #fff; border: none; cursor: pointer; border-radius: 18px; box-shadow: 0 5px 0 rgba(0,0,0,.35); }
-  .lane { width: 74px; height: 74px; font-size: 32px; background: rgba(21,89,184,.85); border: 3px solid rgba(255,255,255,.5) !important; }
-  .brake { flex: 1; height: 88px; font-size: 26px; background: linear-gradient(180deg, #ff5a3a, #c81e1e); border: 3px solid rgba(255,255,255,.5) !important; }
+  .lane { width: 76px; height: 76px; font-size: 32px; background: rgba(21,89,184,.88); border: 3px solid rgba(255,255,255,.55) !important; }
+  .brake { flex: 1; height: 88px; font-size: 26px; background: linear-gradient(180deg, #ff5a3a, #c81e1e); border: 3px solid rgba(255,255,255,.55) !important; }
   .brake.on { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,.35); filter: brightness(1.15); }
   .lane:active { transform: translateY(3px); }
-  .ov { position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; text-align: center; color: #fff;
-    background: radial-gradient(ellipse at 50% 30%, rgba(255,160,80,.35), transparent 60%), rgba(8,22,55,.88); }
+  .call { position: fixed; left: 50%; top: 34%; z-index: 8; width: min(86vw, 330px); transform: translate(-50%, -260%); transition: transform .3s cubic-bezier(.2,1.4,.5,1); background: #fff; border-radius: 20px; padding: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.5); text-align: center; }
+  .call.on { transform: translate(-50%, -50%); }
+  .call.on .who { animation: buzz .12s infinite; } @keyframes buzz { 50% { transform: rotate(12deg); } }
+  .call .who { font-size: 40px; display: inline-block; } .call b { display: block; font-size: 22px; font-weight: 900; color: #13233f; } .call small { color: #50607a; font-size: 14px; }
+  .call .r { display: flex; gap: 8px; margin-top: 10px; } .call button { flex: 1; border: none; border-radius: 14px; padding: 12px 6px; font-family: 'Kanit'; font-weight: 900; font-size: 15px; color: #fff; cursor: pointer; }
+  .call .no { background: #e5484d; } .call .yes { background: #2bb36a; }
+  .ov { position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 22px; text-align: center; color: #fff;
+    background: radial-gradient(ellipse at 50% 30%, rgba(255,140,60,.4), transparent 60%), rgba(8,22,55,.9); overflow-y: auto; }
   .ov.on { display: flex; }
-  .ov h1 { font-weight: 900; font-size: 34px; line-height: 1.1; text-shadow: 0 3px 0 #082456; } .ov h1 b { color: #ffd36b; }
-  .ov p { font-size: 16px; line-height: 1.45; opacity: .95; max-width: 360px; }
-  .ov .go { font-family: 'Kanit'; font-weight: 900; font-size: 24px; color: #fff; border: none; border-radius: 40px; padding: 16px 44px; background: linear-gradient(180deg, #ff8a2a, #e8650c); box-shadow: 0 6px 0 #8a3500; cursor: pointer; }
-  .ov .how { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 14px; max-width: 360px; text-align: left; }
-  .ov .how div { background: rgba(255,255,255,.1); border-radius: 10px; padding: 6px 8px; }
-  .big { font-weight: 900; font-size: 64px; color: #ffd36b; line-height: 1; text-shadow: 0 4px 0 #8a3500; }
+  .ov h1 { font-weight: 900; font-size: 28px; line-height: 1.15; text-shadow: 0 3px 0 #082456; } .ov h1 b { color: #ffd36b; }
+  .ov .logo { font-family: 'Kanit'; font-weight: 900; font-size: 50px; color: #ffd400; -webkit-text-stroke: 2px #1a1a1a; text-shadow: 5px 5px 0 #c81e1e; line-height: 1; transform: rotate(-4deg); }
+  .ov p { font-size: 15px; line-height: 1.45; opacity: .95; max-width: 370px; }
+  .ov .go { font-family: 'Kanit'; font-weight: 900; font-size: 24px; color: #fff; border: none; border-radius: 40px; padding: 15px 44px; background: linear-gradient(180deg, #ff8a2a, #e8650c); box-shadow: 0 6px 0 #8a3500; cursor: pointer; }
+  .ov .cast { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-width: 370px; width: 100%; }
+  .ov .cast div { background: rgba(255,255,255,.1); border-radius: 12px; padding: 4px; font-size: 11px; font-weight: 700; line-height: 1.15; }
+  .ov .cast img { width: 100%; aspect-ratio: 1; object-fit: contain; display: block; }
+  .ov .how { font-size: 13px; opacity: .85; max-width: 370px; }
+  .big { font-family: 'Bangers', cursive; font-size: 80px; color: #ffd400; line-height: 1; -webkit-text-stroke: 3px #1a1a1a; text-shadow: 5px 5px 0 #c81e1e; }
+  .fam { width: min(60vw, 230px); border-radius: 18px; border: 4px solid #ffd36b; box-shadow: 0 10px 24px rgba(0,0,0,.5); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-width: 340px; width: 100%; font-size: 14px; }
+  .stats div { background: rgba(255,255,255,.1); border-radius: 10px; padding: 6px; } .stats b { color: #ffd36b; font-size: 18px; }
+  .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
+  .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body>
 <canvas id="gl"></canvas>
+<div class="vig" id="vig"></div><div class="speed" id="speed"></div><div class="rain" id="rain"></div>
 <div class="hud">
-  <div class="row"><div class="pill hearts" id="hearts">❤️❤️❤️</div><div class="pill"><small>คะแนน</small><span id="score">0</span></div><div class="pill"><small>km/h</small><span id="spd">0</span></div></div>
+  <div class="row"><div class="pill hearts" id="hearts">❤️❤️❤️</div><div class="pill"><small>คะแนน</small><span id="score">0</span></div><div class="pill combo" id="combo" style="display:none">x1</div><div class="pill"><small>km/h</small><span id="spd">0</span></div></div>
   <div class="trip"><i id="tripBar"></i><b class="a">NBMT</b><b class="z">🏠 HOME</b><span class="me" id="tripMe">🛵</span></div>
-  <div class="gap" id="gap">ระยะห่าง 3.0 วิ</div>
+  <div class="meters"><div class="meter">😴<div class="bar"><i id="sleepBar"></i></div></div><div class="meter">↔️ <span id="gapT">ระยะ —</span><div class="bar"><i id="gapBar"></i></div></div></div>
 </div>
-<div class="msg" id="msg"><div id="msgT"></div><small id="msgS"></small></div>
-<div class="ctrl">
-  <button class="lane" id="bL">◀</button>
-  <button class="brake" id="bB">✋ เบรก</button>
-  <button class="lane" id="bR">▶</button>
-</div>
+<div class="warn" id="warn">⚠️</div>
+<div class="call" id="call"><div class="who">📞</div><b id="callWho">แม่โทรมา!</b><small id="callSub">กำลังขับรถอยู่นะ...</small>
+  <div class="r"><button class="yes" id="callYes">รับสาย</button><button class="no" id="callNo">✖ จอดก่อนค่อยโทรกลับ</button></div></div>
+<div class="ctrl"><button class="lane" id="bL">◀</button><button class="brake" id="bB">✋ เบรก</button><button class="lane" id="bR">▶</button></div>
+
+<div class="load" id="load">กำลังเช็คอิน...<div class="b"><i id="loadBar"></i></div></div>
 <div class="ov on" id="start">
-  <h1>ทุกเที่ยวไป<br><b>ต้องมีเที่ยวกลับ</b></h1>
-  <p>ขี่ XMAX จากโรงงาน NBMT กลับบ้านให้ปลอดภัย ถึงบ้านพร้อมหัวใจครบ = ชนะ</p>
-  <div class="how"><div>◀ ▶ เปลี่ยนเลน</div><div>✋ กดค้าง = เบรก</div><div>🚦 ไฟแดง หยุดหลังเส้น</div><div>🚗 เว้นระยะ ≥ 3 วิ</div><div>👵 ทางม้าลาย หยุดให้คนข้าม</div><div>❤️ มี 3 ดวง</div></div>
+  <div class="logo">ถนนนรก<br>กลับบ้าน!</div>
+  <h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1>
+  <p>ขี่ XMAX จาก NBMT ฝ่าถนนสุดป่วนกลับบ้านให้รอด! ขับปลอดภัยได้คะแนน ประมาทเสียหัวใจ</p>
+  <div class="cast" id="cast"></div>
+  <div class="how">◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · 🚦 ไฟแดงต้องหยุด · ☕ เก็บกาแฟแก้ง่วง · 📵 อย่ารับสายขณะขับ</div>
   <button class="go" id="goBtn">▶ ออกเดินทาง</button>
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
+  <img class="fam" id="endImg" src="img/family.webp" alt="">
   <div class="big" id="endScore">0</div>
+  <div class="stats" id="stats"></div>
   <p id="endP"></p>
   <button class="go" id="againBtn">↻ เล่นอีกครั้ง</button>
 </div>
@@ -73,130 +105,104 @@
 <script type="module">
 import * as THREE from 'three';
 const $ = (id) => document.getElementById(id);
+const rnd = (a, b) => a + Math.random() * (b - a), pick = (a) => a[Math.floor(Math.random() * a.length)];
 
-// ---------- renderer / scene ----------
+// ================= renderer & world =================
 const renderer = new THREE.WebGLRenderer({ canvas: $('gl'), antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
-const scene = new THREE.Scene();
-const SKY_TOP = new THREE.Color('#2a4f9e'), SKY_BOT = new THREE.Color('#ffb067');
-scene.fog = new THREE.Fog('#f3a56a', 60, 260);
-const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 600);
-function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w / h < 0.7 ? 68 : 58; camera.updateProjectionMatrix(); }
+renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08;
+const scene = new THREE.Scene(); scene.fog = new THREE.Fog('#f0a070', 70, 240);
+const camera = new THREE.PerspectiveCamera(50, 1, .1, 600);
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w / h < .7 ? 66 : 56; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize();
-
-// sky dome
-{ const g = new THREE.SphereGeometry(500, 24, 12); const c = []; const p = g.attributes.position;
-  for (let i = 0; i < p.count; i++) { const t = Math.max(0, Math.min(1, (p.getY(i) + 40) / 260)); const col = SKY_BOT.clone().lerp(SKY_TOP, t); c.push(col.r, col.g, col.b); }
-  g.setAttribute('color', new THREE.Float32BufferAttribute(c, 3));
-  scene.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false }))); }
-// sun
-{ const s = new THREE.Mesh(new THREE.CircleGeometry(22, 32), new THREE.MeshBasicMaterial({ color: '#fff1c2', fog: false })); s.position.set(-60, 40, -420); scene.add(s);
-  const halo = new THREE.Mesh(new THREE.CircleGeometry(60, 32), new THREE.MeshBasicMaterial({ color: '#ffc47a', transparent: true, opacity: .35, fog: false })); halo.position.set(-60, 40, -421); scene.add(halo); }
-
-scene.add(new THREE.HemisphereLight('#ffd9b0', '#3a4f80', 1.0));
-const sun = new THREE.DirectionalLight('#ffd0a0', 1.6); sun.position.set(-30, 40, -20); scene.add(sun);
-const fill = new THREE.DirectionalLight('#cfe0ff', 1.1); fill.position.set(10, 12, 30); scene.add(fill);
-
-const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .8, metalness: 0, ...o });
+{ const g = new THREE.SphereGeometry(500, 24, 12), c = [], p = g.attributes.position, top = new THREE.Color('#3557a8'), bot = new THREE.Color('#ffb067');
+  for (let i = 0; i < p.count; i++) { const t = Math.max(0, Math.min(1, (p.getY(i) + 30) / 240)); const col = bot.clone().lerp(top, t); c.push(col.r, col.g, col.b); }
+  g.setAttribute('color', new THREE.Float32BufferAttribute(c, 3)); scene.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false }))); }
+{ const s = new THREE.Mesh(new THREE.CircleGeometry(24, 32), new THREE.MeshBasicMaterial({ color: '#fff1c2', fog: false })); s.position.set(-50, 36, -430); scene.add(s);
+  const h = new THREE.Mesh(new THREE.CircleGeometry(70, 32), new THREE.MeshBasicMaterial({ color: '#ffb870', transparent: true, opacity: .35, fog: false })); h.position.set(-50, 36, -431); scene.add(h); }
+scene.add(new THREE.HemisphereLight('#ffe0c0', '#405a90', 1.1));
+const sunL = new THREE.DirectionalLight('#ffd0a0', 1.4); sunL.position.set(-30, 40, -20); scene.add(sunL);
+const fillL = new THREE.DirectionalLight('#d8e6ff', 1.0); fillL.position.set(10, 14, 30); scene.add(fillL);
+const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .8, ...o });
 const LANES = [-3.4, 0, 3.4];
 
-// ---------- road (scrolling texture) ----------
 const roadTex = (() => { const cv = document.createElement('canvas'); cv.width = 256; cv.height = 512; const c = cv.getContext('2d');
-  c.fillStyle = '#3d434e'; c.fillRect(0, 0, 256, 512);
-  for (let i = 0; i < 1400; i++) { c.fillStyle = `rgba(255,255,255,${Math.random() * .05})`; c.fillRect(Math.random() * 256, Math.random() * 512, 2, 2); }
-  c.fillStyle = '#f5f5f5'; c.fillRect(6, 0, 6, 512); c.fillRect(244, 0, 6, 512);
+  c.fillStyle = '#3a404b'; c.fillRect(0, 0, 256, 512); for (let i = 0; i < 1600; i++) { c.fillStyle = `rgba(255,255,255,${Math.random() * .06})`; c.fillRect(Math.random() * 256, Math.random() * 512, 2, 2); }
+  c.fillStyle = '#f5d24a'; c.fillRect(4, 0, 7, 512); c.fillRect(245, 0, 7, 512);
   c.fillStyle = '#f2f2f2'; [87, 165].forEach(x => { c.fillRect(x, 40, 5, 170); c.fillRect(x, 296, 5, 170); });
-  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 30); t.anisotropy = 4; t.colorSpace = THREE.SRGBColorSpace; return t; })();
-const road = new THREE.Mesh(new THREE.PlaneGeometry(11, 600), M('#ffffff', { map: roadTex })); road.rotation.x = -Math.PI / 2; road.position.z = -250; scene.add(road);
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 600), M('#7aa05a')); ground.rotation.x = -Math.PI / 2; ground.position.set(0, -0.02, -250); scene.add(ground);
-const curb = (x) => { const m = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.25, 600), M('#d9d4c9')); m.position.set(x, 0.12, -250); scene.add(m); }; curb(-5.8); curb(5.8);
-const walk = (x) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(3, 600), M('#c9c1b3')); m.rotation.x = -Math.PI / 2; m.position.set(x, 0.01, -250); scene.add(m); }; walk(-7.6); walk(7.6);
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 30); t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace; return t; })();
+const roadMat = M('#ffffff', { map: roadTex, roughness: .7, metalness: 0 });
+const road = new THREE.Mesh(new THREE.PlaneGeometry(11, 600), roadMat); road.rotation.x = -Math.PI / 2; road.position.z = -250; scene.add(road);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 600), M('#7aa05a')); ground.rotation.x = -Math.PI / 2; ground.position.set(0, -.02, -250); scene.add(ground);
+[-5.8, 5.8].forEach(x => { const m = new THREE.Mesh(new THREE.BoxGeometry(.6, .25, 600), M('#e0d8c8')); m.position.set(x, .12, -250); scene.add(m); });
+[-7.6, 7.6].forEach(x => { const m = new THREE.Mesh(new THREE.PlaneGeometry(3, 600), M('#c9c1b3')); m.rotation.x = -Math.PI / 2; m.position.set(x, .01, -250); scene.add(m); });
 
-// ---------- scenery pool (palms, buildings, lamps) ----------
 const scenery = [];
-function palm() { const g = new THREE.Group(); const trunk = new THREE.Mesh(new THREE.CylinderGeometry(.22, .32, 6, 6), M('#8a6a45')); trunk.position.y = 3; g.add(trunk);
-  for (let i = 0; i < 7; i++) { const leaf = new THREE.Mesh(new THREE.ConeGeometry(.5, 3.4, 4), M('#2f7d3a')); leaf.position.y = 6.1; leaf.rotation.z = Math.PI / 2.4; leaf.rotation.y = i / 7 * Math.PI * 2; leaf.geometry.translate(0, 1.6, 0); g.add(leaf); }
-  return g; }
-function building() { const g = new THREE.Group(); const h = 6 + Math.random() * 10, w = 8 + Math.random() * 8;
-  const col = ['#e9e4da', '#d7dde6', '#f0d9c2', '#cfd8cf'][Math.floor(Math.random() * 4)];
-  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 10), M(col)); b.position.y = h / 2; g.add(b);
-  const win = M('#5a7aa8', { emissive: '#ffb26b', emissiveIntensity: .15 });
-  for (let y = 2; y < h - 1; y += 2.6) for (let x = -w / 2 + 1.5; x < w / 2 - 1; x += 2.4) { const wnd = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.2), win); wnd.position.set(x, y, 5.01); g.add(wnd); }
-  return g; }
-function lamp() { const g = new THREE.Group(); const p = new THREE.Mesh(new THREE.CylinderGeometry(.08, .1, 6, 6), M('#555b66')); p.position.y = 3; g.add(p);
-  const arm = new THREE.Mesh(new THREE.BoxGeometry(1.6, .12, .12), M('#555b66')); arm.position.set(.75, 6, 0); g.add(arm);
-  const bulb = new THREE.Mesh(new THREE.BoxGeometry(.6, .18, .3), M('#fff2c4', { emissive: '#ffd68a', emissiveIntensity: 1.2 })); bulb.position.set(1.4, 5.9, 0); g.add(bulb); return g; }
-for (let i = 0; i < 26; i++) { const side = i % 2 ? 1 : -1, z = -i * 11;
-  const p = palm(); p.position.set(side * 9.5, 0, z); scenery.push({ o: p, len: 286 }); scene.add(p);
-  if (i % 3 === 0) { const l = lamp(); l.position.set(-side * 6.3, 0, z - 5); l.rotation.y = side > 0 ? 0 : Math.PI; scenery.push({ o: l, len: 286 }); scene.add(l); } }
-for (let i = 0; i < 14; i++) { const side = i % 2 ? 1 : -1; const b = building(); b.position.set(side * (20 + Math.random() * 6), 0, -i * 22); scenery.push({ o: b, len: 308 }); scene.add(b); }
+function palm() { const g = new THREE.Group(); const t = new THREE.Mesh(new THREE.CylinderGeometry(.22, .32, 6, 6), M('#8a6a45')); t.position.y = 3; g.add(t);
+  for (let i = 0; i < 7; i++) { const l = new THREE.Mesh(new THREE.ConeGeometry(.55, 3.4, 4), M('#2f8a3a')); l.geometry.translate(0, 1.6, 0); l.position.y = 6.1; l.rotation.z = Math.PI / 2.4; l.rotation.y = i / 7 * Math.PI * 2; g.add(l); } return g; }
+function building() { const g = new THREE.Group(), h = 6 + Math.random() * 12, w = 8 + Math.random() * 8;
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 10), M(pick(['#efe7da', '#d7dde6', '#f3d6be', '#cfdccf', '#f0c9c9']))); b.position.y = h / 2; g.add(b);
+  const win = M('#5a7aa8', { emissive: '#ffb26b', emissiveIntensity: .25 });
+  for (let y = 2; y < h - 1; y += 2.6) for (let x = -w / 2 + 1.5; x < w / 2 - 1; x += 2.4) { const wn = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.2), win); wn.position.set(x, y, 5.01); g.add(wn); } return g; }
+const SLOGANS = ['ทุกเที่ยวไป ต้องมีเที่ยวกลับ', 'ดื่มไม่ขับ', 'หมวกกันน็อก + รัดคาง', 'เว้นระยะ 3 วินาที', 'ง่วงจอดพัก', 'ไม่ใช้มือถือขณะขับ', 'ชะลอทางแยก', 'มีน้ำใจ หยุดให้คนข้าม'];
+function billboard(i) { const g = new THREE.Group(); [-2, 2].forEach(x => { const p = new THREE.Mesh(new THREE.CylinderGeometry(.15, .15, 5, 6), M('#555')); p.position.set(x, 2.5, 0); g.add(p); });
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 192; const c = cv.getContext('2d');
+  const gr = c.createLinearGradient(0, 0, 512, 0); gr.addColorStop(0, '#0b2f6b'); gr.addColorStop(1, '#1559b8'); c.fillStyle = gr; c.fillRect(0, 0, 512, 192);
+  c.fillStyle = '#ffd36b'; c.fillRect(0, 160, 512, 32); c.fillStyle = '#fff'; c.font = '900 50px Kanit'; c.textAlign = 'center'; c.fillText(SLOGANS[i % SLOGANS.length], 256, 112);
+  c.fillStyle = '#0b2f6b'; c.font = '800 22px Kanit'; c.fillText('NBMT SAFE ROAD · SAVE LIFE', 256, 184);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; const b = new THREE.Mesh(new THREE.PlaneGeometry(7, 2.6), new THREE.MeshBasicMaterial({ map: t })); b.position.y = 5.6; g.add(b); return g; }
+function buildScenery() {
+  for (let i = 0; i < 26; i++) { const side = i % 2 ? 1 : -1, z = -i * 11; const p = palm(); p.position.set(side * 9.5, 0, z); scenery.push({ o: p, len: 286 }); scene.add(p); }
+  for (let i = 0; i < 14; i++) { const side = i % 2 ? 1 : -1, b = building(); b.position.set(side * rnd(20, 26), 0, -i * 22); scenery.push({ o: b, len: 308 }); scene.add(b); }
+  for (let i = 0; i < 4; i++) { const b = billboard(i); const side = i % 2 ? 1 : -1; b.position.set(side * 13, 0, -i * 75 - 30); b.rotation.y = side * -.35; scenery.push({ o: b, len: 300 }); scene.add(b); } }
 
-// ---------- player: rider on black maxi-scooter ----------
-const pinTex = (() => { const cv = document.createElement('canvas'); cv.width = 64; cv.height = 64; const c = cv.getContext('2d'); c.fillStyle = '#e8eef6'; c.fillRect(0, 0, 64, 64);
-  c.fillStyle = '#7fa1cf'; for (let x = 0; x < 64; x += 6) c.fillRect(x, 0, 2, 64); const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(2, 2); t.colorSpace = THREE.SRGBColorSpace; return t; })();
-const player = new THREE.Group();
-{ const body = M('#2a2e36', { roughness: .3, metalness: .5 });
-  const deck = new THREE.Mesh(new THREE.BoxGeometry(.75, .5, 2.0), body); deck.position.set(0, .55, 0); player.add(deck);
-  const tail = new THREE.Mesh(new THREE.BoxGeometry(.7, .55, .7), body); tail.position.set(0, .85, .6); player.add(tail);
-  const box = new THREE.Mesh(new THREE.BoxGeometry(.75, .5, .55), body); box.position.set(0, 1.25, .95); player.add(box);
-  const tl = new THREE.Mesh(new THREE.BoxGeometry(.55, .12, .05), M('#ff2222', { emissive: '#ff1a1a', emissiveIntensity: 1.5 })); tl.position.set(0, .95, 1.0); player.add(tl); player.userData.tail = tl;
-  const sL = new THREE.Mesh(new THREE.BoxGeometry(.12, .1, .05), M('#ff9a2a', { emissive: '#ff8a00', emissiveIntensity: 0 })); sL.position.set(-.33, .78, .97); player.add(sL);
-  const sR = sL.clone(); sR.material = sL.material.clone(); sR.position.x = .33; player.add(sR); player.userData.sig = [sL, sR];
-  const wheelG = new THREE.CylinderGeometry(.34, .34, .22, 14); const wm = M('#111'); [-0.85, .75].forEach(z => { const w = new THREE.Mesh(wheelG, wm); w.rotation.z = Math.PI / 2; w.position.set(0, .34, z); player.add(w); });
-  const shield = new THREE.Mesh(new THREE.BoxGeometry(.7, .55, .05), M('#9fc3e8', { transparent: true, opacity: .45, roughness: .1 })); shield.position.set(0, 1.35, -.95); shield.rotation.x = -.35; player.add(shield);
-  const bar = new THREE.Mesh(new THREE.BoxGeometry(.95, .06, .06), M('#222')); bar.position.set(0, 1.25, -.7); player.add(bar);
-  const shirt = M('#ffffff', { map: pinTex });
-  const torso = new THREE.Mesh(new THREE.BoxGeometry(.62, .72, .38), shirt); torso.position.set(0, 1.45, -.05); torso.rotation.x = -.18; player.add(torso);
-  const legs = new THREE.Mesh(new THREE.BoxGeometry(.6, .3, .7), M('#a9c2df')); legs.position.set(0, 1.0, -.2); player.add(legs);
-  [-.38, .38].forEach(x => { const a = new THREE.Mesh(new THREE.BoxGeometry(.16, .16, .62), shirt); a.position.set(x, 1.45, -.42); a.rotation.x = .35; player.add(a); });
-  const helm = new THREE.Mesh(new THREE.SphereGeometry(.3, 16, 12), M('#111317', { roughness: .25, metalness: .3 })); helm.position.set(0, 2.05, -.02); player.add(helm);
-  const stripe = new THREE.Mesh(new THREE.TorusGeometry(.3, .035, 6, 20, Math.PI), M('#7dff2a', { emissive: '#4aff00', emissiveIntensity: .3 })); stripe.rotation.y = Math.PI / 2; stripe.position.copy(helm.position); player.add(stripe);
+// ================= sprites =================
+const SPR = { rider: 2.4, sedan: 2.6, pickup: 2.9, truck: 5.4, wrongway: 2.2, drunk: 2.7, buffalo: 2.4, chicken: 1.2, dog: 1.2, grandma: 2.0, crate: 1.4, pothole: .8, coffee: 1.1, helmet: 1.0, phone: 1.0 };
+const tex = {}; const loader = new THREE.TextureLoader();
+async function loadAll() { const ks = Object.keys(SPR); let n = 0;
+  await Promise.all(ks.map(k => new Promise(ok => loader.load(`race/${k}.webp`, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; tex[k] = t; $('loadBar').style.width = (++n / ks.length * 100) + '%'; ok(); }, undefined, () => { n++; ok(); })))); }
+function sprite(k, flip = false) { const t = tex[k]; const h = SPR[k] * (k === 'rider' ? 1 : 1.3); const a = t ? t.image.width / t.image.height : 1; const w = h * a;
+  const g = new THREE.PlaneGeometry(w, h); g.translate(0, h / 2, 0);
+  const m = new THREE.MeshBasicMaterial({ map: t || null, color: t ? '#ffffff' : '#ff00ff', transparent: true, alphaTest: .35, side: THREE.DoubleSide });
+  const mesh = new THREE.Mesh(g, m); if (flip) mesh.scale.x = -1; mesh.userData.w = w; return mesh; }
+function shadowBlob(w) { const m = new THREE.Mesh(new THREE.CircleGeometry(.5, 16), new THREE.MeshBasicMaterial({ color: '#000', transparent: true, opacity: .28, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.scale.set(w, w * .45, 1); m.position.y = .02; return m; }
+
+// ================= state =================
+const S = {}; let ents = [], lights = [];
+const player = new THREE.Group(); scene.add(player);
+function reset() {
+  Object.assign(S, { v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, combo: 1, brake: false, run: false, inv: 0, sleep: 0, total: 3000, nextSpawn: 70, rain: false, slow: 1, shield: false, truck: false, sleepWarned: false, gapGood: 0,
+    stats: { red: 0, coffee: 0, phoneNo: 0, dodge: 0, crash: 0 }, call: null, nextCall: rnd(18, 26), t: 0 });
+  ents.forEach(e => scene.remove(e.o)); lights.forEach(l => scene.remove(l.o)); ents = []; lights = [];
+  player.clear(); const r = sprite('rider'); player.add(shadowBlob(1.6)); player.add(r); player.userData.spr = r;
+  [520, 1650, 2550].forEach(addLight);
 }
-scene.add(player);
+function addLight(at) { const g = new THREE.Group(); const pole = new THREE.Mesh(new THREE.CylinderGeometry(.14, .14, 6, 8), M('#2b2f36')); pole.position.set(6.3, 3, 0); g.add(pole);
+  const arm = new THREE.Mesh(new THREE.BoxGeometry(5.5, .22, .22), M('#2b2f36')); arm.position.set(3.7, 5.8, 0); g.add(arm);
+  const head = new THREE.Mesh(new THREE.BoxGeometry(1.2, 3, .6), M('#1d2026')); head.position.set(1.4, 4.5, 0); g.add(head);
+  const lamps = ['#ff2a2a', '#ffc21a', '#22e06a'].map((c, i) => { const m = new THREE.Mesh(new THREE.CircleGeometry(.42, 16), M('#333', { emissive: c, emissiveIntensity: 0 })); m.position.set(1.4, 5.4 - i * .95, .31); g.add(m); return m; });
+  const line = new THREE.Mesh(new THREE.PlaneGeometry(11, .55), M('#ffffff')); line.rotation.x = -Math.PI / 2; line.position.set(0, .02, 2.5); g.add(line);
+  scene.add(g); const L = { at, o: g, lamps, state: 'green', t: 0, done: false }; setL(L, 'green'); lights.push(L); }
+function setL(L, s) { L.state = s; L.lamps.forEach((m, i) => m.material.emissiveIntensity = s === ['red', 'yellow', 'green'][i] ? 2.6 : 0); }
 
-// ---------- traffic cars ----------
-function car(color) { const g = new THREE.Group(); const b = M(color, { roughness: .35, metalness: .3 });
-  const base = new THREE.Mesh(new THREE.BoxGeometry(1.9, .75, 4.2), b); base.position.y = .7; g.add(base);
-  const cab = new THREE.Mesh(new THREE.BoxGeometry(1.65, .65, 2.2), b); cab.position.set(0, 1.4, .2); g.add(cab);
-  const glass = new THREE.Mesh(new THREE.BoxGeometry(1.67, .5, 2.0), M('#2b3a52', { roughness: .1, metalness: .6 })); glass.position.set(0, 1.42, .2); g.add(glass);
-  const bl = M('#ff2020', { emissive: '#ff0000', emissiveIntensity: .4 }); g.userData.brake = bl;
-  [-.7, .7].forEach(x => { const l = new THREE.Mesh(new THREE.BoxGeometry(.4, .16, .05), bl); l.position.set(x, .85, 2.11); g.add(l); });
-  const wg = new THREE.CylinderGeometry(.38, .38, .3, 12), wm = M('#111'); [[-.9, -1.3], [.9, -1.3], [-.9, 1.3], [.9, 1.3]].forEach(([x, z]) => { const w = new THREE.Mesh(wg, wm); w.rotation.z = Math.PI / 2; w.position.set(x, .38, z); g.add(w); });
-  return g; }
-
-// ---------- events ----------
-function trafficLight() { const g = new THREE.Group(); const pole = new THREE.Mesh(new THREE.CylinderGeometry(.12, .12, 5.5, 8), M('#2b2f36')); pole.position.set(6.3, 2.75, 0); g.add(pole);
-  const arm = new THREE.Mesh(new THREE.BoxGeometry(5, .2, .2), M('#2b2f36')); arm.position.set(3.9, 5.4, 0); g.add(arm);
-  const head = new THREE.Mesh(new THREE.BoxGeometry(1.1, 2.9, .6), M('#1d2026')); head.position.set(1.6, 4.4, 0); g.add(head);
-  const lamps = ['#ff2a2a', '#ffc21a', '#22e06a'].map((c, i) => { const m = new THREE.Mesh(new THREE.CircleGeometry(.4, 16), M('#333', { emissive: c, emissiveIntensity: 0 })); m.position.set(1.6, 5.3 - i * .92, .31); g.add(m); return m; });
-  const line = new THREE.Mesh(new THREE.PlaneGeometry(11, .5), M('#ffffff')); line.rotation.x = -Math.PI / 2; line.position.set(0, .015, 2.5); g.add(line);
-  g.userData.lamps = lamps; return g; }
-function setLight(ev, s) { ev.state = s; ev.o.userData.lamps.forEach((m, i) => m.material.emissiveIntensity = (s === ['red', 'yellow', 'green'][i]) ? 2.4 : 0); }
-function zebra() { const g = new THREE.Group(); for (let i = 0; i < 9; i++) { const s = new THREE.Mesh(new THREE.PlaneGeometry(.75, 3.2), M('#f4f4f4')); s.rotation.x = -Math.PI / 2; s.position.set(-4.6 + i * 1.15, .015, 0); g.add(s); }
-  const line = new THREE.Mesh(new THREE.PlaneGeometry(11, .4), M('#ffffff')); line.rotation.x = -Math.PI / 2; line.position.set(0, .015, 3.4); g.add(line);
-  const sign = new THREE.Group(); const sp = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, 3, 6), M('#666')); sp.position.y = 1.5; sign.add(sp);
-  const sb = new THREE.Mesh(new THREE.BoxGeometry(.9, .9, .05), M('#1f6fe0')); sb.position.y = 3.1; sign.add(sb); sign.position.set(6.5, 0, 3); g.add(sign);
-  const gm = new THREE.Group(); const dress = new THREE.Mesh(new THREE.ConeGeometry(.42, 1.2, 10), M('#b07ad8')); dress.position.y = .6; gm.add(dress);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(.24, 12, 10), M('#f1c9a0')); head.position.y = 1.4; gm.add(head);
-  const hair = new THREE.Mesh(new THREE.SphereGeometry(.25, 12, 10, 0, Math.PI * 2, 0, Math.PI / 2), M('#d6d6d6')); hair.position.y = 1.45; gm.add(hair);
-  const stick = new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, 1.1, 5), M('#6a4a2a')); stick.position.set(.38, .55, 0); stick.rotation.z = .15; gm.add(stick);
-  gm.position.set(-7, 0, 0); g.add(gm); g.userData.gm = gm; return g; }
-
-let evs = [], cars = [];
-const S = { v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, brake: false, run: false, inv: 0, sig: 0, sigDir: 0, cruise: 55 / 3.6, total: 2200, safeGap: 0 };
-function plan() {
-  evs.forEach(e => scene.remove(e.o)); cars.forEach(c => scene.remove(c.o)); evs = []; cars = [];
-  const add = (type, at) => { const o = type === 'light' ? trafficLight() : zebra(); scene.add(o); const e = { type, at, o, done: false, state: 'green', t: 0 }; if (type === 'light') setLight(e, 'green'); evs.push(e); };
-  add('light', 450); add('zebra', 1000); add('light', 1550); add('zebra', 1950);
-  [[250, 1], [700, 0], [850, 2], [1250, 1], [1400, 0], [1750, 2]].forEach(([at, lane]) => { const o = car(['#d62828', '#f4f4f4', '#1f5fd1', '#9aa3ad', '#f5c518'][Math.floor(Math.random() * 5)]); scene.add(o); cars.push({ at, lane, o, v: 0, brakeAt: at + 60 + Math.random() * 80, braking: false, gone: false }); });
+const KINDS = ['sedan', 'sedan', 'pickup', 'drunk', 'wrongway', 'buffalo', 'chicken', 'dog', 'grandma', 'pothole', 'coffee', 'helmet'];
+const CROSS = ['buffalo', 'chicken', 'dog', 'grandma'];
+function spawn(kind, ahead = 120, lane) {
+  const e = { kind, pos: S.dist + ahead, lane: lane ?? Math.floor(Math.random() * 3), x: 0, v: 0, vx: 0, len: 4, hit: false, passed: false };
+  const o = new THREE.Group(); const sp = sprite(kind); o.add(shadowBlob(sp.userData.w * .9)); o.add(sp); e.o = o; e.spr = sp;
+  if (['sedan', 'pickup', 'drunk'].includes(kind)) { e.v = rnd(7, 10); e.x = LANES[e.lane]; }
+  if (kind === 'truck') { e.v = 12; e.len = 8; e.lane = 1; e.x = 1.7; }
+  if (kind === 'wrongway') { e.v = -12; e.len = 2.4; e.x = LANES[e.lane]; }
+  if (CROSS.includes(kind)) { const fromL = Math.random() < .5; e.x = fromL ? -9 : 9; e.vx = (fromL ? 1 : -1) * { buffalo: 1.7, chicken: 4.4, dog: 3.8, grandma: 1.5 }[kind]; e.len = 2; e.cross = true; if (!fromL) sp.scale.x = -1; e.wide = { buffalo: 2.4, chicken: 1.4, dog: 1.2, grandma: 1 }[kind]; }
+  if (kind === 'pothole' || kind === 'crate') { e.x = LANES[e.lane]; e.len = 2.2; }
+  if (kind === 'coffee' || kind === 'helmet') { e.x = LANES[e.lane]; e.len = 2; e.item = true; }
+  o.position.x = e.x; scene.add(o); ents.push(e); return e;
 }
+const WARN = { wrongway: ['🛵 ย้อนศร!', 'wrongway'], buffalo: ['🐃 ควายข้ามถนน!', 'buffalo'], chicken: ['🐔 ไก่วิ่งตัดหน้า!', 'chicken'], dog: ['🐕 หมาวิ่งตัดหน้า!', null], grandma: ['👵 คนข้ามถนน! ชะลอ', null], drunk: ['🍺 รถขี้เมา! อย่าเข้าใกล้', 'drunk'], pickup: ['📦 กระบะบรรทุกเกิน!', null], pothole: ['🕳️ หลุมข้างหน้า!', null], truck: ['🚛 รถพ่วงมาแล้ว!', 'truck'] };
 
-// ---------- input ----------
-function laneTo(d) { if (!S.run) return; const n = Math.max(0, Math.min(2, S.lane + d)); if (n !== S.lane) { S.lane = n; sfx.whoosh(); } }
-$('bL').onpointerdown = (e) => { e.preventDefault(); laneTo(-1); };
-$('bR').onpointerdown = (e) => { e.preventDefault(); laneTo(1); };
+// ================= input =================
+function laneTo(d) { if (!S.run) return; const n = Math.max(0, Math.min(2, S.lane + d)); if (n !== S.lane) { S.lane = n; snd.whoosh(); } }
+$('bL').onpointerdown = (e) => { e.preventDefault(); laneTo(-1); }; $('bR').onpointerdown = (e) => { e.preventDefault(); laneTo(1); };
 const bB = $('bB'); const setB = (v) => { S.brake = v; bB.classList.toggle('on', v); };
 bB.onpointerdown = (e) => { e.preventDefault(); setB(true); }; bB.onpointerup = bB.onpointerleave = bB.onpointercancel = () => setB(false);
 addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') laneTo(-1); if (e.key === 'ArrowRight') laneTo(1); if (e.key === ' ' || e.key === 'ArrowDown') setB(true); });
@@ -204,113 +210,131 @@ addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'ArrowDown') s
 let tx = null; addEventListener('touchstart', (e) => { if (e.target.tagName !== 'BUTTON') tx = e.touches[0].clientX; }, { passive: true });
 addEventListener('touchend', (e) => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) laneTo(dx > 0 ? 1 : -1); tx = null; }, { passive: true });
 
-// ---------- sound (WebAudio) ----------
-const sfx = (() => { let ac = null, eng = null, engG = null;
+// ================= sound =================
+const snd = (() => { let ac, eng, voices = {}, last = 0;
   const ctx = () => { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (ac && ac.state === 'suspended') ac.resume(); return ac; };
   function tone(f, d, type = 'square', vol = .1, slide = 0, delay = 0) { const a = ctx(); if (!a) return; const t = a.currentTime + delay; const o = a.createOscillator(), g = a.createGain(); o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, f + slide), t + d); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g).connect(a.destination); o.start(t); o.stop(t + d + .02); }
+  function noise(d, vol = .2) { const a = ctx(); if (!a) return; const b = a.createBuffer(1, a.sampleRate * d, a.sampleRate), ch = b.getChannelData(0); for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / ch.length, 2); const s = a.createBufferSource(), g = a.createGain(); s.buffer = b; g.gain.value = vol; s.connect(g).connect(a.destination); s.start(); }
+  ['go', 'red', 'buffalo', 'wrongway', 'chicken', 'phone', 'sleepy', 'ouch', 'nearmiss', 'great', 'truck', 'drunk', 'crate', 'home'].forEach(k => { const au = new Audio(`snd/${k}.mp3`); au.preload = 'auto'; voices[k] = au; });
   return {
-    start() { const a = ctx(); if (!a || eng) return; eng = a.createOscillator(); eng.type = 'sawtooth'; const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 600; engG = a.createGain(); engG.gain.value = .045; eng.connect(f).connect(engG).connect(a.destination); eng.start(); },
-    engine(v) { if (eng) eng.frequency.setTargetAtTime(40 + v * 5.2, ac.currentTime, .1); },
-    stop() { if (eng) { eng.stop(); eng = null; } },
-    whoosh() { tone(300, .15, 'triangle', .06, 400); },
-    good() { tone(660, .1, 'square', .07); tone(990, .16, 'square', .07, 0, .09); },
-    bad() { tone(200, .35, 'sawtooth', .13, -120); },
-    horn() { tone(380, .3, 'square', .08); tone(470, .3, 'square', .06); },
-    win() { [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, .18, 'triangle', .1, 0, i * .12)); },
+    unlock() { ctx(); Object.values(voices).forEach(v => { v.muted = true; v.play().then(() => { v.pause(); v.currentTime = 0; v.muted = false; }).catch(() => { v.muted = false; }); }); },
+    say(k, force) { const now = performance.now(); if (!force && now - last < 1500) return; last = now; const v = voices[k]; if (v) { try { v.currentTime = 0; v.play().catch(() => {}); } catch (e) {} } },
+    start() { const a = ctx(); if (!a || eng) return; eng = a.createOscillator(); eng.type = 'sawtooth'; const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 700; const g = a.createGain(); g.gain.value = .035; eng.connect(f).connect(g).connect(a.destination); eng.start(); },
+    engine(v) { if (eng) eng.frequency.setTargetAtTime(38 + v * 4.6, ac.currentTime, .1); }, stop() { if (eng) { eng.stop(); eng = null; } },
+    whoosh() { tone(260, .16, 'triangle', .06, 420); }, good() { tone(700, .09, 'square', .06); tone(1050, .14, 'square', .06, 0, .08); },
+    crash() { noise(.5, .35); tone(120, .4, 'sawtooth', .12, -60); },
+    ring() { [0, .25, .5, .75].forEach(d => { tone(1320, .12, 'sine', .07, 0, d); tone(1760, .12, 'sine', .05, 0, d + .06); }); },
+    win() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, .2, 'triangle', .1, 0, i * .12)); },
   }; })();
 
-// ---------- feedback ----------
-let msgT = null;
-function say(t, s = '', kind = '') { const m = $('msg'); $('msgT').textContent = t; $('msgS').textContent = s; m.className = 'msg on ' + kind; clearTimeout(msgT); msgT = setTimeout(() => m.className = 'msg', 1500); }
-let shakeT = 0;
-function hurt(t, s) { if (S.inv > 0) return; S.hearts--; S.inv = 1.6; shakeT = .45; say(t, s, 'bad'); sfx.bad(); if (navigator.vibrate) navigator.vibrate([60, 40, 60]); renderHearts(); if (S.hearts <= 0) finish(false); }
-function reward(n, t, s) { S.score += n; say(t, s, 'good'); sfx.good(); }
-function renderHearts() { $('hearts').textContent = '❤️'.repeat(Math.max(0, S.hearts)) + '🤍'.repeat(3 - Math.max(0, S.hearts)); }
+// ================= feedback =================
+let popN = 0; function pop(txt, kind = '', th = false, x = innerWidth / 2, y = innerHeight * .4) { y += (popN++ % 3) * 46; setTimeout(() => popN = Math.max(0, popN - 1), 700); const d = document.createElement('div'); d.className = 'pop ' + kind + (th ? ' th' : ''); d.textContent = txt; d.style.left = x + 'px'; d.style.top = y + 'px'; document.body.appendChild(d); setTimeout(() => d.remove(), 1000); }
+let shakeT = 0, warnT = null;
+function warn(t) { const w = $('warn'); w.textContent = t; w.classList.add('on'); clearTimeout(warnT); warnT = setTimeout(() => w.classList.remove('on'), 1800); }
+function hurt(why, voice = 'ouch') {
+  if (S.inv > 0 || !S.run) return false;
+  if (S.shield) { S.shield = false; S.inv = 1.2; pop('หมวกช่วยไว้!', 'good', true); snd.good(); hearts(); return false; }
+  S.hearts--; S.inv = 1.8; S.combo = 1; S.stats.crash++; shakeT = .5; S.slow = .25; setTimeout(() => S.slow = 1, 450);
+  pop(pick(['POW!', 'BOOM!', 'CRASH!', 'BONK!']), 'bad'); setTimeout(() => pop(why, 'bad', true, innerWidth / 2, innerHeight * .5), 250);
+  snd.crash(); snd.say(voice, true); if (navigator.vibrate) navigator.vibrate([80, 40, 80]); hearts(); if (S.hearts <= 0) setTimeout(() => finish(false), 700); return true;
+}
+function good(n, why, voice) { const pts = n * S.combo; S.score += pts; S.combo = Math.min(5, S.combo + 1); pop(`+${pts} ${why}`, 'good', true); snd.good(); if (voice) snd.say(voice); }
+function hearts() { $('hearts').textContent = '❤️'.repeat(Math.max(0, S.hearts)) + '🤍'.repeat(3 - Math.max(0, S.hearts)) + (S.shield ? '⛑️' : ''); }
 
-// ---------- loop ----------
+const CALLERS = [['แม่โทรมา!', 'ซื้อกับข้าวด้วยนะลูก...'], ['หัวหน้าโทรมา!', 'พรุ่งนี้เข้าเช้านะ'], ['แฟนโทรมา!', 'ถึงไหนแล้ว~'], ['เบอร์แปลก', 'ยินดีด้วย คุณได้รับรางวัล...']];
+function ringPhone() { const c = pick(CALLERS); $('callWho').textContent = c[0]; $('callSub').textContent = c[1] + ' (กำลังขับรถอยู่!)'; $('call').classList.add('on'); S.call = { t: 0 }; snd.ring(); setTimeout(() => snd.say('phone'), 900); }
+$('callYes').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; $('gl').style.filter = 'blur(5px)'; setTimeout(() => $('gl').style.filter = '', 1500); hurt('ห้ามใช้มือถือขณะขับ!'); };
+$('callNo').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; S.stats.phoneNo++; good(30, 'มีสติ! ไว้โทรกลับ'); };
+
+// ================= loop =================
 const clock = new THREE.Clock();
 function update(dt) {
-  // speed
-  if (S.brake) S.v = Math.max(0, S.v - 22 * dt); else S.v = Math.min(S.cruise, S.v + 6 * dt);
-  const dz = S.v * dt; S.dist += dz;
-  roadTex.offset.y += dz / 20;
-  for (const s of scenery) { s.o.position.z += dz; if (s.o.position.z > 12) s.o.position.z -= s.len; }
-  // player lateral
-  S.x += (LANES[S.lane] - S.x) * Math.min(1, dt * 7);
-  player.position.x = S.x; player.rotation.z = (S.x - LANES[S.lane]) * .12; player.rotation.y = (S.x - LANES[S.lane]) * -.05;
-  player.userData.tail.material.emissiveIntensity = S.brake ? 4 : 1.2;
-  if (S.inv > 0) { S.inv -= dt; player.visible = Math.floor(S.inv * 10) % 2 === 0; } else player.visible = true;
-  // cars
+  S.t += dt; const prog = S.dist / S.total;
+  const cruise = (52 + prog * 30) / 3.6 * (S.rain ? .9 : 1), brakeP = S.rain ? 15 : 24;
+  if (S.brake) S.v = Math.max(0, S.v - brakeP * dt); else S.v = Math.min(cruise, S.v + 7 * dt);
+  const dz = S.v * dt; S.dist += dz; roadTex.offset.y += dz / 20;
+  for (const s of scenery) { s.o.position.z += dz; if (s.o.position.z > 14) s.o.position.z -= s.len; }
+  const rainNow = S.dist > 1250 && S.dist < 2100; if (rainNow !== S.rain) { S.rain = rainNow; $('rain').style.opacity = rainNow ? 1 : 0; roadMat.roughness = rainNow ? .25 : .7; roadMat.metalness = rainNow ? .4 : 0; if (rainNow) warn('🌧️ ฝนตก! ถนนลื่น เบรกยากขึ้น'); }
+  S.x += (LANES[S.lane] - S.x) * Math.min(1, dt * 8);
+  player.position.x = S.x; player.rotation.z = -(LANES[S.lane] - S.x) * .18; player.userData.spr.position.y = Math.sin(S.t * 14) * .025 * (S.v / 15);
+  if (S.inv > 0) { S.inv -= dt; player.visible = Math.floor(S.inv * 12) % 2 === 0; } else player.visible = true;
+  // sleepiness
+  S.sleep = Math.min(1, S.sleep + dt / 60); $('sleepBar').style.width = S.sleep * 100 + '%';
+  $('vig').style.opacity = Math.max(0, (S.sleep - .5) * 2);
+  if (!S.call) $('gl').style.filter = S.sleep > .75 ? `blur(${((S.sleep - .75) * 8).toFixed(1)}px)` : '';
+  if (S.sleep > .7 && !S.sleepWarned) { S.sleepWarned = true; snd.say('sleepy', true); warn('😴 ง่วงแล้ว! เก็บกาแฟ ☕'); spawn('coffee', 70); }
+  if (S.sleep >= 1) { S.sleep = .55; S.sleepWarned = false; pop('หลับใน!', 'bad'); hurt('ง่วงให้จอดพัก!'); }
+  // phone
+  if (!S.call && S.t > S.nextCall) { ringPhone(); S.nextCall = S.t + rnd(28, 40); }
+  if (S.call) { S.call.t += dt; if (S.call.t > 5) { $('call').classList.remove('on'); S.call = null; } }
+  // spawning
+  if (S.dist > S.nextSpawn && S.dist < S.total - 120) {
+    const nearLight = lights.some(L => !L.done && L.at - S.dist < 150 && L.at - S.dist > -10);
+    if (!nearLight) { let k = pick(KINDS); if (S.dist > 2700 && !S.truck) { k = 'truck'; S.truck = true; } spawn(k); const w = WARN[k]; if (w) setTimeout(() => { if (S.run) { warn(w[0]); if (w[1]) snd.say(w[1]); } }, 300); }
+    S.nextSpawn = S.dist + rnd(55, 85) * (1 - prog * .45);
+  }
+  // entities
   let nearest = null;
-  for (const c of cars) {
-    if (c.gone) continue;
-    if (c.pos === undefined) { if (S.dist < c.at - 110) { c.o.visible = false; continue; } c.pos = S.dist + 110; c.v = 9; c.o.visible = true; }
-    if (!c.braked && c.lane === S.lane && c.pos - S.dist < 32 && c.pos - S.dist > 12) { c.braking = c.braked = true; c.brakeT = 2.0; sfx.horn(); say('รถคันหน้าเบรก!', 'เบรก แล้วเว้นระยะ ≥ 3 วินาที'); }
-    if (c.braking) { c.brakeT -= dt; c.v = Math.max(0, c.v - 16 * dt); if (c.brakeT <= 0) { c.braking = false; } } else c.v = Math.min(9, c.v + 4 * dt);
-    c.pos += c.v * dt;
-    c.o.userData.brake.emissiveIntensity = c.braking ? 3.5 : .4;
-    const zz = -(c.pos - S.dist); c.o.position.set(LANES[c.lane], 0, zz);
-    if (zz > 15) { c.gone = true; scene.remove(c.o); continue; }
-    if (c.lane === S.lane && zz < 0 && zz > -60 && (!nearest || zz > nearest.z)) nearest = { c, z: zz };
-    if (Math.abs(c.o.position.x - S.x) < 1.6 && zz > -3.3 && zz < 2.5) { hurt('ชนท้าย!', 'เว้นระยะอย่างน้อย 3 วินาที'); c.pos += 8; }
-  }
-  // gap meter
-  const g = $('gap');
-  if (nearest && S.v > 2) { const sec = (-nearest.z - 3) / S.v; g.textContent = `ระยะห่าง ${Math.max(0, sec).toFixed(1)} วิ`; g.className = 'gap on ' + (sec >= 3 ? '' : sec >= 1.5 ? 'warn' : 'bad'); if (sec >= 3) S.safeGap += dt; }
-  else g.className = 'gap';
-  if (S.safeGap > 4) { S.safeGap = 0; reward(20, '+20 เว้นระยะดีมาก', 'ขับขี่อย่างมีสติ'); }
-  // events
-  for (const e of evs) {
-    const z = -(e.at - S.dist); e.o.position.z = z;
-    if (e.done) continue;
-    if (e.type === 'light') {
-      if (e.state === 'green' && e.at - S.dist < 95) { setLight(e, 'yellow'); e.t = 1.2; }
-      else if (e.state === 'yellow') { e.t -= dt; if (e.t <= 0) { setLight(e, 'red'); say('🚦 ไฟแดง!', 'หยุดหลังเส้นหยุดรถ'); } }
-      else if (e.state === 'red') {
-        const lineGap = (e.at - 2.5) - S.dist;
-        if (S.v < 0.6 && lineGap > -0.5 && lineGap < 70) { e.t += dt; if (e.t > 1.6) { setLight(e, 'green'); e.done = true; reward(50, '+50 หยุดไฟแดงถูกต้อง', 'ปฏิบัติตามกฎจราจร'); } }
-        if (lineGap < -1) { e.done = true; setLight(e, 'green'); hurt('ฝ่าไฟแดง!', 'ต้องหยุดหลังเส้นเมื่อไฟแดง'); }
-      }
-    } else if (e.type === 'zebra') {
-      const gm = e.o.userData.gm, near = e.at - S.dist;
-      if (near < 80 && !e.walking) { e.walking = true; say('👵 คนข้ามทางม้าลาย', 'ชะลอ แล้วหยุดให้คนข้าม'); }
-      if (e.walking && gm.position.x < 7) gm.position.x += dt * 1.6;
-      const onRoad = gm.position.x > -5.5 && gm.position.x < 5.5;
-      const lineGap = (e.at - 3.4) - S.dist;
-      if (onRoad && lineGap < -1 && near > -2) { e.done = true; hurt('ไม่หยุดให้คนข้าม!', 'หยุดให้คนข้ามทางม้าลายเสมอ'); }
-      else if (!onRoad && gm.position.x >= 5.5) { e.done = true; if (e.waited) reward(50, '+50 มีน้ำใจ', 'หยุดให้คนข้ามทางม้าลาย'); }
-      if (onRoad && S.v < 0.6 && lineGap > -0.5 && lineGap < 70) e.waited = true;
+  for (const e of ents) {
+    if (e.dead) continue;
+    if (e.kind === 'drunk') { e.wob = (e.wob || 0) + dt; e.x = Math.sin(e.wob * 1.3) * 3.2; e.lane = e.x < -1.7 ? 0 : e.x > 1.7 ? 2 : 1; e.spr.rotation.z = Math.sin(e.wob * 2.6) * .12; }
+    if (e.kind === 'truck') { e.wob = (e.wob || 0) + dt; e.x = Math.sin(e.wob * .6) * 1.7; }
+    if (e.kind === 'pickup' && !e.dropped && e.pos - S.dist < 55) { e.dropped = true; spawn('crate', e.pos - S.dist - 6, e.lane); snd.say('crate'); }
+    if (e.cross) { if (e.pos - S.dist < 75) e.x += e.vx * dt; e.spr.position.y = Math.abs(Math.sin(S.t * (e.kind === 'chicken' ? 18 : 8))) * .12; }
+    e.pos += e.v * dt;
+    const z = -(e.pos - S.dist);
+    e.o.position.set(e.x, e.item ? .3 + Math.abs(Math.sin(S.t * 4)) * .3 : (e.hit && !e.item ? e.o.position.y : 0), z);
+    if (e.hit && !e.item) { e.spr.rotation.z += dt * 6; e.o.position.y = Math.min(2.5, e.o.position.y + dt * 4); }
+    if (z > 14 || Math.abs(e.x) > 12) { e.dead = true; scene.remove(e.o); continue; }
+    const halfW = e.cross ? e.wide / 2 + .4 : (e.kind === 'truck' ? 2.4 : 1.1);
+    const overlapX = Math.abs(e.x - S.x) < halfW + .5, overlapZ = z > -e.len / 2 - 1.2 && z < e.len / 2 + .6;
+    if (!e.hit && overlapX && overlapZ) {
+      e.hit = true;
+      if (e.kind === 'coffee') { S.sleep = 0; S.sleepWarned = false; S.stats.coffee++; good(25, 'สดชื่น!'); e.dead = true; scene.remove(e.o); continue; }
+      if (e.kind === 'helmet') { S.shield = true; hearts(); good(25, 'หมวกกันน็อกกันชน!'); e.dead = true; scene.remove(e.o); continue; }
+      const why = { sedan: 'ชนท้าย! เว้นระยะ 3 วิ', pickup: 'ชนท้าย! เว้นระยะ 3 วิ', drunk: 'โดนขี้เมาเฉี่ยว!', truck: 'ชนรถพ่วง! อย่าจี้ท้าย', wrongway: 'ชนคนย้อนศร!', buffalo: 'ชนควาย!! 🐃', chicken: 'ไก่กระจาย! 🐔', dog: 'ชนน้องหมา!', grandma: 'ไม่หยุดให้คนข้าม!', pothole: 'ตกหลุม!', crate: 'ชนของหล่น!' }[e.kind] || 'ชน!';
+      hurt(why); if (e.v > 0) e.pos += 6;
     }
+    if (!e.passed && z > 3 && !e.item) { e.passed = true; if (!e.hit) { S.stats.dodge++; if (Math.abs(e.x - S.x) < 4.2 && S.v > 8) good(15, pick(['หลบสวย!', 'รอดหวุดหวิด!', 'เทพ!']), Math.random() < .3 ? 'nearmiss' : null); else S.score += 5; } }
+    if (!e.cross && !e.item && !e.hit && Math.abs(e.x - S.x) < 1.6 && z < 0 && z > -60 && (!nearest || z > nearest.z) && e.v >= 0) nearest = { e, z };
   }
-  // distance points + HUD
-  S.score += dz * .05;
-  $('score').textContent = Math.floor(S.score); $('spd').textContent = Math.round(S.v * 3.6);
-  const k = Math.min(1, S.dist / S.total); $('tripBar').style.width = (k * 100) + '%'; $('tripMe').style.left = `calc(${8 + k * 84}% )`;
-  sfx.engine(S.v * 3.6);
+  ents = ents.filter(e => !e.dead);
+  if (nearest && S.v > 2) { const sec = Math.max(0, (-nearest.z - nearest.e.len / 2 - 1) / S.v); const k = Math.min(1, sec / 4);
+    $('gapT').textContent = `ระยะ ${sec.toFixed(1)} วิ`; $('gapBar').style.width = k * 100 + '%'; $('gapBar').style.background = sec >= 3 ? '#2bd46a' : sec >= 1.5 ? '#ffcc33' : '#ff4d4d';
+    S.gapGood = sec >= 3 ? S.gapGood + dt : 0; if (S.gapGood > 4) { S.gapGood = 0; good(20, 'เว้นระยะดี!'); } }
+  else { $('gapT').textContent = 'ระยะ —'; $('gapBar').style.width = '0'; }
+  for (const L of lights) { const z = -(L.at - S.dist); L.o.position.z = z; if (L.done) continue;
+    if (L.state === 'green' && L.at - S.dist < 100) { setL(L, 'yellow'); L.t = 1.1; }
+    else if (L.state === 'yellow') { L.t -= dt; if (L.t <= 0) { setL(L, 'red'); warn('🚦 ไฟแดง! หยุดหลังเส้น'); snd.say('red', true); } }
+    else if (L.state === 'red') { const gap = (L.at - 2.5) - S.dist;
+      if (S.v < .6 && gap > -.5 && gap < 70) { L.t += dt; if (L.t > 1.5) { setL(L, 'green'); L.done = true; S.stats.red++; good(50, 'หยุดไฟแดง!', 'great'); } }
+      if (gap < -1) { L.done = true; setL(L, 'green'); hurt('ฝ่าไฟแดง!'); } } }
+  S.score += dz * .05; $('score').textContent = Math.floor(S.score); $('spd').textContent = Math.round(S.v * 3.6);
+  $('combo').style.display = S.combo > 1 ? '' : 'none'; $('combo').textContent = 'x' + S.combo;
+  $('tripBar').style.width = Math.min(100, prog * 100) + '%'; $('tripMe').style.left = `calc(${8 + Math.min(1, prog) * 84}%)`;
+  $('speed').style.opacity = Math.max(0, (S.v * 3.6 - 60) / 30);
+  snd.engine(S.v * 3.6);
   if (S.dist >= S.total) finish(true);
-  // camera
-  const sh = shakeT > 0 ? (shakeT -= dt, (Math.random() - .5) * .35) : 0;
-  camera.position.set(S.x * .7 + sh, 5.4 + S.v * .015, 10.5 - S.v * .03);
-  camera.lookAt(S.x * .5, 0.9, -20);
+  const sh = shakeT > 0 ? (shakeT -= dt, (Math.random() - .5) * .5) : 0;
+  camera.position.set(S.x * .7 + sh, 5.2 + S.v * .015, 10 - S.v * .03); camera.lookAt(S.x * .5, 1, -20);
 }
 const TS = +(new URLSearchParams(location.search).get('ts') || 1);
-function loop() { const dt = Math.min(.05, clock.getDelta()); if (S.run) { for (let i = 0; i < TS; i++) update(dt); } renderer.render(scene, camera); requestAnimationFrame(loop); }
-
-function start() {
-  Object.assign(S, { v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, brake: false, run: true, inv: 0, safeGap: 0 });
-  plan(); renderHearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); sfx.start(); say('ออกเดินทาง!', 'ขับขี่ปลอดภัย กลับบ้านกัน');
-}
+function loop() { const dt = Math.min(.05, clock.getDelta()); if (S.run) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
+function start() { snd.unlock(); reset(); S.run = true; hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
 function finish(win) {
-  if (!S.run) return; S.run = false; sfx.stop(); setB(false);
-  if (win) { S.score += S.hearts * 100; sfx.win(); }
-  $('endT').innerHTML = win ? 'ถึงบ้านแล้ว! 🏠<br><b style="color:#ffd36b">คนที่บ้านรอคุณอยู่</b>' : 'ไปไม่ถึงบ้าน 😢';
-  $('endScore').textContent = Math.floor(S.score);
-  $('endP').textContent = win ? `หัวใจเหลือ ${S.hearts} ดวง (+${S.hearts * 100})` : 'ขับขี่อย่างมีสติ ลองใหม่อีกครั้ง';
+  if (!S.run) return; S.run = false; snd.stop(); setB(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
+  if (win) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); }
+  $('endT').innerHTML = win ? 'ถึงบ้านแล้ว! 🏠<br><b>คนที่บ้านรอคุณอยู่</b>' : 'ไปไม่ถึงบ้าน 😢<br><b>ขับช้าๆ ไม่ต้องรีบนะ</b>';
+  $('endImg').style.display = win ? '' : 'none'; $('endScore').textContent = Math.floor(S.score);
+  const st = S.stats; $('stats').innerHTML = `<div>🚦 หยุดไฟแดง<br><b>${st.red}</b></div><div>🛡️ หลบอันตราย<br><b>${st.dodge}</b></div><div>☕ แก้ง่วง<br><b>${st.coffee}</b></div><div>📵 ไม่รับสาย<br><b>${st.phoneNo}</b></div>`;
+  $('endP').textContent = win ? `หัวใจเหลือ ${S.hearts} ดวง (+${S.hearts * 150})` : `ไปได้ ${Math.round(S.dist)} / ${S.total} ม.`;
   $('end').classList.add('on');
 }
 $('goBtn').onclick = start; $('againBtn').onclick = start;
-plan(); camera.position.set(0, 5.4, 10.5); camera.lookAt(0, .9, -20); loop();
-window.__S = S; window.__D = { get evs() { return evs; }, get cars() { return cars; } };
+buildScenery(); await document.fonts.ready; await loadAll(); $('load').style.display = 'none';
+$('cast').innerHTML = [['buffalo', 'ควาย'], ['wrongway', 'ย้อนศร'], ['drunk', 'ขี้เมา'], ['chicken', 'ไก่'], ['pickup', 'ของหล่น'], ['truck', 'รถพ่วง'], ['coffee', 'กาแฟ'], ['phone', 'มือถือ']].map(([k, t]) => `<div><img src="race/${k}.webp" alt="">${t}</div>`).join('');
+reset(); camera.position.set(0, 5.2, 10); camera.lookAt(0, 1, -20); loop();
+window.__S = S; window.__D = { get ents() { return ents; }, get lights() { return lights; } };
 </script>
 </body>
 </html>
