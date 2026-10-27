@@ -81,6 +81,9 @@
   .foot { text-align: center; color: #ffe9c4; font-size: 12px; margin-top: 8px; line-height: 1.4; }
 
   /* ===== scoreboard ===== */
+  .pinbox { display: none; background: #fff1e6; border: 2px solid #d9480f; border-radius: 10px; padding: 8px 10px; font-size: 13.5px; line-height: 1.4; margin-bottom: 6px; color: #7a1d00; }
+  .pinbox.on { display: block; }
+  .pinbox input { margin: 6px 0 0 !important; letter-spacing: 4px; text-align: center; }
   .sub { background: rgba(255,240,210,.97); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
   .sub .h { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
   .sub input, .sub select { width: 100%; font-family: 'Kanit'; font-size: 17px; padding: 9px 10px; border: 2px solid #c9a46a; border-radius: 10px; margin-bottom: 6px; background: #fff; color: var(--ink); }
@@ -150,6 +153,7 @@
     <div class="sub" id="submitBox">
       <div class="h">ลงชื่อบนกระดานนายอำเภอ</div>
       <input id="pName" maxlength="20" placeholder="ชื่อเล่น เช่น เอิร์ท" autocomplete="off">
+      <div class="pinbox" id="pinBox"><b>🔒 ชื่อนี้สงวนไว้สำหรับนายอำเภอตัวจริง</b><br>ถ้าคุณคือเจ้าของชื่อ ใส่ PIN · ถ้าไม่ใช่ เปลี่ยนชื่อเล่นนะ<input id="pPin" inputmode="numeric" maxlength="6" placeholder="PIN 6 หลัก" autocomplete="off"></div>
       <select id="pDept"><option value="">— เลือกโซน 5ส ของคุณ —</option></select>
             <button class="btn" id="submitBtn">📌 ส่งคะแนน</button>
       <div class="note">ชื่อเล่นและโซนจะแสดงบนกระดานที่ทุกคนเห็น · ไม่เก็บข้อมูลอื่น</div>
@@ -298,6 +302,7 @@ const BADGE = { gold: '🥇', silver: '🥈', bronze: '🥉' };
 const esc = (t) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 $('pDept').innerHTML += DEPTS.map(d => `<option>${d}</option>`).join('');
 $('pName').value = store.get('nbmt_name') || '';
+$('pName').oninput = () => $('pinBox').classList.remove('on');
 const savedDept = store.get('nbmt_dept') || '';
 if (DEPTS.includes(savedDept)) $('pDept').value = savedDept;
 
@@ -329,9 +334,15 @@ $('submitBtn').onclick = async () => {
   store.set('nbmt_name', name); store.set('nbmt_dept', dept);
   const btn = $('submitBtn'); btn.disabled = true; btn.textContent = 'กำลังส่ง...';
   try {
-    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, dept, ...last }) });
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, dept, pin: $('pPin').value.trim() || store.get('nbmt_pin') || '', ...last }) });
     const j = await r.json();
-    if (!j.ok) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน'; alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
+    if (!j.ok) {
+      btn.disabled = false; btn.textContent = '📌 ส่งคะแนน';
+      if (j.err === 'reserved') { const had = $('pPin').value; $('pinBox').classList.add('on'); store.set('nbmt_pin', ''); $('pPin').value = ''; $('pPin').placeholder = had ? 'PIN ไม่ถูกต้อง ลองอีกครั้ง' : 'PIN 6 หลัก'; $('pPin').focus(); return; }
+      alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return;
+    }
+    if ($('pPin').value.trim()) store.set('nbmt_pin', $('pPin').value.trim());
+    $('pinBox').classList.remove('on');
     me = { name, dept }; boardData = j.board;
     $('submitBox').style.display = 'none';
     $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)}</small>`;
