@@ -80,6 +80,24 @@
   .it .x { margin-left: auto; font-weight: 900; font-size: 18px; color: #bbb; } .it.ok .x { color: var(--green); }
   .foot { text-align: center; color: #ffe9c4; font-size: 12px; margin-top: 8px; line-height: 1.4; }
 
+  /* ===== fit intro to any screen height ===== */
+  html, body { height: 100%; } .app { height: 100dvh; }
+  .intro { overflow-y: auto; justify-content: space-evenly; gap: 6px; padding-bottom: 4px; }
+  .intro .w { font-size: clamp(40px, 8.5vh, 64px); margin-top: 0; }
+  .intro h1 { font-size: clamp(19px, 3.2vh, 26px); }
+  .intro .hero { margin: 4px 0; align-items: center; }
+  .intro .vwrap { width: auto; height: clamp(150px, 30vh, 290px); aspect-ratio: 9/16; }
+  .intro .vwrap video { height: 100%; width: auto !important; }
+  .intro .bubble { font-size: clamp(13px, 1.9vh, 15px); margin-bottom: 0; }
+  .intro .rules { padding: 6px 10px; font-size: clamp(12.5px, 1.8vh, 14px); line-height: 1.35; }
+  .intro .rules img { width: clamp(26px, 3.6vh, 34px); height: clamp(26px, 3.6vh, 34px); }
+  .intro .btn { margin-top: 0; padding: clamp(9px, 1.6vh, 14px); font-size: clamp(18px, 2.7vh, 22px); }
+  .intro .btn.ghost { font-size: clamp(15px, 2.2vh, 18px); padding: clamp(7px, 1.2vh, 11px); }
+  .linkbtn { background: none; border: none; color: #ffe9c4; font-family: 'Kanit'; font-weight: 600; font-size: 14px; text-decoration: underline; cursor: pointer; padding: 2px; }
+  .intro .best { margin-top: 0; }
+  .mute { top: 8px !important; bottom: auto !important; right: 8px !important; width: 34px !important; height: 34px !important; font-size: 15px !important; }
+  .intro .brand { padding-right: 40px; padding-left: 40px; }
+  .hud { padding-right: 40px; }
   /* ===== tap-to-start gate (unlocks sound) ===== */
   .gate { position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center; text-align: center;
     background: linear-gradient(180deg, rgba(30,15,5,.25), rgba(30,15,5,.85)), url(img/gate_bg.jpg) center/cover; }
@@ -197,7 +215,7 @@
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
     <button class="btn ghost" id="boardBtn">🏆 ดูกระดานคะแนน</button>
-    <button class="btn ghost" id="replayStory" style="font-size:16px;padding:9px">🎬 ดูวิดีโอเรื่องราวอีกครั้ง</button>
+    <button class="linkbtn" id="replayStory">🎬 ดูวิดีโอเรื่องราวอีกครั้ง</button>
     <div class="best" id="bestTxt"></div>
   </section>
 
