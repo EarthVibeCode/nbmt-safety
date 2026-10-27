@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027232704';
+const BUILD = '20261027234055';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -14,7 +14,7 @@ const BUILD = '20261027232704';
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <link rel="icon" href="data:,">
 <title>ถนนนรก กลับบ้าน · NBMT Safe Ride Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;800;900&family=Chakra+Petch:wght@700&family=Bangers&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;800;900&family=Chakra+Petch:wght@700&family=Bangers&family=M+PLUS+Rounded+1c:wght@800;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
   html, body { height: 100%; overflow: hidden; background: #0b2f6b; font-family: 'Kanit', sans-serif; touch-action: none; }
@@ -130,15 +130,22 @@ const BUILD = '20261027232704';
   #end, #board { padding-bottom: 80px !important; }
   .ov p, .bfoot, .how { text-wrap: balance; } .pk b { white-space: nowrap; }
   .spdp { display: flex; align-items: center; gap: 4px; } .lim { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 4px solid #e01b1b; color: #111; font-size: 12px; font-weight: 900; } .spdp.over { background: rgba(200,20,20,.8); }
-  .ppe { position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 8; display: none; font-family: 'Kanit'; font-weight: 900; font-size: 22px; color: #fff; border: 4px solid #1a1a1a; border-radius: 22px; padding: 16px 22px; background: linear-gradient(180deg, #33c9ff, #1559b8); box-shadow: 0 6px 0 #1a1a1a; animation: pulse .6s infinite alternate; max-width: 88vw; text-align: center; line-height: 1.25; } .ppe.on { display: block; }
+  .ppe { position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 8; display: none; font-family: 'Kanit'; font-weight: 900; font-size: 22px; color: #fff; border: 4px solid #1a1a1a; border-radius: 22px; padding: 16px 22px; background: linear-gradient(180deg, #33c9ff, #1559b8); box-shadow: 0 6px 0 #1a1a1a; animation: ppep .6s infinite alternate; max-width: calc(100vw - 32px); text-align: center; line-height: 1.25; } .ppe.on { display: block; }
   .mlist { width: 100%; max-width: 360px; background: rgba(255,255,255,.08); border-radius: 14px; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; text-align: left; font-size: 13px; }
-  .mlist .mh { font-weight: 900; color: #ffd36b; text-align: center; font-size: 14px; margin-bottom: 2px; } .mlist div:not(.mh) { display: grid; grid-template-columns: 22px auto 1fr; gap: 6px; align-items: baseline; } .mlist small { opacity: .7; font-size: 11px; text-align: right; } .mlist .no b { opacity: .75; } .mlist .warnrow { display: block !important; color: #ff8a8a; font-weight: 700; text-align: center; }
+  .mlist .mh { font-weight: 900; color: #ffd36b; text-align: center; font-size: 14px; margin-bottom: 2px; } .mlist .row { display: none; } .mlist.open .row { display: grid; } .mlist.open .more { display: none; } .mlist .chips { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; } .mlist .chips span { font-weight: 900; font-size: 13px; padding: 2px 7px; border-radius: 8px; background: rgba(255,255,255,.15); } .mlist .chips .ok { background: #1a8a4c; } .mlist .more { text-align: center; font-size: 11px; opacity: .7; cursor: pointer; } .mlist .row { grid-template-columns: 22px auto 1fr; gap: 6px; align-items: baseline; } .mlist .x { display: none; } grid-template-columns: 22px auto 1fr; gap: 6px; align-items: baseline; } .mlist small { opacity: .7; font-size: 11px; text-align: right; } .mlist .no b { opacity: .75; } .mlist .warnrow { display: block !important; color: #ff8a8a; font-weight: 700; text-align: center; }
   .priv { font-size: 13px; font-weight: 800; color: #0b5a2e; background: #e3f7ea; border-radius: 10px; padding: 6px 8px; line-height: 1.35; }
   .br .tag { display: block; font-size: 11px; font-weight: 700; color: #fff; opacity: .85; } .br.ph { opacity: .45; border: 2px dashed rgba(255,255,255,.3); background: transparent; } .br.sep { justify-content: center; padding: 0; background: none; opacity: .6; }
   .chase { font-size: 14px; font-weight: 800; color: #ffd36b; } .lineh { font-size: 12px; opacity: .8; display: none; }
   .cf { position: fixed; top: -20px; width: 10px; height: 16px; z-index: 30; pointer-events: none; border-radius: 2px; animation: cf 2.4s cubic-bezier(.2,.6,.4,1) forwards; } @keyframes cf { to { transform: translate(var(--dx), 110vh) rotate(var(--r)); } }
   .medal .coin { border: 6px solid rgba(255,255,255,.55); outline: 3px solid rgba(0,0,0,.25); }
   .langs { display: flex; gap: 6px; flex: none; } .langs button { font-family: 'Kanit'; font-weight: 800; font-size: 13px; color: #fff; background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.35); border-radius: 14px; padding: 3px 12px; cursor: pointer; } .langs button.on { background: #ffd36b; color: #3a2200; border-color: #ffd36b; }
+  .drunkbox { background: #c81e1e; color: #fff; border: 3px solid #1a1a1a; border-radius: 14px; padding: 10px 14px; font-size: 15px; max-width: 360px; box-shadow: 0 5px 0 #1a1a1a; }
+  .fam { animation: famin .9s cubic-bezier(.2,1.5,.5,1); } @keyframes famin { from { transform: scale(.4) rotate(-8deg); opacity: 0; } }
+  .ctrl .gas { position: absolute; right: 10px; bottom: calc(108px + env(safe-area-inset-bottom)); width: 64px; height: 64px; border-radius: 50%; font-size: 22px; line-height: 1; background: rgba(120,40,160,.85); border: 3px solid rgba(255,255,255,.55) !important; display: flex; flex-direction: column; align-items: center; justify-content: center; } .ctrl .gas small { font-size: 11px; } .ctrl .gas.on { filter: brightness(1.3); transform: scale(.95); }
+  @keyframes ppep { to { transform: translate(-50%, -50%) scale(1.06); } }
+  :lang(ja) .logo, :lang(ja) h1, :lang(ja) .pk b, :lang(ja) .go { font-family: 'M PLUS Rounded 1c', 'Kanit', sans-serif; } :lang(ja) p, :lang(ja) .how, :lang(ja) .bfoot { word-break: keep-all; line-break: strict; overflow-wrap: anywhere; }
+  .mbtn { z-index: 32; }
+  .ov > * { flex-shrink: 0; }
   .pkbtn { display: flex; gap: 10px; align-items: center; flex: none; } .pkbtn .go { padding: min(15px, 1.8dvh) 40px; } .pkbtn .btn2 { padding: min(10px, 1.4dvh) 18px; font-size: 22px; }
   #pkChar { grid-template-columns: repeat(4, 1fr); } #pkChar img { height: 11dvh; }
   .pkh { font-weight: 900; font-size: min(18px, 2.4dvh); color: #ffd36b; align-self: center; flex: none; }
@@ -148,7 +155,7 @@ const BUILD = '20261027232704';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
-<script src="race_i18n.js?b=20261027232704"></script>
+<script src="race_i18n.js?b=20261027234055"></script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body class="menu">
@@ -166,7 +173,7 @@ const BUILD = '20261027232704';
 <button class="ppe" id="ppeBtn">👆 แตะเพื่อรัดคางหมวก ⛑️</button>
 <div class="tempt" id="tempt"><img id="tImg" alt=""><b id="tWho"></b><small id="tSub"></small>
   <div class="r"><button class="bad" id="tBad"></button><button class="good" id="tGood"></button></div><i class="tm"></i></div>
-<div class="ctrl"><button class="lane" id="bL">◀</button><button class="brake" id="bB">✋ เบรก</button><button class="lane" id="bR">▶</button></div>
+<div class="ctrl"><button class="lane" id="bL">◀</button><button class="brake" id="bB">✋ เบรก</button><button class="lane" id="bR">▶</button><button class="gas" id="bG">⏩<small>เร่ง</small></button></div>
 
 <div class="gate" id="pause"><div class="logo" style="font-size:44px">⏸ พักก่อน</div><button class="go" id="resumeBtn">▶ ขี่ต่อ</button><small>ง่วงก็จอดพักแบบนี้นะ 😴</small></div>
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
@@ -175,9 +182,9 @@ const BUILD = '20261027232704';
   <div class="langs" id="langs"><button data-l="th">TH</button><button data-l="en">EN</button><button data-l="jp">日本語</button></div>
   <div class="logo">ถนนนรก<br>กลับบ้าน!</div>
   <h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1>
-  <p>เลือกนักบิด เอิร์ท · ปลื้ม · ฟลุ๊ค แล้วฝ่าถนนสุดป่วนจาก NBMT กลับบ้านให้รอด! ขับปลอดภัยได้คะแนน ประมาทเสียหัวใจ</p>
+  <p>เลือกนักบิด เอิร์ท · ปลื้ม · ฟลุ๊ค · ใบเตย แล้วฝ่าถนนสุดป่วนจาก NBMT กลับบ้านให้รอด! ขับปลอดภัยได้คะแนน ประมาทเสียหัวใจ</p>
   <div class="cast" id="cast"></div>
-  <div class="how">◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · 🚦 ไฟแดงต้องหยุด · 😴 ง่วง = ชิดซ้ายจอดพัก 🅿️ · 📵 ไม่รับสายขณะขับ · 🚸 ชะลอให้คนข้าม · 😈 ระวังเพื่อนชวนนอกลู่นอกทาง!</div>
+  <div class="how">◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · ขับปลอดภัยแบบไหน เดี๋ยวเกมบอกระหว่างทาง!</div>
   <button class="go" id="goBtn">▶ ออกเดินทาง</button>
   <button class="btn2" id="boardBtn">🏆 กระดานคะแนน</button>
 </div>
@@ -192,11 +199,11 @@ const BUILD = '20261027232704';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261027232704" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261027234055" alt="">
   <div class="big" id="endScore">0</div>
-  <div class="stats" id="stats"></div>
-  <div class="mlist" id="mList"></div>
   <p id="endP"></p>
+  <div class="drunkbox" id="drunkBox" style="display:none">🚫 รอบที่ดื่มแล้วขับ ไม่นับคะแนน ไม่ขึ้นกระดาน<br><b>เล่นใหม่แบบ "ดื่มไม่ขับ" นะ</b></div>
+  <div class="mlist" id="mList"></div>
   <div class="sub" id="submitBox">
     <div class="h">✈️ เช็คอินขึ้นกระดานคะแนน</div>
     <input id="pName" maxlength="20" placeholder="ชื่อเล่น เช่น ปลื้ม" autocomplete="off">
@@ -208,6 +215,7 @@ const BUILD = '20261027232704';
     <div class="note">บนกระดานแสดงแค่ชื่อเล่น โซน และกลุ่ม 5ส · ใช้รหัสเพื่อนับคะแนนดีที่สุดของแต่ละคน</div>
   </div>
   <div class="myrank" id="myRank"></div>
+  <div class="stats" id="stats"></div>
   <button class="btn2" id="certBtn">🎫 บัตรผ่านกลับบ้าน (บันทึก/แชร์)</button>
   <img id="certImg" alt="บัตรผ่านกลับบ้าน">
   <div class="lineh" id="lineH">📲 กดค้างที่รูปเพื่อบันทึก หรือส่งต่อใน LINE</div>
@@ -224,7 +232,7 @@ const BUILD = '20261027232704';
   <div class="blist" id="bList"></div>
   <button class="go" id="boardPlay">▶ เล่นเลย</button>
   <button class="btn2" id="boardClose">✖ ปิด</button>
-  <div class="bfoot">⭐ ถึงบ้านแบบไม่ชนเลย · 🏠 ถึงบ้านปลอดภัย · 😇 ไม่หลงกลเพื่อนครบ 4 ครั้ง<br>โซน 5ส: คะแนนรวม + เฉลี่ยต่อคน · กระดาน "วันนี้" เริ่มใหม่ทุกเที่ยงคืน</div>
+  <div class="bfoot">⭐ ถึงบ้านแบบไม่ชนเลย · 🏠 ถึงบ้านปลอดภัย · 😇 ไม่หลงกลเพื่อนครบ 4 ครั้ง<br>โซน 5ส: คะแนนรวม + เฉลี่ยต่อคน · กระดาน "วันนี้" เริ่มใหม่ทุกเที่ยงคืน<br>🔒 รหัสพนักงานเก็บแบบเข้ารหัส และจะลบหลังจบกิจกรรม</div>
   <div style="height:20px"></div>
 </div>
 <div class="ov medal" id="medal">
@@ -315,7 +323,7 @@ function shadowBlob(w) { const m = new THREE.Mesh(new THREE.CircleGeometry(.5, 1
 const S = {}; let ents = [], lights = [];
 const player = new THREE.Group(); scene.add(player);
 function reset() {
-  Object.assign(S, { paused: false, v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, combo: 1, brake: false, run: false, inv: 0, sleep: 0, total: 3000, nextSpawn: 70, rain: false, slow: 1, shield: false, truck: false, sleepWarned: false, gapGood: 0,
+  Object.assign(S, { paused: false, gas: false, overT: 0, v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, combo: 1, brake: false, run: false, inv: 0, sleep: 0, total: 3000, nextSpawn: 70, rain: false, slow: 1, shield: false, truck: false, sleepWarned: false, gapGood: 0,
     stats: { red: 0, coffee: 0, phoneNo: 0, declined: 0, dodge: 0, crash: 0, nope: 0, ppe: false, drank: false, rush: false, speeding: false, redRun: 0, phoneAns: 0, rear: 0, micro: 0, blind: 0, haz: 0, walk: 0, yield: 0, crossSeen: 0, rest: 0 }, zone: 0, zoneSped: false, laneT: -9, callback: 0, cbT: 0, restT: 0, ppeT: 0, drunk: 0, turbo: 0, heavy: 0, tmp: null, tq: shuffle(['friends', 'racer', 'hitch', 'shortcut']).map((k, i) => ({ k, at: [330, 930, 1380, 2230][i] })), call: null, nextCall: rnd(18, 26), t: 0 });
   ents.forEach(e => scene.remove(e.o)); lights.forEach(l => scene.remove(l.o)); ents = []; lights = [];
   player.clear(); const r = sprite(`p_${PL.c}_${PL.v}`); player.add(shadowBlob(1.6)); player.add(r); player.userData.spr = r;
@@ -349,8 +357,10 @@ function laneTo(d) { if (!S.run) return; if (S.drunk > 0) d = -d; const n = Math
 $('bL').onpointerdown = (e) => { e.preventDefault(); laneTo(-1); }; $('bR').onpointerdown = (e) => { e.preventDefault(); laneTo(1); };
 const bB = $('bB'); const setB = (v) => { S.brake = v; bB.classList.toggle('on', v); };
 bB.onpointerdown = (e) => { e.preventDefault(); setB(true); }; bB.onpointerup = bB.onpointerleave = bB.onpointercancel = () => setB(false);
-addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') laneTo(-1); if (e.key === 'ArrowRight') laneTo(1); if (e.key === ' ' || e.key === 'ArrowDown') setB(true); });
-addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'ArrowDown') setB(false); });
+const bG = $('bG'); const setG = (v) => { S.gas = v; bG.classList.toggle('on', v); };
+bG.onpointerdown = (e) => { e.preventDefault(); setG(true); }; bG.onpointerup = bG.onpointerleave = bG.onpointercancel = () => setG(false);
+addEventListener('keydown', (e) => { if (e.key === 'ArrowUp') setG(true); if (e.key === 'ArrowLeft') laneTo(-1); if (e.key === 'ArrowRight') laneTo(1); if (e.key === ' ' || e.key === 'ArrowDown') setB(true); });
+addEventListener('keyup', (e) => { if (e.key === 'ArrowUp') setG(false); if (e.key === ' ' || e.key === 'ArrowDown') setB(false); });
 let tx = null; addEventListener('touchstart', (e) => { if (e.target.tagName !== 'BUTTON') tx = e.touches[0].clientX; }, { passive: true });
 addEventListener('touchend', (e) => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) laneTo(dx > 0 ? 1 : -1); tx = null; }, { passive: true });
 
@@ -390,7 +400,7 @@ function callbackTick(dt) { if (!S.callback) return; if (S.t > S.callback) { S.c
 function ppeTick(dt) { if (S.ppeT <= 0) return; S.ppeT -= dt; if (S.ppeT <= 0 && $('ppeBtn').classList.contains('on')) { $('ppeBtn').classList.remove('on'); pop(PL.v === 'car' ? 'อย่าลืมคาดเข็มขัด!' : 'อย่าลืมรัดคางหมวก!', 'bad', true); } }
 $('ppeBtn').onclick = () => { if (!S.run || S.stats.ppe) return; S.stats.ppe = true; $('ppeBtn').classList.remove('on'); good(20, PL.v === 'car' ? 'คาดเข็มขัดแล้ว พร้อมออกเดินทาง!' : 'รัดคางแล้ว พร้อมออกเดินทาง!'); };
 function confetti(n = 70) { const C = ['#ffd36b', '#ff5a3a', '#2bd46a', '#33c9ff', '#ff6fb1', '#fff']; for (let i = 0; i < n; i++) { const d = document.createElement('i'); d.className = 'cf'; d.style.left = Math.random() * 100 + 'vw'; d.style.background = C[i % C.length]; d.style.animationDelay = Math.random() * .6 + 's'; d.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px'); d.style.setProperty('--r', (Math.random() * 1080 - 540) + 'deg'); document.body.appendChild(d); setTimeout(() => d.remove(), 3200); } }
-const TIPS = ['💡 ง่วงเมื่อไหร่ ชิดซ้ายจอดพักที่ 🅿️', '💡 เว้นระยะ 3 วิ หลบได้ทันเสมอ', '💡 เห็นคนข้าม ชะลอให้ได้คะแนนเพิ่ม', '💡 มือถือดัง กดไม่รับ แล้วจอดก่อนค่อยโทรกลับ', '💡 ไฟเหลือง = เตรียมหยุด ไม่ใช่เร่ง', '💡 ขับไม่เกินป้ายจำกัดความเร็ว ได้โบนัสทุกช่วง'];
+const TIPS = ['💡 ⏩ เร่งได้ แต่เกินป้ายจำกัด = โดนกล้องจับ', '💡 ง่วงเมื่อไหร่ ชิดซ้ายจอดพักที่ 🅿️', '💡 เว้นระยะ 3 วิ หลบได้ทันเสมอ', '💡 เห็นคนข้าม ชะลอให้ได้คะแนนเพิ่ม', '💡 มือถือดัง กดไม่รับ แล้วจอดก่อนค่อยโทรกลับ', '💡 ไฟเหลือง = เตรียมหยุด ไม่ใช่เร่ง', '💡 ขับไม่เกินป้ายจำกัดความเร็ว ได้โบนัสทุกช่วง'];
 function crossDone(e) { if (e.scored || e.hit) return; e.scored = true; if (e.yielded) { S.stats.yield++; good(e.kind === 'grandma' ? 30 : 20, e.kind === 'grandma' ? 'หยุดให้คนข้าม 🙏' : 'ชะลอให้สัตว์ข้าม'); } }
 function good(n, why, voice) { const pts = n * S.combo; S.score += pts; S.combo = Math.min(5, S.combo + 1); if (navigator.vibrate) try { navigator.vibrate(12); } catch (e) {} pop(`+${pts} ${why}`, 'good', true); snd.good(); if (voice) snd.say(voice); }
 function hearts() { $('hearts').textContent = '❤️'.repeat(Math.max(0, S.hearts)) + '🤍'.repeat(3 - Math.max(0, S.hearts)) + (S.shield ? '🛡️' : ''); }
@@ -516,7 +526,7 @@ function update(dt) {
   S.t += dt; musicTick(); const prog = S.dist / S.total;
   const VH = VEHS[PL.v]; const zone = S.dist < 900 ? 0 : S.dist < 2600 ? 1 : 2, LIM = [60, 80, 50][zone];
   if (zone !== S.zone) { if (!S.zoneSped) good(20, 'ขับไม่เกินกำหนด ✓'); S.zone = zone; S.zoneSped = false; $('lim').textContent = LIM; warn(zone === 1 ? '🛣️ ถนนใหญ่ จำกัด 80 km/h' : '🏘️ เขตชุมชน จำกัด 50 · ใกล้บ้าน = จุดเสี่ยง ชะลอ!'); }
-  const cruise = (LIM - 4) / 3.6 * (S.rain ? .9 : 1) * VH.top, brakeP = (S.rain ? 15 : 24) * VH.brake;
+  const cruise = ((S.gas ? LIM + 30 : LIM - 4) / 3.6) * (S.rain ? .9 : 1) * VH.top, brakeP = (S.rain ? 15 : 24) * VH.brake;
   temptTick(dt);
   if (S.turbo > 0) S.v = Math.min(120 / 3.6, S.v + 14 * dt); else if (S.brake) S.v = Math.max(0, S.v - brakeP * dt); else S.v = S.v > cruise ? Math.max(cruise, S.v - 10 * dt) : Math.min(cruise, S.v + VH.acc * dt);
   const dz = S.v * dt; S.dist += dz; roadTex.offset.y += dz / 20;
@@ -537,7 +547,7 @@ function update(dt) {
   // spawning
   if (S.dist > S.nextSpawn && S.dist < S.total - 120) {
     const nearLight = lights.some(L => !L.done && L.at - S.dist < 150 && L.at - S.dist > -10);
-    if (!nearLight) { let k = pick(KINDS); if (S.dist > 2700 && !S.truck) { k = 'truck'; S.truck = true; } const se = spawn(k); const w = WARN[k]; const side = se.cross ? (se.x < 0 ? ' ⬅' : ' ➡') : ['drunk', 'truck'].includes(k) ? '' : [' ⬅ ซ้าย', ' ⬆ กลาง', ' ขวา ➡'][se.lane]; if (w) setTimeout(() => { if (S.run) { warn(w[0] + side); if (w[1]) snd.say(w[1]); } }, 300); }
+    if (!nearLight) { let k = pick(KINDS); if (S.dist > 2700 && !S.truck) { k = 'truck'; S.truck = true; } const se = spawn(k); const w = WARN[k]; const side = se.cross ? (se.x < 0 ? ' ⬅' : ' ➡') : k === 'drunk' ? ' ↔ ส่ายทุกเลน' : k === 'truck' ? ' ⬆ กินเลนกลาง' : [' ⬅ ซ้าย', ' ⬆ กลาง', ' ขวา ➡'][se.lane]; if (w) setTimeout(() => { if (S.run) { warn(w[0] + side); if (w[1]) snd.say(w[1]); } }, 300); }
     S.nextSpawn = S.dist + rnd(55, 85) * (1 - prog * .45);
   }
   // entities
@@ -574,15 +584,16 @@ function update(dt) {
   else { $('gapT').textContent = 'ระยะ —'; $('gapBar').style.width = '0'; }
   $('gapBar').closest('.meter').style.opacity = nearest && S.v > 2 ? 1 : .35;
   for (const L of lights) { const z = -(L.at - S.dist); L.o.position.z = z; if (L.done) continue;
-    if (L.state === 'green' && L.at - S.dist < 100) { setL(L, 'yellow'); L.t = 1.1; }
-    else if (L.state === 'yellow') { L.t -= dt; if (L.t <= 0) { setL(L, 'red'); warn('🚦 ไฟแดง! หยุดหลังเส้น'); snd.say('red', true); } }
+    if (L.state === 'green' && L.at - S.dist < 110) { setL(L, 'yellow'); L.t = 2; warn('🟡 ไฟเหลือง = เตรียมหยุด ไม่ใช่เร่ง'); }
+    else if (L.state === 'yellow') { if (S.gas && !S.stats.yellowGo) { S.stats.yellowGo = true; pop('เร่งตอนไฟเหลือง!', 'bad', true); } L.t -= dt; if (L.t <= 0) { setL(L, 'red'); warn('🚦 ไฟแดง! หยุดหลังเส้น'); snd.say('red', true); } }
     else if (L.state === 'red') { const gap = (L.at - 2.5) - S.dist;
       if (S.v < .6 && gap > -.5 && gap < 70) { L.t += dt; if (L.t > 1.5) { setL(L, 'green'); L.done = true; S.stats.red++; good(50, 'หยุดไฟแดง!', 'great'); } }
       if (gap < -1) { L.done = true; setL(L, 'green'); hurt('ฝ่าไฟแดง!', 'ouch', 'red'); } } }
   S.score += dz * .05; $('score').textContent = Math.floor(S.score); $('spd').textContent = Math.round(S.v * 3.6); $('spd').parentElement.classList.toggle('over', S.v * 3.6 > LIM + 2);
   restTick(dt); callbackTick(dt); ppeTick(dt);
+  if (S.gas && S.v * 3.6 > LIM + 2) { S.score += dz * .05; S.overT = (S.overT || 0) + dt; if (S.overT > 1) { if (!S.stats.speeding) { S.stats.speeding = true; warn('📸 กล้องจับความเร็ว! เกินกำหนด'); } S.zoneSped = true; S.overT = -2; S.score = Math.max(0, S.score - 10); S.combo = 1; pop('เกินกำหนด! −10', 'bad', true); } } else if (!S.gas) S.overT = 0;
   $('combo').style.visibility = S.combo > 1 ? 'visible' : 'hidden'; $('combo').textContent = 'x' + S.combo;
-  $('tripBar').style.width = Math.min(100, prog * 100) + '%'; $('tripMe').style.left = `calc(${8 + Math.min(1, prog) * 84}%)`; document.querySelector('.trip .a').style.opacity = prog > .005 ? 0 : 1;
+  $('tripBar').style.width = Math.min(100, prog * 100) + '%'; $('tripMe').style.left = `calc(${8 + Math.min(1, prog) * 84}%)`; document.querySelector('.trip .a').style.opacity = 0;
   $('speed').style.opacity = Math.max(0, (S.v * 3.6 - 60) / 30);
   snd.engine(S.v * 3.6);
   if (S.dist >= S.total) finish(true);
@@ -595,24 +606,28 @@ function loop() { const dt = Math.min(.05, clock.getDelta());
   if (S.run && !S.paused && !fpsDone) { fpsN++; fpsT += dt; if (fpsT > 4) { fpsDone = true; if (fpsN / fpsT < 40 && renderer.getPixelRatio() > 1) { renderer.setPixelRatio(1); resize(); } } }
   if (S.run && !S.paused) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
 function start() { snd.unlock(); reset(); S.run = true; document.body.classList.remove('menu'); $('lim').textContent = 60; S.ppeT = 4.5; $('ppeBtn').textContent = PL.v === 'car' ? '👆 แตะเพื่อคาดเข็มขัด 🔒' : '👆 แตะเพื่อรัดคางหมวก ⛑️'; $('ppeBtn').classList.add('on'); setTimeout(() => S.run && warn(pick(TIPS)), 5200); if (!Music.playTrack(`${PL.c}_${PL.v}`, true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
-const MEASURES = [['เตรียมคน เตรียมรถ', 'รัดคาง/คาดเข็มขัด · ไม่ดื่ม'], ['วางแผนเส้นทาง', 'ไม่รีบ ไม่ลัด ไม่แข่ง'], ['ทำตามกฎจราจร', 'ไฟแดง · มือถือ · ความเร็ว'], ['เว้นระยะ ≥ 3 วิ', 'ไม่จี้ท้าย · ง่วงจอดพัก'], ['ชะลอทางแยก', 'หยุดหลังเส้นเมื่อไฟแดง'], ['ตรวจจุดอับสายตา', 'ไม่ชนตอนเปลี่ยนเลน'], ['คาดการณ์ความเสี่ยง', 'พร้อมเบรก ไม่ชนสิ่งกีดขวาง'], ['หยุดให้คนข้าม', 'มีน้ำใจต่อเพื่อนร่วมทาง']];
-function measures() { const st = S.stats; return [st.ppe && !st.drank && !st.pillion, !st.rush, !st.redRun && !st.phoneAns && !st.speeding, !st.rear && !st.micro, st.red > 0 && !st.redRun, !st.blind, !st.haz, !st.walk && (st.yield > 0 || !st.crossSeen)]; }
+const MEASURES = [['เตรียมคน เตรียมรถ ก่อนเดินทาง', 'ไม่ดื่ม · ชุดรัดกุม · รัดคาง/เข็มขัด'], ['วางแผนเส้นทาง ก่อนขับขี่', 'ออกเผื่อเวลา ไม่รีบ ไม่ลัด'], ['ปฏิบัติตาม กฎจราจร', 'ไฟแดงหยุด · ไม่ขับเร็ว · ไม่ใช้มือถือ'], ['ขับขี่อย่างมีสติ เว้นระยะปลอดภัย', 'เว้นระยะ ≥ 3 วิ · ง่วงให้จอดพัก'], ['ชะลอทางแยก ให้สัญญาณล่วงหน้า', 'ลดความเร็ว · ไฟเหลืองเตรียมหยุด'], ['ตรวจจุดอับสายตา', 'ก่อนเลี้ยวหรือเปลี่ยนเลน'], ['คาดการณ์ความเสี่ยง', 'พร้อมรับเหตุฉุกเฉิน · พร้อมเบรก'], ['มีน้ำใจและเคารพเพื่อนร่วมทาง', 'หยุดให้คนข้าม']];
+function measures() { const st = S.stats; return [st.ppe && !st.drank && !st.pillion, !st.rush, !st.redRun && !st.phoneAns && !st.speeding, !st.rear && !st.micro, !st.redRun && !st.yellowGo && st.red > 0, !st.blind, !st.haz, !st.walk && (st.yield > 0 || !st.crossSeen)]; }
+function reasons() { const st = S.stats, r = (c, t) => c ? t : null, j = (...a) => a.filter(Boolean).join(' · ');
+  return [j(r(st.drank, 'ดื่มแล้วขับ'), r(!st.ppe, 'ไม่ได้รัดคาง/คาดเข็มขัดตอนออกรถ'), r(st.pillion, 'ให้ซ้อน/นั่งโดยไม่มี PPE')), j(r(st.rush, 'รับคำท้า/ใช้ทางลัด')), j(r(st.redRun, `ฝ่าไฟแดง ${st.redRun} ครั้ง`), r(st.phoneAns, `รับสาย ${st.phoneAns} ครั้ง`), r(st.speeding, 'ขับเร็วเกินกำหนด')), j(r(st.rear, `ชนท้าย ${st.rear} ครั้ง`), r(st.micro, `หลับใน ${st.micro} ครั้ง`)), j(r(st.redRun, 'ไม่หยุดที่ทางแยก'), r(st.yellowGo, 'เร่งตอนไฟเหลือง'), r(!st.red && !st.redRun, 'ยังไม่ผ่านทางแยก')), j(r(st.blind, `ชนตอนเปลี่ยนเลน ${st.blind} ครั้ง`)), j(r(st.haz, `ชนสิ่งกีดขวาง ${st.haz} ครั้ง`)), j(r(st.walk, 'ไม่หยุดให้คนข้าม'), r(!st.walk && !st.yield && st.crossSeen, 'ไม่ได้ชะลอให้คน/สัตว์ข้าม'))]; }
 function finish(win) {
-  if (!S.run) return; S.run = false; document.body.classList.add('menu'); snd.stop(); setB(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
+  if (!S.run) return; S.run = false; document.body.classList.add('menu'); snd.stop(); setB(false); setG(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
   Music.stop(); Music.trackTick({ rate: 1, wobble: false, lp: 18000 }); Music.duck(4); if (!win) Music.trackTick({ rate: .85, wobble: true, lp: 1400 });
-  const drank = S.stats.drank; if (win) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); if (!S.stats.drank) setTimeout(() => confetti(90), 300); }
-  const ms = measures(), mok = ms.filter(Boolean).length; S.score += mok * 25; if (drank) S.score = Math.floor(S.score * .5);
+  const drank = S.stats.drank; if (win && !drank) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); if (!S.stats.drank) setTimeout(() => confetti(90), 300); }
+  const ms = measures(), mok = ms.filter(Boolean).length, why = reasons(); if (!drank) S.score += mok * 25; else { S.score = 0; snd.crash(); }
   $('endT').innerHTML = win && drank ? 'ถึงบ้าน... แต่เมาแล้วขับ ❌<br><b>เมาไม่ขับ ไม่มีข้อยกเว้น</b>' : win ? 'ถึงบ้านแล้ว! 🏠<br><b>คนที่บ้านรอคุณอยู่</b>' : 'ไปไม่ถึงบ้าน 😢<br><b>ขับช้าๆ ไม่ต้องรีบนะ</b>';
-  $('mList').innerHTML = `<div class="mh">✈ ผ่าน ${mok}/8 ด่าน · 8 มาตรการขับขี่ปลอดภัย (+${mok * 25})</div>` + MEASURES.map((m, i) => `<div class="${ms[i] ? 'ok' : 'no'}"><span>${ms[i] ? '✅' : '❌'}</span><b>${i + 1}. ${m[0]}</b><small>${m[1]}</small></div>`).join('') + (drank ? '<div class="no warnrow">🍺 ดื่มแล้วขับ: คะแนนรอบนี้เหลือครึ่งเดียว และไม่ได้ตรา</div>' : '');
+  $('mList').classList.remove('open'); $('mList').innerHTML = `<div class="mh">✈ ผ่าน ${mok}/8 ด่าน · 8 มาตรการขับขี่ปลอดภัย ${drank ? '' : `(+${mok * 25})`}</div><div class="chips">${ms.map((ok, i) => `<span class="${ok ? 'ok' : 'no'}">${ok ? '✓' : '·'}${i + 1}</span>`).join('')}</div><div class="more">แตะเพื่อดูรายละเอียด ▾</div>` + MEASURES.map((m, i) => `<div class="row ${ms[i] ? 'ok' : 'no'}"><span>${ms[i] ? '✅' : '⬜'}</span><b>${i + 1}. ${m[0]}</b><small>${ms[i] ? m[1] : '✗ ' + why[i]}</small></div>`).join('');
+  $('drunkBox').style.display = drank ? '' : 'none';
   $('endScore').textContent = Math.floor(S.score);
   const st = S.stats; $('stats').innerHTML = `<div>🚦 หยุดไฟแดง<br><b>${st.red}</b></div><div>🚸 หยุดให้ข้าม<br><b>${st.yield}</b></div><div>🅿️ จอดพักแก้ง่วง<br><b>${st.rest}</b></div><div>📵 ไม่ใช้มือถือ<br><b>${st.declined}</b></div><div>😇 ไม่หลงกลเพื่อน<br><b>${st.nope}/4</b></div><div>💥 ชน<br><b>${st.crash}</b></div>`;
-  $('endP').textContent = win ? `หัวใจเหลือ ${S.hearts} ดวง (+${S.hearts * 150})` : `ไปได้ ${Math.round(S.dist)} / ${S.total} ม.`; $('endImg').style.display = win && !drank ? '' : 'none';
+  $('endP').textContent = drank ? 'ถ้าเป็นถนนจริง ด่านตรวจ: ยึดรถ · ปรับ · จำคุก — ไม่มีโบนัสสำหรับคนเมาแล้วขับ' : win ? `หัวใจเหลือ ${S.hearts} ดวง (+${S.hearts * 150})` : `ไปได้ ${Math.round(S.dist)} / ${S.total} ม.`; $('endImg').style.display = win && !drank ? '' : 'none';
   last = { char: PL.c, veh: PL.v, game: 'race', score: Math.floor(S.score), dist: Math.round(Math.min(S.dist, S.total)), hearts: Math.max(0, S.hearts), crash: st.crash, nope: st.nope, sim: Math.round(S.t), win, drank, ms, mok, red: st.red, dodge: st.dodge, yield: st.yield, rest: st.rest, coffee: st.coffee, phoneNo: st.declined };
-  $('submitBox').style.display = last.score > 0 ? '' : 'none'; $('myRank').classList.remove('on'); $('submitBtn').disabled = false; $('submitBtn').textContent = '📌 ส่งคะแนน'; $('certImg').style.display = 'none';
+  $('submitBox').style.display = last.score > 0 && !drank ? '' : 'none'; $('myRank').classList.remove('on'); $('submitBtn').disabled = false; $('submitBtn').textContent = '📌 ส่งคะแนน'; $('certImg').style.display = 'none';
   me = me ? { name: me.name, dept: me.dept, group: me.group } : null;
   $('end').classList.add('on'); $('end').scrollTop = 0;
 }
 $('againBtn').onclick = start;
+$('mList').onclick = () => $('mList').classList.toggle('open');
 $('changeBtn').onclick = () => { $('end').classList.remove('on'); $('goBtn').onclick(); };
 // ================= character & vehicle pick =================
 { const sc = (localStorage.getItem && (() => { try { return [localStorage.getItem('nbmt_race_c'), localStorage.getItem('nbmt_race_v')]; } catch (e) { return []; } })()) || [];
@@ -697,7 +712,7 @@ $('submitBtn').onclick = async () => {
     const al = j.board.all || [], ra = j.rankAll; let chase = '';
     if (ra === 1) chase = '👑 คุณคืออันดับ 1 ตลอดกาล! ป้องกันแชมป์ไว้นะ';
     else if (ra > 1 && ra <= al.length) chase = `🎯 อีก ${(al[ra - 2].score - al[ra - 1].score + 1).toLocaleString()} คะแนน จะแซงอันดับ ${ra - 1} (${esc(al[ra - 2].name)})`;
-    else if (al.length >= 10) chase = `🎯 อีก ${Math.max(1, al[9].score - last.score + 1).toLocaleString()} คะแนน จะติด Top 10`;
+    else if (al.length >= 10 && al[9].score >= last.score) chase = `🎯 อีก ${(al[9].score - last.score + 1).toLocaleString()} คะแนน จะติด Top 10`;
     const zs = (j.board.depts || []), zi = zs.findIndex(z => z.dept === dept); if (zi > 0) chase += `<br>🏭 ${esc(dept)} ตาม ${esc(zs[zi - 1].dept)} อยู่ ${(zs[zi - 1].total - zs[zi].total).toLocaleString()} คะแนน ชวนเพื่อนในโซนมาช่วย!`; else if (zi === 0) chase += `<br>🏭 ${esc(dept)} นำเป็นโซนอันดับ 1!`;
     $('myRank').innerHTML = (ra ? `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${ra}` : 'ส่งคะแนนแล้ว ✓') + `<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)} · ${esc(group.split(' : ')[0])}</small>` + (chase ? `<div class="chase">${chase}</div>` : ''); $('myRank').classList.add('on');
     setTimeout(() => medalShow(j.rankToday, j.rankAll), 400);
@@ -710,7 +725,8 @@ function medalShow(rankToday, rankAll) {
   $('mCoin').className = 'coin ' + cls; $('mNum').textContent = r; $('mLab').textContent = useAll ? 'ALL-TIME' : 'TODAY';
   $('mT').textContent = r === 1 ? 'ราชาถนน!' : r <= 3 ? 'ยอดเยี่ยม!' : 'TOP 10!';
   $('mP').innerHTML = `ยินดีด้วย <b>${esc(me.name)}</b><br>คุณติด<b>อันดับ ${r}</b> ${useAll ? 'ตลอดกาล' : 'ของวันนี้'} บนกระดานคนกลับบ้าน 🎉<br><span style="font-size:14px;opacity:.85">${esc(me.dept)} · ${esc(me.group.split(' : ')[0])}</span>`;
-  $('medal').classList.add('on'); snd.win(); confetti(110); me.medal = { r, cls, useAll }; return true;
+  const dr = last && last.drank; if (dr) { $('mT').textContent = 'อันดับดีที่สุดของคุณ (จากรอบก่อน)'; $('mP').innerHTML += '<br><b style="color:#ff8a8a">รอบนี้เมาแล้วขับ ไม่นับคะแนนเป็นตรา · เมาไม่ขับ ไม่มีข้อยกเว้น</b>'; }
+  $('medal').classList.add('on'); if (!dr) { snd.win(); confetti(110); } me.medal = dr ? null : { r, cls, useAll }; return true;
 }
 $('mClose').onclick = () => $('medal').classList.remove('on');
 $('mCert').onclick = async () => { $('medal').classList.remove('on'); await showCert(); };
@@ -743,7 +759,7 @@ async function makeCert() {
   const zone = (me && me.dept) || $('pDept').value || '', grp = (me && me.group) || $('pGroup').value || '';
   c.fillStyle = '#334'; c.font = '600 28px Kanit'; c.fillText([zone, grp.split(' : ')[0]].filter(Boolean).join(' · ') || 'NBMT', X + 50, Y + 430);
   // medal
-  if (me && me.medal) { const mx = X + PW - 140, my = Y + 360, cols = { gold: ['#fff6c4', '#ffd34a', '#c9930e'], silver: ['#ffffff', '#d6dde6', '#8b97a6'], bronze: ['#ffe1c4', '#d98b4a', '#8f4e1c'], top: ['#e2f0ff', '#6aa8ff', '#1559b8'] }[me.medal.cls];
+  if (me && me.medal && !L.drank) { const mx = X + PW - 140, my = Y + 360, cols = { gold: ['#fff6c4', '#ffd34a', '#c9930e'], silver: ['#ffffff', '#d6dde6', '#8b97a6'], bronze: ['#ffe1c4', '#d98b4a', '#8f4e1c'], top: ['#e2f0ff', '#6aa8ff', '#1559b8'] }[me.medal.cls];
     const rg = c.createRadialGradient(mx - 25, my - 25, 10, mx, my, 95); rg.addColorStop(0, cols[0]); rg.addColorStop(.45, cols[1]); rg.addColorStop(1, cols[2]);
     c.save(); c.shadowColor = 'rgba(0,0,0,.4)'; c.shadowBlur = 18; c.beginPath(); c.arc(mx, my, 88, 0, 7); c.fillStyle = rg; c.fill(); c.restore();
     c.textAlign = 'center'; c.fillStyle = me.medal.cls === 'top' ? '#fff' : 'rgba(70,40,0,.85)'; c.font = '80px Bangers'; c.fillText(String(me.medal.r), mx, my + 26); c.font = '800 20px Kanit'; c.fillText(me.medal.useAll ? 'ALL-TIME' : 'TODAY', mx, my + 56); c.textAlign = 'left'; }
@@ -756,20 +772,20 @@ async function makeCert() {
   // pictures
   const py = Y + 650, ph = 320;
   c.save(); rrect(c, X + 50, py, 420, ph, 24); c.clip(); g = c.createLinearGradient(0, py, 0, py + ph); g.addColorStop(0, '#ffd9a8'); g.addColorStop(1, '#f6a560'); c.fillStyle = g; c.fillRect(X + 50, py, 420, ph);
-  if (rider) { const s = Math.min(380 / rider.width, 390 / rider.height); c.drawImage(rider, X + 50 + (420 - rider.width * s) / 2, py + ph - rider.height * s - 10, rider.width * s, rider.height * s); } c.restore();
-  c.save(); rrect(c, X + 490, py, PW - 540, ph, 24); c.clip(); if (fam && win && !L.drank) { const s = Math.max((PW - 540) / fam.width, ph / fam.height); c.drawImage(fam, X + 490 + (PW - 540 - fam.width * s) / 2, py + (ph - fam.height * s) / 2, fam.width * s, fam.height * s); } else { c.fillStyle = '#dfe6f1'; c.fillRect(X + 490, py, PW - 540, ph); c.fillStyle = '#5a6a85'; c.textAlign = 'center'; c.font = '900 40px Kanit'; c.fillText('คนที่บ้าน', X + 490 + (PW - 540) / 2, py + ph / 2 - 10); c.fillText('ยังรออยู่...', X + 490 + (PW - 540) / 2, py + ph / 2 + 44); c.textAlign = 'left'; } c.restore();
+  if (rider) { const s = Math.min(380 / rider.width, (ph - 36) / rider.height); c.drawImage(rider, X + 50 + (420 - rider.width * s) / 2, py + ph - rider.height * s - 10, rider.width * s, rider.height * s); } c.restore();
+  c.save(); rrect(c, X + 490, py, PW - 540, ph, 24); c.clip(); if (fam && win) { if (L.drank) { c.filter = 'grayscale(1) brightness(.45)'; } const s = Math.max((PW - 540) / fam.width, ph / fam.height); c.drawImage(fam, X + 490 + (PW - 540 - fam.width * s) / 2, py + (ph - fam.height * s) / 2, fam.width * s, fam.height * s); c.filter = 'none'; if (L.drank) { c.fillStyle = '#fff'; c.textAlign = 'center'; c.font = '900 34px Kanit'; c.fillText('คนที่บ้าน', X + 490 + (PW - 540) / 2, py + 80); c.fillText('ยังรออยู่...', X + 490 + (PW - 540) / 2, py + 124); c.textAlign = 'left'; } } else { c.fillStyle = '#dfe6f1'; c.fillRect(X + 490, py, PW - 540, ph); c.fillStyle = '#5a6a85'; c.textAlign = 'center'; c.font = '900 40px Kanit'; c.fillText('คนที่บ้าน', X + 490 + (PW - 540) / 2, py + ph / 2 - 10); c.fillText('ยังรออยู่...', X + 490 + (PW - 540) / 2, py + ph / 2 + 44); c.textAlign = 'left'; } c.restore();
   // stamp
-  c.save(); c.translate(X + PW - 230, py + ph - 60); c.rotate(-.18); const den = L.drank, stc = win && !den ? '#1a8a4c' : '#c81e1e', stt = den ? 'DENIED · เมาไม่ขับ' : win ? 'ARRIVED SAFELY' : 'MISSED FLIGHT';
+  c.save(); c.translate(X + PW - 230, py + ph - 60); c.rotate(-.18); c.scale(.85, .85); const den = L.drank, stc = win && !den ? '#1a8a4c' : '#c81e1e', stt = den ? 'DENIED · เมาไม่ขับ' : win ? 'ARRIVED SAFELY' : 'MISSED FLIGHT';
   c.font = '64px Bangers'; const tw = c.measureText(stt).width + 40; c.fillStyle = 'rgba(255,255,255,.82)'; rrect(c, -tw / 2, -50, tw, 84, 12); c.fill(); c.strokeStyle = stc; c.lineWidth = 8; rrect(c, -tw / 2, -50, tw, 84, 12); c.stroke(); c.fillStyle = stc; c.textAlign = 'center'; c.fillText(stt, 0, 18); c.restore();
   // score + stats
   c.textAlign = 'center'; const sy = py + ph + 110; c.fillStyle = '#5a6a85'; c.font = '700 28px Kanit'; c.fillText('คะแนน / SCORE', W / 2, sy - 70);
   c.fillStyle = '#e8650c'; c.font = '120px Bangers'; c.fillText((L.score || 0).toLocaleString(), W / 2, sy + 40);
   const st = [['🚦', 'หยุดไฟแดง', L.red || 0], ['🚸', 'หยุดให้ข้าม', L.yield || 0], ['😇', 'ไม่หลงกล', `${L.nope || 0}/4`], ['📵', 'ไม่ใช้มือถือ', L.phoneNo || 0]];
-  st.forEach(([e, k, v], i) => { const x = X + 120 + i * ((PW - 240) / 3); c.font = '44px Kanit'; c.fillText(e, x, sy + 125); c.fillStyle = '#13233f'; c.font = '900 40px Kanit'; c.fillText(String(v), x, sy + 175); c.fillStyle = '#5a6a85'; c.font = '600 22px Kanit'; c.fillText(k, x, sy + 208); });
+  st.forEach(([e, k, v], i) => { const x = X + 120 + i * ((PW - 240) / 3); c.font = '40px Kanit'; c.fillText(e, x, sy + 100); c.fillStyle = '#13233f'; c.font = '900 36px Kanit'; c.fillText(String(v), x, sy + 142); c.fillStyle = '#5a6a85'; c.font = '600 21px Kanit'; c.fillText(k, x, sy + 170); });
   // 8 measures row
-  if (L.ms) { c.textAlign = 'center'; c.fillStyle = '#0b2f6b'; c.font = '800 26px Kanit'; c.fillText(`ผ่าน ${L.mok}/8 ด่าน · 8 มาตรการขับขี่ปลอดภัย`, W / 2, H - 252); L.ms.forEach((ok, i) => { const bx2 = W / 2 - 4 * 74 + i * 74 + 37; c.fillStyle = ok ? '#1a8a4c' : '#c9d3e3'; rrect(c, bx2 - 30, H - 238, 60, 34, 10); c.fill(); c.fillStyle = '#fff'; c.font = '900 22px Kanit'; c.fillText((ok ? '✓' : '✕') + (i + 1), bx2, H - 213); }); }
+  if (L.ms) { c.textAlign = 'center'; c.fillStyle = '#0b2f6b'; c.font = '800 26px Kanit'; c.fillText(`ผ่าน ${L.mok}/8 ด่าน · 8 มาตรการขับขี่ปลอดภัย`, W / 2, H - 238); L.ms.forEach((ok, i) => { const bx2 = W / 2 - 4 * 74 + i * 74 + 37; c.fillStyle = ok ? '#1a8a4c' : '#c9d3e3'; rrect(c, bx2 - 30, H - 226, 60, 34, 10); c.fill(); c.fillStyle = '#fff'; c.font = '900 22px Kanit'; c.fillText((ok ? '✓' : '·') + (i + 1), bx2, H - 201); }); }
   // barcode + slogan
-  c.fillStyle = '#13233f'; let bx = X + 80; const seed = (nm + (L.score || 0)).split('').reduce((a, ch) => a + ch.charCodeAt(0), 7); for (let i = 0; bx < X + PW - 80; i++) { const w = 3 + ((seed * (i + 3)) % 7); if (i % 2 === 0) c.fillRect(bx, H - 190, w, 34); bx += w + 2; }
+  c.fillStyle = '#13233f'; let bx = X + 80; const seed = (nm + (L.score || 0)).split('').reduce((a, ch) => a + ch.charCodeAt(0), 7); for (let i = 0; bx < X + PW - 80; i++) { const w = 3 + ((seed * (i + 3)) % 7); if (i % 2 === 0) c.fillRect(bx, H - 180, w, 30); bx += w + 2; }
   c.fillStyle = '#0b2f6b'; c.font = '900 40px Kanit'; c.fillText('ทุกเที่ยวไป ต้องมีเที่ยวกลับ', W / 2, H - 96);
   return cv;
 }
