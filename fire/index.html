@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027185848';
+const BUILD = '20261027192724';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -13,7 +13,7 @@ const BUILD = '20261027185848';
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="icon" href="../favicon.svg?b=20261027185848"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
+<link rel="icon" href="../favicon.svg?b=20261027192724"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
 <meta name="description" content="เกม 30 วินาที ช่วยนายอำเภอเอิร์ทจับ 6 ผู้ร้ายจุดไฟในโรงงาน — NBMT Fire Prevention 3ต 3จ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&family=Rye&display=swap" rel="stylesheet">
@@ -164,6 +164,54 @@ const BUILD = '20261027185848';
   .hero video { width: 38%; border-radius: 10px; border: 4px solid var(--paper); box-shadow: 0 8px 18px rgba(0,0,0,.5); aspect-ratio: 9/16; object-fit: cover; background: #2e1a0e; }
   .end .score .n.zoom { animation: npop .6s cubic-bezier(.3,1.8,.5,1); }
   @keyframes npop { 0% { transform: scale(.2); } 100% { transform: scale(1); } }
+  /* ===== CASE REPORT celebration ===== */
+  .rep { position: fixed; inset: 0; z-index: 40; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px;
+    background: radial-gradient(ellipse at 50% 40%, rgba(255,140,30,.35), transparent 60%), rgba(20,10,4,.92); }
+  .rep.on { display: flex; }
+  .rep .t1 { font-family: 'Rye', serif; color: #ffcf4a; font-size: clamp(30px, 10vw, 48px); text-shadow: 0 4px 0 #8a2a00, 0 0 30px rgba(255,140,0,.8); line-height: 1; opacity: 0; transform: scale(2.5); }
+  .rep .t1.in { animation: slam .45s cubic-bezier(.2,1.6,.5,1) forwards; }
+  .rep .t2 { color: #ffe9c4; font-weight: 700; font-size: 15px; opacity: 0; transition: opacity .4s; } .rep .t2.in { opacity: 1; }
+  .rep .mugs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: min(92vw, 420px); }
+  .rep .mug { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 4px solid #f1dcae; background: #f1dcae; opacity: 0; transform: translateY(40px) rotate(-6deg); }
+  .rep .mug.in { animation: drop .4s cubic-bezier(.2,1.4,.5,1) forwards; }
+  .rep .mug img { width: 100%; height: 100%; object-fit: cover; }
+  .rep .mug .nm { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(43,26,14,.85); color: #ffe9c4; font-size: 11px; font-weight: 700; text-align: center; padding: 2px; }
+  .rep .mug .st { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%) rotate(-14deg) scale(3); opacity: 0; border: 4px solid #d11f1f; color: #d11f1f; background: rgba(255,240,225,.7);
+    font-weight: 900; font-size: 20px; padding: 0 8px; border-radius: 8px; white-space: nowrap; }
+  .rep .mug.caught .st { animation: stamp .3s ease-in forwards; }
+  .rep .mug.caught img { filter: grayscale(.85) contrast(1.1); transition: filter .3s .15s; }
+  @keyframes slam { to { opacity: 1; transform: scale(1); } }
+  @keyframes drop { to { opacity: 1; transform: none; } }
+  @keyframes stamp { 60% { opacity: 1; transform: translate(-50%, -50%) rotate(-14deg) scale(.9); } 100% { opacity: 1; transform: translate(-50%, -50%) rotate(-14deg) scale(1); } }
+  .rep .star { width: 96px; height: 96px; opacity: 0; transform: scale(0) rotate(-180deg); filter: drop-shadow(0 0 18px rgba(255,200,40,.9)); }
+  .rep .star.in { animation: spin .7s cubic-bezier(.2,1.5,.5,1) forwards; }
+  @keyframes spin { to { opacity: 1; transform: scale(1) rotate(0); } }
+  .rep .sc { font-family: 'Kanit'; font-weight: 900; font-size: 60px; color: #ffcf4a; text-shadow: 0 4px 0 #8a2a00; line-height: 1; min-height: 60px; }
+  .rep .btn { max-width: 420px; opacity: 0; transition: opacity .4s; } .rep .btn.in { opacity: 1; }
+  /* ===== medal ceremony ===== */
+  .medal { position: fixed; inset: 0; z-index: 45; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px; text-align: center;
+    background: radial-gradient(ellipse at 50% 38%, rgba(255,215,90,.45), transparent 60%), rgba(10,8,20,.92); }
+  .medal.on { display: flex; }
+  .medal .rays { position: absolute; width: 520px; height: 520px; top: calc(38% - 260px); left: calc(50% - 260px); pointer-events: none; opacity: .35;
+    background: repeating-conic-gradient(from 0deg, rgba(255,220,120,.6) 0 8deg, transparent 8deg 22deg); border-radius: 50%; animation: rot 12s linear infinite; mask: radial-gradient(circle, #000 30%, transparent 70%); -webkit-mask: radial-gradient(circle, #000 30%, transparent 70%); }
+  @keyframes rot { to { transform: rotate(360deg); } }
+  .medal .m { position: relative; width: 170px; height: 230px; animation: mdrop .9s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes mdrop { from { transform: translateY(-120vh) rotate(-30deg); } }
+  .medal .ribbon { position: absolute; left: 35px; top: 0; width: 100px; height: 110px; background: linear-gradient(90deg, #b3141b 0 30%, #ffcf4a 30% 40%, #b3141b 40% 60%, #ffcf4a 60% 70%, #b3141b 70%); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%); }
+  .medal .coin { position: absolute; left: 10px; top: 80px; width: 150px; height: 150px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5), inset 0 0 0 8px rgba(255,255,255,.35), inset 0 -10px 20px rgba(0,0,0,.25); overflow: hidden; }
+  .medal .coin::after { content: ''; position: absolute; top: -50%; left: -60%; width: 40%; height: 200%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent); transform: rotate(20deg); animation: shine 2.4s 1s infinite; }
+  @keyframes shine { 0% { left: -60%; } 40%, 100% { left: 130%; } }
+  .medal .coin b { font-family: 'Rye', serif; font-size: 58px; line-height: 1; color: rgba(70,40,0,.85); text-shadow: 0 2px 0 rgba(255,255,255,.5); }
+  .medal .coin small { font-weight: 800; font-size: 13px; color: rgba(70,40,0,.85); letter-spacing: 1px; }
+  .medal .gold { background: radial-gradient(circle at 35% 30%, #fff6c4, #ffd34a 40%, #c9930e); }
+  .medal .silver { background: radial-gradient(circle at 35% 30%, #ffffff, #d6dde6 40%, #8b97a6); }
+  .medal .bronze { background: radial-gradient(circle at 35% 30%, #ffe1c4, #d98b4a 40%, #8f4e1c); }
+  .medal .top { background: radial-gradient(circle at 35% 30%, #e2f0ff, #6aa8ff 40%, #1559b8); } .medal .top b, .medal .top small { color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.3); }
+  .medal h2 { font-family: 'Rye', serif; color: #ffcf4a; font-size: clamp(28px, 9vw, 40px); text-shadow: 0 4px 0 #8a2a00; line-height: 1.05; }
+  .medal p { color: #fff; font-weight: 700; font-size: 18px; line-height: 1.35; } .medal p b { color: #ffcf4a; }
+  .medal .btn { max-width: 380px; }
+  #certImg { width: 100%; border-radius: 14px; box-shadow: 0 10px 24px rgba(0,0,0,.5); display: none; margin-top: 4px; }
   /* ===== scoreboard ===== */
   .row2 { display: flex; gap: 6px; } .row2 select { flex: 1.1; } .row2 input { flex: 1; }
   #pGroup { font-size: 15px; }
@@ -202,11 +250,27 @@ const BUILD = '20261027185848';
   <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div></div>
 </div>
 <div class="story" id="story">
-  <video id="storyVid" src="img/story.mp4?b=20261027185848" poster="img/story_poster.jpg?b=20261027185848" playsinline muted preload="auto"></video>
+  <video id="storyVid" src="img/story.mp4?b=20261027192724" poster="img/story_poster.jpg?b=20261027192724" playsinline muted preload="auto"></video>
   <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
   <button class="st-skip" id="stSkip" disabled>ข้ามได้ใน <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
   <div class="st-bar"><i id="stBar"></i></div>
+</div>
+<div class="rep" id="rep">
+  <div class="t1" id="repT">CASE CLOSED</div>
+  <div class="t2" id="repT2">รายงานการจับกุม · 6 ผู้ร้ายจุดไฟ</div>
+  <div class="mugs" id="repMugs"></div>
+  <svg class="star" id="repStar" viewBox="0 0 100 100"><defs><radialGradient id="sg" cx="40%" cy="35%"><stop offset="0" stop-color="#fff6c4"/><stop offset=".5" stop-color="#ffd34a"/><stop offset="1" stop-color="#b8820a"/></radialGradient></defs>
+    <polygon points="50,4 61,36 95,36 67,56 78,90 50,70 22,90 33,56 5,36 39,36" fill="url(#sg)" stroke="#8a5a00" stroke-width="3"/><circle cx="50" cy="52" r="15" fill="#b8820a" opacity=".35"/><text x="50" y="58" text-anchor="middle" font-family="Rye" font-size="14" fill="#5a3a00">NBMT</text></svg>
+  <div class="sc" id="repSc"></div>
+  <button class="btn" id="repGo">ดูสรุปผล & ลงชื่อ ›</button>
+</div>
+<div class="medal" id="medal"><div class="rays"></div>
+  <div class="m"><div class="ribbon"></div><div class="coin" id="mCoin"><b id="mNum">1</b><small id="mLab">TODAY</small></div></div>
+  <h2 id="mT">CONGRATULATIONS!</h2>
+  <p id="mP"></p>
+  <button class="btn" id="mCert">🎖️ รับใบรายงานการจับกุม</button>
+  <button class="btn ghost" id="mClose">ปิด</button>
 </div>
 <canvas id="fx"></canvas><div class="fireglow" id="glow"></div><div class="flash" id="flash"></div><div class="combo" id="combo"></div><div class="cd" id="cd"></div>
 <button class="mute" id="muteBtn" aria-label="เสียง">🔊</button>
@@ -218,12 +282,12 @@ const BUILD = '20261027185848';
     <div class="w">WANTED</div>
     <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
     <div class="hero">
-      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027185848" poster="img/sheriff.webp?b=20261027185848" muted loop playsinline preload="auto"></video></div>
+      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027192724" poster="img/sheriff.webp?b=20261027192724" muted loop playsinline preload="auto"></video></div>
       <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
     </div>
     <div class="rules">
-      <div class="row"><img src="img/v2.webp?b=20261027185848" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
-      <div class="row"><img class="g" src="img/c3.webp?b=20261027185848" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
+      <div class="row"><img src="img/v2.webp?b=20261027192724" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
+      <div class="row"><img class="g" src="img/c3.webp?b=20261027192724" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
       <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
@@ -260,6 +324,8 @@ const BUILD = '20261027185848';
       <div class="note">ชื่อเล่น โซน และกลุ่ม แสดงบนกระดาน · รหัสพนักงานไม่แสดง ใช้ยืนยันตัวตนและนับคะแนนดีที่สุดของแต่ละคน</div>
     </div>
     <div class="myrank" id="myRank"></div>
+    <button class="btn" id="certBtn" style="display:none">🎖️ ใบรายงานการจับกุม (บันทึก/แชร์)</button>
+    <img id="certImg" alt="ใบรายงานการจับกุม">
     <div class="list" id="summary"></div>
     <button class="btn" id="againBtn">↻ เล่นอีกครั้ง</button>
     <button class="btn ghost" id="shareBtn">📤 แชร์ให้เพื่อนมาเล่น</button>
@@ -382,7 +448,7 @@ function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').t
 
 function build() {
   $('grid').innerHTML = SPOTS.map((s, i) => `<div class="hole" data-i="${i}"><span class="lab">${s}</span></div>`).join('');
-  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027185848" alt=""></span>`).join('');
+  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027192724" alt=""></span>`).join('');
 }
 
 function toast(html, bad) {
@@ -490,6 +556,8 @@ function end() {
     `<div class="it ${caught.has(v.id) ? 'ok' : ''}"><img src="img/${caught.has(v.id) ? 'c' : 'v'}${v.id}.webp" alt=""><div><b>${v.name}</b><br>${v.how}</div><span class="x">${caught.has(v.id) ? '✓' : '—'}</span></div>`).join('');
   $('summary').innerHTML = sec('ต', 'var(--navy)', '3ต ตรวจให้พร้อมใช้งาน') + '<div style="height:6px"></div>' + sec('จ', 'var(--green)', '3จ จัดให้ถูกที่ ถูกวิธี');
   show('end');
+  $('certBtn').style.display = ''; $('certImg').style.display = 'none'; me = me ? { name: me.name, dept: me.dept, group: me.group } : null;
+  if (caught.size === 6) setTimeout(caseReport, 600);
 }
 const _show = show; show = (id) => { _show(id); if (id === 'intro') playVid($('introVid')); };
 
@@ -564,6 +632,7 @@ $('submitBtn').onclick = async () => {
     $('submitBox').style.display = 'none';
     $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)} · ${esc(group.split(' : ')[0])}</small>`;
     $('myRank').classList.add('on');
+    setTimeout(() => medalShow(j.rankToday, j.rankAll), 400);
   } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
 };
 
@@ -606,6 +675,112 @@ $('gateBtn').onclick = boot;
   if (SFX.muted) { if (wantStory) Story.open(); else playVid($('introVid')); return; }
   $('gate').classList.add('on');
 })();
+
+
+// ===== CASE REPORT (6/6) & medal ceremony & certificate =====
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+async function caseReport() {
+  const R = $('rep'); R.classList.add('on');
+  ['repT', 'repT2', 'repStar', 'repGo'].forEach(id => $(id).classList.remove('in')); $('repSc').textContent = '';
+  $('repMugs').innerHTML = V.map(v => `<div class="mug" id="mug${v.id}"><img src="img/v${v.id}.webp?b=20261027192724" alt=""><div class="nm">${v.name}</div><div class="st">จับแล้ว!</div></div>`).join('');
+  await sleep(200); $('repT').classList.add('in'); SFX.miss && SFX.count(); shake(true);
+  await sleep(450); $('repT2').classList.add('in');
+  for (const v of V) {
+    const m = $('mug' + v.id); m.classList.add('in'); await sleep(170);
+    m.classList.add('caught'); SFX.hit(4); const [x, y] = centerOf(m); FX.burst(x, y, 'hit'); if (navigator.vibrate) navigator.vibrate(20);
+    await sleep(260);
+  }
+  await sleep(200); $('repStar').classList.add('in'); SFX.bonus(); FX.burst(0, 0, 'confetti');
+  let n = 0; const tgt = score, t0 = performance.now();
+  await new Promise(ok => { const f = (t) => { const k = Math.min(1, (t - t0) / 900); n = Math.round(tgt * (1 - Math.pow(1 - k, 3))); $('repSc').textContent = n; k < 1 ? requestAnimationFrame(f) : ok(); }; requestAnimationFrame(f); });
+  await sleep(250); $('repGo').classList.add('in');
+}
+$('repGo').onclick = () => { $('rep').classList.remove('on'); };
+
+function medalShow(rankToday, rankAll) {
+  const best = Math.min(rankToday || 99, rankAll || 99); if (best > 10) return false;
+  const useAll = rankAll && rankAll <= 10 && rankAll <= rankToday, r = useAll ? rankAll : rankToday;
+  const cls = r === 1 ? 'gold' : r === 2 ? 'silver' : r === 3 ? 'bronze' : 'top';
+  $('mCoin').className = 'coin ' + cls; $('mNum').textContent = r; $('mLab').textContent = useAll ? 'ALL-TIME' : 'TODAY';
+  const title = r === 1 ? 'นายอำเภอใหญ่!' : r <= 3 ? 'ยอดเยี่ยม!' : 'TOP 10!';
+  $('mT').textContent = title;
+  $('mP').innerHTML = `ยินดีด้วย <b>${esc(me.name)}</b><br>คุณติด<b>อันดับ ${r}</b> ${useAll ? 'ตลอดกาล' : 'ของวันนี้'} บนกระดานนายอำเภอ 🎉<br><span style="font-size:14px;opacity:.85">${esc(me.dept)} · ${esc(me.group.split(' : ')[0])}</span>`;
+  $('medal').classList.add('on'); SFX.end(); setTimeout(() => FX.burst(0, 0, 'confetti'), 500); setTimeout(() => FX.burst(0, 0, 'confetti'), 1500);
+  me.medal = { r, cls, useAll };
+  return true;
+}
+$('mClose').onclick = () => $('medal').classList.remove('on');
+$('mCert').onclick = async () => { $('medal').classList.remove('on'); await showCert(); };
+$('certBtn').onclick = () => showCert();
+
+const loadImg = (src) => new Promise(ok => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = src; });
+function rrect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+async function makeCert() {
+  await document.fonts.ready;
+  const W = 1080, H = 1580, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+  const imgs = await Promise.all(V.map(v => loadImg(`img/v${v.id}.webp`))); const sheriff = await loadImg('img/sheriff.webp');
+  // wood + fire glow
+  let g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#5a3a22'); g.addColorStop(.6, '#3f2716'); g.addColorStop(1, '#2e1a0e'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  c.fillStyle = 'rgba(0,0,0,.18)'; for (let x = 0; x < W; x += 120) c.fillRect(x, 0, 4, H);
+  g = c.createRadialGradient(W / 2, H + 100, 50, W / 2, H + 100, 900); g.addColorStop(0, 'rgba(255,100,20,.7)'); g.addColorStop(1, 'rgba(255,100,20,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  // paper
+  const PX = 50, PY = 50, PW = W - 100, PH = H - 100;
+  c.save(); c.shadowColor = 'rgba(0,0,0,.6)'; c.shadowBlur = 40; c.shadowOffsetY = 16; rrect(c, PX, PY, PW, PH, 18); c.fillStyle = '#f1dcae'; c.fill(); c.restore();
+  g = c.createRadialGradient(W / 2, H / 2, 200, W / 2, H / 2, 800); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(120,70,20,.35)'); c.fillStyle = g; rrect(c, PX, PY, PW, PH, 18); c.fill();
+  c.strokeStyle = '#6b3a12'; c.lineWidth = 6; rrect(c, PX + 22, PY + 22, PW - 44, PH - 44, 10); c.stroke(); c.lineWidth = 2; rrect(c, PX + 34, PY + 34, PW - 68, PH - 68, 8); c.stroke();
+  c.textAlign = 'center';
+  c.fillStyle = '#7a1d00'; c.font = '700 30px Kanit'; c.fillText('NBMT FIRE PREVENTION · 3ต 3จ', W / 2, 150);
+  c.fillStyle = '#b3261e'; c.font = '120px Rye'; c.fillText('CASE CLOSED', W / 2, 272);
+  c.fillStyle = '#2b1a0e'; c.font = '800 40px Kanit'; c.fillText('รายงานการจับกุม 6 ผู้ร้ายจุดไฟ', W / 2, 330);
+  // mugs 3x2
+  const gx = 120, gy = 370, cw = 260, gap = 30;
+  V.forEach((v, i) => {
+    const x = gx + (i % 3) * (cw + gap), y = gy + Math.floor(i / 3) * (cw + 70);
+    c.save(); rrect(c, x, y, cw, cw, 12); c.clip(); c.fillStyle = '#e8d2a0'; c.fillRect(x, y, cw, cw);
+    if (imgs[i]) { c.filter = caught.has(v.id) ? 'grayscale(0.8) contrast(1.1)' : 'none'; c.drawImage(imgs[i], x, y, cw, cw); c.filter = 'none'; }
+    c.restore(); c.strokeStyle = '#6b3a12'; c.lineWidth = 6; rrect(c, x, y, cw, cw, 12); c.stroke();
+    c.fillStyle = '#2b1a0e'; c.font = '800 28px Kanit'; c.fillText(v.name, x + cw / 2, y + cw + 40);
+    c.save(); c.translate(x + cw / 2, y + cw / 2); c.rotate(-0.25);
+    const ok = caught.has(v.id), col = ok ? '#d11f1f' : '#6b6b6b', txt = ok ? 'จับแล้ว!' : 'หลบหนี';
+    c.font = '900 50px Kanit'; const tw = c.measureText(txt).width + 36;
+    c.fillStyle = 'rgba(255,240,225,.75)'; rrect(c, -tw / 2, -40, tw, 76, 12); c.fill(); c.strokeStyle = col; c.lineWidth = 7; rrect(c, -tw / 2, -40, tw, 76, 12); c.stroke();
+    c.fillStyle = col; c.fillText(txt, 0, 18); c.restore();
+  });
+  // sheriff + info
+  const by = 1030;
+  if (sheriff) { c.save(); rrect(c, 110, by, 240, 330, 12); c.clip(); const s = Math.max(240 / sheriff.width, 330 / sheriff.height); c.drawImage(sheriff, 110 + (240 - sheriff.width * s) / 2, by, sheriff.width * s, sheriff.height * s); c.restore(); c.strokeStyle = '#6b3a12'; c.lineWidth = 6; rrect(c, 110, by, 240, 330, 12); c.stroke(); }
+  c.textAlign = 'left';
+  c.fillStyle = '#7a1d00'; c.font = '700 26px Kanit'; c.fillText('ผู้ช่วยนายอำเภอ', 390, by + 40);
+  const nm = (me && me.name) || $('pName').value.trim() || 'นักสืบนิรนาม'; const nmMax = (me && me.medal) ? 380 : 560; let fs = 66; c.font = `900 ${fs}px Kanit`; while (c.measureText(nm).width > nmMax && fs > 34) { fs -= 4; c.font = `900 ${fs}px Kanit`; }
+  c.fillStyle = '#2b1a0e'; c.fillText(nm, 390, by + 108);
+  const zone = (me && me.dept) || $('pDept').value || '', grp = (me && me.group) || $('pGroup').value || '';
+  c.fillStyle = '#5a2a0a'; c.font = '600 26px Kanit'; c.fillText([zone, grp.split(' : ')[0]].filter(Boolean).join(' · '), 390, by + 148);
+  c.fillStyle = '#b3261e'; c.font = '900 96px Kanit'; c.fillText(String(score), 390, by + 255);
+  c.fillStyle = '#5a2a0a'; c.font = '700 28px Kanit'; c.fillText(`คะแนน · จับครบ ${caught.size}/6 · แตะผิด ${misses}`, 390, by + 300);
+  c.font = '500 22px Kanit'; c.fillText(new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' }), 390, by + 340);
+  // medal badge on certificate
+  if (me && me.medal) {
+    const mx = 870, my = by + 170, cols = { gold: ['#fff6c4', '#ffd34a', '#c9930e'], silver: ['#ffffff', '#d6dde6', '#8b97a6'], bronze: ['#ffe1c4', '#d98b4a', '#8f4e1c'], top: ['#e2f0ff', '#6aa8ff', '#1559b8'] }[me.medal.cls];
+    c.fillStyle = '#b3141b'; c.fillRect(mx - 40, my - 150, 80, 120); c.fillStyle = '#ffcf4a'; c.fillRect(mx - 22, my - 150, 9, 120); c.fillRect(mx + 13, my - 150, 9, 120);
+    const rg = c.createRadialGradient(mx - 25, my - 25, 10, mx, my, 95); rg.addColorStop(0, cols[0]); rg.addColorStop(.45, cols[1]); rg.addColorStop(1, cols[2]);
+    c.save(); c.shadowColor = 'rgba(0,0,0,.45)'; c.shadowBlur = 20; c.shadowOffsetY = 8; c.beginPath(); c.arc(mx, my, 90, 0, 7); c.fillStyle = rg; c.fill(); c.restore();
+    c.strokeStyle = 'rgba(255,255,255,.5)'; c.lineWidth = 6; c.beginPath(); c.arc(mx, my, 78, 0, 7); c.stroke();
+    c.textAlign = 'center'; c.fillStyle = me.medal.cls === 'top' ? '#fff' : 'rgba(70,40,0,.85)'; c.font = '70px Rye'; c.fillText(String(me.medal.r), mx, my + 22);
+    c.font = '800 20px Kanit'; c.fillText(me.medal.useAll ? 'ALL-TIME' : 'TODAY', mx, my + 52);
+    c.fillStyle = '#7a1d00'; c.font = '800 26px Kanit'; c.fillText(`อันดับ ${me.medal.r} ${me.medal.useAll ? 'ตลอดกาล' : 'วันนี้'}`, mx, my + 130);
+  }
+  c.textAlign = 'center'; c.fillStyle = '#7a1d00'; c.font = '700 26px Kanit';
+  c.fillText('หยุดใช้ · แจ้งหัวหน้างาน · ให้ผู้รับผิดชอบแก้ไข', W / 2, H - 100);
+  return cv;
+}
+async function showCert() {
+  const cv = await makeCert(); const url = cv.toDataURL('image/jpeg', .9);
+  $('certImg').src = url; $('certImg').style.display = 'block'; $('certImg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const blob = await new Promise(ok => cv.toBlob(ok, 'image/jpeg', .9));
+  const f = new File([blob], 'NBMT-case-closed.jpg', { type: 'image/jpeg' });
+  try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], text: `ปิดคดีจับผู้ร้ายจุดไฟได้ ${score} คะแนน! 🔥 NBMT Fire Prevention ${location.href}` }); return; } } catch (e) { return; }
+  const a = document.createElement('a'); a.href = url; a.download = 'NBMT-case-closed.jpg'; a.click();
+}
 
 $('startBtn').onclick = start;
 $('againBtn').onclick = start;
