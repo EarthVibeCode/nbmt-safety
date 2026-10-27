@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027181833';
+const BUILD = '20261027183232';
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
     if (j.v && j.v !== BUILD) { const k = 'nbmt_reload_' + j.v; if (!sessionStorage.getItem(k)) { sessionStorage.setItem(k, '1'); const u = new URL(location.href); u.searchParams.set('b', j.v); location.replace(u.toString()); } }
@@ -11,7 +11,7 @@ const BUILD = '20261027181833';
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" href="../favicon.svg?b=20261027181833">
+<link rel="icon" href="../favicon.svg?b=20261027183232">
 <title>AI Boarding Pass · NBMT Safe Road Save Life</title>
 <meta name="description" content="เช็คอินครบ 8 ข้อ แล้วรับบัตรผ่านกลับบ้าน พร้อมภาพการ์ตูน AI ของคุณเอง — NBMT Safety Traffic">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -114,7 +114,7 @@ const BUILD = '20261027181833';
 <div class="app">
   <section class="scr on" id="s0">
     <div class="top"><div class="a">NBMT AIRWAYS · SAFE ROAD SAVE LIFE</div><h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1></div>
-    <div class="hero"><img src="img/hero.webp?b=20261027181833" alt=""><div class="ai">✨ AI การ์ตูนตัวคุณเอง</div>
+    <div class="hero"><img src="img/hero.webp?b=20261027183232" alt=""><div class="ai">✨ AI การ์ตูนตัวคุณเอง</div>
       <div class="ov"><b>เช็คอินครบ 8 ข้อ<br>รับ <span>บัตรผ่านกลับบ้าน</span> ที่มีคุณเป็นตัวการ์ตูน!</b><p>เลือกพาหนะของคุณ ถ่ายเซลฟี่ 1 รูป แล้วแชร์ให้เพื่อนใน LINE</p></div></div>
     <div class="how"><div><span>✅</span>เช็ค 8 ข้อ</div><div><span>🛵</span>เลือกพาหนะ</div><div><span>🤳</span>ถ่ายเซลฟี่</div><div><span>🎫</span>รับบัตรผ่าน</div></div>
     <button class="btn" id="goCheck">✈ เริ่มเช็คอิน</button>
@@ -171,7 +171,7 @@ const BUILD = '20261027181833';
   </section>
 
   <section class="scr" id="s5">
-    <canvas id="pass" width="1080" height="1720"></canvas>
+    <canvas id="pass" width="1080" height="2000"></canvas>
     <div class="left" id="leftTxt"></div>
     <div class="row"><button class="btn" id="share">📤 แชร์</button><button class="btn ghost" id="save" style="font-size:18px">💾 บันทึกรูป</button></div>
     <button class="btn ghost" id="again">↻ สร้างอีกภาพ</button>
@@ -223,7 +223,7 @@ function go(n) { document.querySelectorAll('.scr').forEach(s => s.classList.togg
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
 
 $('list').innerHTML = ITEMS.map((it, i) => (i === 0 ? '<span class="sec o">ก่อนออกเดินทาง</span>' : i === 2 ? '<br><span class="sec b">ระหว่างทาง</span>' : '') +
-  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027181833" alt=""><div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
+  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027183232" alt=""><div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
 document.querySelectorAll('.item').forEach(el => el.onclick = () => { const i = +el.dataset.i; st.on.has(i) ? st.on.delete(i) : st.on.add(i); el.classList.toggle('on', st.on.has(i)); upd(); });
 $('goCheck').onclick = () => go(1);
 $('toInfo').onclick = () => go(2);
@@ -303,7 +303,7 @@ function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w
 function cover(c, im, x, y, w, h, fy = .4) { if (!im) return; const s = Math.max(w / im.width, h / im.height); const sw = w / s, sh = h / s; c.drawImage(im, (im.width - sw) / 2, (im.height - sh) * fy, sw, sh, x, y, w, h); }
 async function drawPass() {
   await document.fonts.ready;
-  const c = $('pass').getContext('2d'), W = 1080, H = 1720, X = 40, Y = 190, TW = W - 80, TH = 1440;
+  const c = $('pass').getContext('2d'), W = 1080, H = 2000, X = 40, Y = 190, TW = W - 80, TH = 1720;
   const art = await load(st.img);
   const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0a2f74'); g.addColorStop(.55, '#2a68c9'); g.addColorStop(1, '#ffb36b'); c.fillStyle = g; c.fillRect(0, 0, W, H);
   c.textAlign = 'center'; c.fillStyle = '#fff'; c.font = '700 30px "Chakra Petch"'; c.fillText('NBMT AIRWAYS · SAFE ROAD SAVE LIFE', W / 2, 70);
@@ -313,12 +313,12 @@ async function drawPass() {
   c.save(); rr(c, X, Y, TW, TH, 36); c.clip();
   const hg = c.createLinearGradient(X, 0, X + TW, 0); hg.addColorStop(0, '#0b2f6b'); hg.addColorStop(1, '#1559b8'); c.fillStyle = hg; c.fillRect(X, Y, TW, 100);
   c.fillStyle = '#fff'; c.font = '800 42px Kanit'; c.fillText('BOARDING PASS', X + 34, Y + 66); c.fillStyle = '#ffd36b'; c.font = '700 32px Kanit'; c.fillText('บัตรผ่านกลับบ้าน', X + 370, Y + 64);
-  cover(c, art, X, Y + 100, TW, 720, .35);
+  cover(c, art, X, Y + 100, TW, 1000, .3);
   c.restore();
-  c.save(); c.translate(X + TW - 190, Y + 750); c.rotate(-0.14);
+  c.save(); c.translate(X + TW - 190, Y + 1030); c.rotate(-0.14);
   c.fillStyle = 'rgba(255,253,247,.9)'; rr(c, -160, -64, 320, 128, 18); c.fill(); c.strokeStyle = '#0f8a3c'; c.lineWidth = 9; rr(c, -160, -64, 320, 128, 18); c.stroke();
   c.fillStyle = '#0f8a3c'; c.textAlign = 'center'; c.font = '700 46px "Chakra Petch"'; c.fillText('CHECKED 8/8', 0, 4); c.font = '700 26px Kanit'; c.fillText('ผ่านครบ ได้กลับบ้าน', 0, 44); c.restore();
-  const y = Y + 900; c.textAlign = 'left';
+  const y = Y + 1180; c.textAlign = 'left';
   c.fillStyle = '#0b2f6b'; c.font = '700 70px "Chakra Petch"'; c.fillText('NBMT', X + 34, y); c.textAlign = 'right'; c.fillText('HOME', X + TW - 34, y); c.textAlign = 'left';
   c.strokeStyle = '#ff7a1a'; c.lineWidth = 6; c.setLineDash([16, 12]); c.beginPath(); c.moveTo(X + 270, y - 24); c.lineTo(X + TW - 280, y - 24); c.stroke(); c.setLineDash([]);
   c.strokeStyle = '#c6d2e3'; c.lineWidth = 4; c.setLineDash([14, 10]); c.beginPath(); c.moveTo(X + 30, y + 26); c.lineTo(X + TW - 30, y + 26); c.stroke(); c.setLineDash([]);
