@@ -115,6 +115,7 @@
   #start .logo { font-size: min(50px, 6.4dvh); flex: none; } #start h1 { font-size: min(28px, 3.5dvh); flex: none; } #start p { font-size: min(15px, 1.95dvh); flex: none; }
   #start .cast { flex: none; gap: .7dvh 6px; } #start .cast img { height: 7.2dvh; aspect-ratio: auto; } #start .cast div { font-size: min(11px, 1.5dvh); padding: 3px; }
   #start .how { font-size: min(13px, 1.65dvh); flex: none; } #start .go { padding: min(15px, 1.8dvh) 44px; flex: none; } #start .btn2 { padding: min(10px, 1.2dvh) 26px; flex: none; }
+  .mbtn { position: fixed; right: 10px; top: calc(118px + env(safe-area-inset-top)); z-index: 16; width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,.45); background: rgba(5,20,50,.6); color: #fff; font-size: 18px; cursor: pointer; } .mbtn.off { opacity: .55; text-decoration: line-through; }
   .pkbtn { display: flex; gap: 10px; align-items: center; flex: none; } .pkbtn .go { padding: min(15px, 1.8dvh) 40px; } .pkbtn .btn2 { padding: min(10px, 1.4dvh) 18px; font-size: 22px; }
   .pkh { font-weight: 900; font-size: min(18px, 2.4dvh); color: #ffd36b; align-self: center; flex: none; }
   .prev { flex: 1 1 0; min-height: 0; width: 100%; max-width: 300px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); animation: wig .9s infinite alternate ease-in-out; }
@@ -134,6 +135,7 @@
   <div class="meters"><div class="meter">😴<div class="bar"><i id="sleepBar"></i></div></div><div class="meter">↔️ <span id="gapT">ระยะ —</span><div class="bar"><i id="gapBar"></i></div></div></div>
 </div>
 <div class="warn" id="warn">⚠️</div>
+<button class="mbtn" id="mBtn" aria-label="เพลง">🎵</button>
 <div class="call" id="call"><div class="who">📞</div><b id="callWho">แม่โทรมา!</b><small id="callSub">กำลังขับรถอยู่นะ...</small>
   <div class="r"><button class="yes" id="callYes">รับสาย</button><button class="no" id="callNo">✖ จอดก่อนค่อยโทรกลับ</button></div></div>
 <div class="tempt" id="tempt"><img id="tImg" alt=""><b id="tWho"></b><small id="tSub"></small>
@@ -326,7 +328,8 @@ const snd = (() => { let ac, eng, voices = {}, last = 0;
   ['go', 'red', 'buffalo', 'wrongway', 'chicken', 'phone', 'sleepy', 'ouch', 'nearmiss', 'great', 'truck', 'drunk', 'crate', 'home', 't_friends', 't_racer', 't_hitch', 't_shortcut', 't_police', 't_ticket', 't_nope', 't_dizzy'].forEach(k => { const au = new Audio(`snd/${k}.mp3`); au.preload = 'auto'; voices[k] = au; });
   return {
     unlock() { ctx(); Object.values(voices).forEach(v => { v.muted = true; v.play().then(() => { v.pause(); v.currentTime = 0; v.muted = false; }).catch(() => { v.muted = false; }); }); },
-    say(k, force) { const now = performance.now(); if (!force && now - last < 1500) return; last = now; const v = voices[k]; if (v) { try { v.currentTime = 0; v.play().catch(() => {}); } catch (e) {} } },
+    get ac() { return ctx(); },
+    say(k, force) { const now = performance.now(); if (!force && now - last < 1500) return; last = now; const v = voices[k]; if (v) { if (window.Music) Music.duck(1.6); try { v.currentTime = 0; v.play().catch(() => {}); } catch (e) {} } },
     start() { const a = ctx(); if (!a || eng) return; eng = a.createOscillator(); eng.type = 'sawtooth'; const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 700; const g = a.createGain(); g.gain.value = .035; eng.connect(f).connect(g).connect(a.destination); eng.start(); },
     engine(v) { if (eng) eng.frequency.setTargetAtTime(38 + v * 4.6, ac.currentTime, .1); }, stop() { if (eng) { eng.stop(); eng = null; } },
     whoosh() { tone(260, .16, 'triangle', .06, 420); }, good() { tone(700, .09, 'square', .06); tone(1050, .14, 'square', .06, 0, .08); },
@@ -353,6 +356,68 @@ const CALLERS = [['แม่โทรมา!', 'ซื้อกับข้า�
 function ringPhone() { const c = pick(CALLERS); $('callWho').textContent = c[0]; $('callSub').textContent = c[1] + ' (กำลังขับรถอยู่!)'; $('call').classList.add('on'); S.call = { t: 0 }; snd.ring(); setTimeout(() => snd.say('phone'), 900); }
 $('callYes').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; $('gl').style.filter = 'blur(5px)'; setTimeout(() => $('gl').style.filter = '', 1500); hurt('ห้ามใช้มือถือขณะขับ!'); };
 $('callNo').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; S.stats.phoneNo++; good(30, 'มีสติ! ไว้โทรกลับ'); };
+
+// ================= music: procedural chiptune × Thai pentatonic (adaptive) =================
+const Music = window.Music = (() => {
+  let ac, bus, filt, timer = null, step = 0, nextT = 0, mode = 'off', bpm = 140, bar = 0, duckUntil = 0;
+  let muted = (() => { try { return localStorage.getItem('nbmt_race_music') === '0'; } catch (e) { return false; } })();
+  const hz = (m) => 440 * Math.pow(2, (m - 69) / 12);
+  const _ = null;
+  // A minor pentatonic phrases (phin / khaen feel), progression Am F G Em
+  const ROOT = [45, 41, 43, 40];
+  const LEAD_A = [[76,_,74,_,72,_,74,76,_,_,69,_,72,_,74,_],[72,_,69,_,67,_,69,72,_,_,74,_,72,_,69,_],[74,_,76,_,79,_,76,74,_,_,72,_,74,_,76,_],[76,_,76,74,_,72,_,69,_,67,_,64,_,67,_,69]];
+  const LEAD_B = [[81,79,76,_,79,76,74,_,76,74,72,_,74,72,69,_],[77,_,76,_,72,_,69,_,72,74,76,_,72,_,69,_],[79,_,79,81,79,76,_,74,_,76,79,_,81,_,79,_],[76,74,72,74,76,_,79,_,76,_,74,_,72,_,_,_]];
+  const CH = [[57, 60, 64], [53, 57, 60], [55, 59, 62], [52, 55, 59]];
+  function env(o, g, t, a, d, v) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + a); g.gain.linearRampToValueAtTime(v * .65, t + a + d * .55); g.gain.exponentialRampToValueAtTime(0.0001, t + a + d); o.start(t); o.stop(t + a + d + .05); }
+  function tone(type, f, t, d, v, det = 0) { const o = ac.createOscillator(), g = ac.createGain(); o.type = type; o.frequency.setValueAtTime(f, t); if (det) o.detune.setValueAtTime(det, t); o.connect(g).connect(bus); env(o, g, t, .005, d, v); return o; }
+  let nb; function noiseBuf() { if (nb) return nb; nb = ac.createBuffer(1, ac.sampleRate * .5, ac.sampleRate); const c = nb.getChannelData(0); for (let i = 0; i < c.length; i++) c[i] = Math.random() * 2 - 1; return nb; }
+  function noise(t, d, v, hp) { const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain(); s.buffer = noiseBuf(); f.type = 'highpass'; f.frequency.value = hp; s.connect(f).connect(g).connect(bus); g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + d); s.start(t); s.stop(t + d + .02); }
+  function kick(t) { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + .12); o.connect(g).connect(bus); env(o, g, t, .002, .16, .55); }
+  function snare(t) { noise(t, .14, .32, 1200); tone('triangle', 190, t, .08, .18); }
+  function wob() { return (typeof S !== 'undefined' && S.drunk > 0) ? Math.sin(performance.now() / 260) * 60 : 0; }
+  function playStep(t, i) {
+    const b = bar % 4, sec = Math.floor(bar / 4) % 2, lv = mode === 'menu' ? 0 : mode === 'hype' ? 2 : 1, d16 = 60 / bpm / 4, det = wob();
+    // drums
+    if (lv > 0) { if (i % 4 === 0 || (lv === 2 && i === 14)) kick(t); if (i === 4 || i === 12) snare(t); if (lv === 2 && i === 15) snare(t); }
+    else if (i === 0 || i === 8) kick(t);
+    if (i % 2 === 0) noise(t, .03, lv ? .12 : .06, 7000); else if (lv) noise(t, i % 4 === 2 ? .09 : .03, .07, 6000);
+    // bass: bouncy octave pattern
+    const r = ROOT[b]; const bp = { 0: r, 3: r + 12, 6: r, 8: r, 10: r + 12, 11: r, 14: r + 7 }[i];
+    if (bp !== undefined) { tone('square', hz(bp), t, d16 * 1.8, lv ? .3 : .2, det); tone('triangle', hz(bp - 12), t, d16 * 1.8, lv ? .35 : .22); }
+    // lead melody (section A / B), khaen-ish detuned pair
+    const ph = (sec ? LEAD_B : LEAD_A)[b][i];
+    if (ph && (lv > 0 || i % 2 === 0)) { const v = lv ? .2 : .14; tone(lv ? 'square' : 'triangle', hz(ph), t, d16 * 1.7, v, det); tone('sawtooth', hz(ph), t, d16 * 1.4, v * .35, det + 9); }
+    // hype layer: 16th arpeggio + brass stabs
+    if (lv === 2) { const c = CH[b]; tone('square', hz(c[i % 3] + 12), t, d16 * .8, .08, det); if (i === 0 || i === 6 || i === 10) c.forEach(n => tone('sawtooth', hz(n), t, d16 * 1.2, .07, det)); }
+  }
+  function tick() {
+    if (!ac) return;
+    while (nextT < ac.currentTime + .15) { playStep(nextT, step); nextT += 60 / bpm / 4; step = (step + 1) % 16; if (step === 0) bar++; }
+    const now = ac.currentTime, vol = muted ? 0 : (performance.now() < duckUntil ? .12 : .3);
+    bus.gain.setTargetAtTime(vol, now, .08);
+  }
+  function ensure() { if (ac) return true; ac = snd.ac; if (!ac) return false; filt = ac.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 18000; bus = ac.createGain(); bus.gain.value = 0; const cp = ac.createDynamicsCompressor(); cp.threshold.value = -20; cp.ratio.value = 4; bus.connect(filt).connect(cp).connect(ac.destination); return true; }
+  return {
+    play(m) { if (!ensure()) return; if (mode === 'off') { nextT = ac.currentTime + .05; step = 0; bar = 0; } mode = m; if (!timer) timer = setInterval(tick, 25); },
+    stop() { mode = 'off'; clearInterval(timer); timer = null; if (bus) bus.gain.setTargetAtTime(0, ac.currentTime, .05); },
+    set(o) { if (!ac) return; if (o.bpm) bpm = o.bpm; if (o.mode && mode !== 'off') mode = o.mode; if (o.lp !== undefined) filt.frequency.setTargetAtTime(o.lp, ac.currentTime, .15); },
+    duck(sec) { duckUntil = performance.now() + sec * 1000; },
+    // debug: render N seconds offline in a given mode → WAV data URL (used by tests / previews)
+    async render(sec, m, b) { const sv = [ac, bus, filt, mode, bpm, bar, step, nb]; const oc = new OfflineAudioContext(2, 44100 * sec, 44100);
+      ac = oc; nb = null; filt = oc.createBiquadFilter(); filt.frequency.value = 18000; bus = oc.createGain(); bus.gain.value = .3; const cp = oc.createDynamicsCompressor(); cp.threshold.value = -20; cp.ratio.value = 4; bus.connect(filt).connect(cp).connect(oc.destination); mode = m; bpm = b; bar = 0; step = 0;
+      for (let t = 0; t < sec - .3; t += 60 / bpm / 4) { playStep(t, step); step = (step + 1) % 16; if (step === 0) bar++; }
+      const buf = await oc.startRendering(); [ac, bus, filt, mode, bpm, bar, step, nb] = sv;
+      const L = buf.getChannelData(0), n = L.length, dv = new DataView(new ArrayBuffer(44 + n * 2)); const w = (o, str) => [...str].forEach((c, i) => dv.setUint8(o + i, c.charCodeAt(0)));
+      w(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, 44100, true); dv.setUint32(28, 88200, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w(36, 'data'); dv.setUint32(40, n * 2, true);
+      let peak = 0; for (let i = 0; i < n; i++) { const v = Math.max(-1, Math.min(1, L[i])); peak = Math.max(peak, Math.abs(v)); dv.setInt16(44 + i * 2, v * 32767, true); }
+      let bin = ''; const u8 = new Uint8Array(dv.buffer); for (let i = 0; i < u8.length; i += 32768) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 32768)); return { peak, wav: btoa(bin) }; },
+    toggle() { muted = !muted; try { localStorage.setItem('nbmt_race_music', muted ? '0' : '1'); } catch (e) {} return muted; }, get muted() { return muted; },
+  };
+})();
+$('mBtn').classList.toggle('off', Music.muted);
+$('mBtn').onclick = (e) => { e.stopPropagation(); snd.unlock(); const m = Music.toggle(); $('mBtn').classList.toggle('off', m); if (!m && !S.run) Music.play('menu'); };
+function musicTick() { if (!S.run) return; const prog = S.dist / S.total; const hype = S.truck || S.turbo > 0 || prog > .9;
+  Music.set({ bpm: (S.tmp ? 100 : 136 + prog * 26 + (S.turbo > 0 ? 20 : 0)), mode: hype ? 'hype' : 'game', lp: S.tmp ? 900 : S.rain ? 2600 : S.call ? 1500 : 18000 }); }
 
 // ================= temptations (ฮาๆ กวนๆ) =================
 const TEMPTS = {
@@ -386,7 +451,7 @@ function temptTick(dt) {
 // ================= loop =================
 const clock = new THREE.Clock();
 function update(dt) {
-  S.t += dt; const prog = S.dist / S.total;
+  S.t += dt; musicTick(); const prog = S.dist / S.total;
   const VH = VEHS[PL.v]; const cruise = (52 + prog * 30) / 3.6 * (S.rain ? .9 : 1) * VH.top, brakeP = (S.rain ? 15 : 24) * VH.brake;
   temptTick(dt);
   if (S.turbo > 0) S.v = Math.min(120 / 3.6, S.v + 14 * dt); else if (S.brake) S.v = Math.max(0, S.v - brakeP * dt); else S.v = S.v > cruise ? Math.max(cruise, S.v - 10 * dt) : Math.min(cruise, S.v + 7 * dt);
@@ -459,9 +524,10 @@ function update(dt) {
 }
 const TS = +(new URLSearchParams(location.search).get('ts') || 1);
 function loop() { const dt = Math.min(.05, clock.getDelta()); if (S.run) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
-function start() { snd.unlock(); reset(); S.run = true; hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
+function start() { snd.unlock(); reset(); S.run = true; Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
 function finish(win) {
   if (!S.run) return; S.run = false; snd.stop(); setB(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
+  Music.stop();
   if (win) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); }
   $('endT').innerHTML = win ? 'ถึงบ้านแล้ว! 🏠<br><b>คนที่บ้านรอคุณอยู่</b>' : 'ไปไม่ถึงบ้าน 😢<br><b>ขับช้าๆ ไม่ต้องรีบนะ</b>';
   $('endImg').style.display = win ? '' : 'none'; $('endScore').textContent = Math.floor(S.score);
@@ -485,7 +551,7 @@ function renderPick() {
   document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); });
   document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); });
 }
-$('goBtn').onclick = () => { snd.unlock(); renderPick(); $('pick').classList.add('on'); $('pick').scrollTop = 0; };
+$('goBtn').onclick = () => { snd.unlock(); Music.play('menu'); Music.set({ bpm: 112, lp: 18000 }); renderPick(); $('pick').classList.add('on'); $('pick').scrollTop = 0; };
 $('pkBack').onclick = () => $('pick').classList.remove('on');
 $('pkGo').onclick = () => { try { localStorage.setItem('nbmt_race_c', PL.c); localStorage.setItem('nbmt_race_v', PL.v); } catch (e) {} $('pick').classList.remove('on'); start(); };
 
