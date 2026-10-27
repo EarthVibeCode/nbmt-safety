@@ -79,6 +79,32 @@
   .it.ok img { border-color: var(--gold); }
   .it .x { margin-left: auto; font-weight: 900; font-size: 18px; color: #bbb; } .it.ok .x { color: var(--green); }
   .foot { text-align: center; color: #ffe9c4; font-size: 12px; margin-top: 8px; line-height: 1.4; }
+
+  /* ===== scoreboard ===== */
+  .sub { background: rgba(255,240,210,.97); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
+  .sub .h { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
+  .sub input, .sub select { width: 100%; font-family: 'Kanit'; font-size: 17px; padding: 9px 10px; border: 2px solid #c9a46a; border-radius: 10px; margin-bottom: 6px; background: #fff; color: var(--ink); }
+  .sub .btn { margin-top: 2px; font-size: 19px; padding: 11px; }
+  .sub .note { font-size: 11.5px; color: #6b4a2a; margin-top: 6px; text-align: center; }
+  .myrank { display: none; text-align: center; background: linear-gradient(180deg, #ffe08a, #ffcf4a); border-radius: 12px; padding: 10px; font-weight: 800; font-size: 18px; margin-bottom: 8px; line-height: 1.3; }
+  .myrank.on { display: block; }
+  .myrank small { display: block; font-weight: 600; font-size: 13px; }
+  .board { overflow-y: auto; }
+  .bstat { text-align: center; color: #ffe9c4; font-size: 13px; margin: 2px 0 8px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+  .tabs button { flex: 1; font-family: 'Kanit'; font-weight: 800; font-size: 16px; padding: 8px; border-radius: 10px; border: 2px solid #c9a46a; background: rgba(0,0,0,.3); color: #ffe9c4; cursor: pointer; }
+  .tabs button.on { background: var(--paper); color: var(--ink); }
+  .blist { background: rgba(255,240,210,.97); border-radius: 12px; padding: 4px 10px; min-height: 120px; }
+  .br { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px dashed #c9a46a; }
+  .br:first-child { border-top: none; }
+  .br .no { width: 30px; height: 30px; flex: none; border-radius: 50%; background: #6b4a2a; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .br:nth-child(1) .no { background: #d9a514; } .br:nth-child(2) .no { background: #9aa4b1; } .br:nth-child(3) .no { background: #b5713a; }
+  .br .nm { font-weight: 800; font-size: 16px; line-height: 1.15; } .br .dp { font-size: 12.5px; color: #6b4a2a; }
+  .br .sc { margin-left: auto; font-weight: 900; font-size: 20px; color: var(--red); text-align: right; line-height: 1.1; }
+  .br .sc small { display: block; font-size: 11px; font-weight: 600; color: #6b4a2a; }
+  .br.me { background: #fff3c4; border-radius: 8px; padding-left: 6px; padding-right: 6px; }
+  .dbar { height: 8px; border-radius: 4px; background: linear-gradient(90deg, #ff7a1a, #d9480f); margin-top: 3px; }
+  .empty { text-align: center; padding: 30px 0; color: #6b4a2a; }
 </style>
 </head>
 <body>
@@ -99,6 +125,7 @@
       <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
+    <button class="btn ghost" id="boardBtn">🏆 ดูกระดานคะแนน</button>
     <div class="best" id="bestTxt"></div>
   </section>
 
@@ -120,10 +147,29 @@
     <div class="w">CASE CLOSED</div>
     <div class="score"><div class="n" id="final">0</div><div class="s" id="finalSub"></div></div>
     <div class="rank" id="rank"></div>
+    <div class="sub" id="submitBox">
+      <div class="h">ลงชื่อบนกระดานนายอำเภอ</div>
+      <input id="pName" maxlength="20" placeholder="ชื่อเล่น เช่น เอิร์ท" autocomplete="off">
+      <select id="pDept"><option value="">— เลือกแผนก —</option></select>
+      <input id="pDeptOther" maxlength="24" placeholder="พิมพ์ชื่อแผนก" style="display:none" autocomplete="off">
+      <button class="btn" id="submitBtn">📌 ส่งคะแนน</button>
+      <div class="note">ชื่อเล่นและแผนกจะแสดงบนกระดานที่ทุกคนเห็น · ไม่เก็บข้อมูลอื่น</div>
+    </div>
+    <div class="myrank" id="myRank"></div>
     <div class="list" id="summary"></div>
     <button class="btn" id="againBtn">↻ เล่นอีกครั้ง</button>
     <button class="btn ghost" id="shareBtn">📤 แชร์ให้เพื่อนมาเล่น</button>
+    <button class="btn ghost" id="boardBtn2">🏆 กระดานคะแนน</button>
     <div class="foot">พบเห็นผู้ร้ายจริงในโรงงาน: <b>หยุดใช้ · แจ้งหัวหน้างาน · ให้ผู้รับผิดชอบแก้ไข</b><br>เกิดเพลิงไหม้: กดสัญญาณแจ้งเหตุ · โทร 199 · Safety NBMT 196, 324</div>
+  </section>
+  <!-- BOARD -->
+  <section class="screen board" id="board">
+    <div class="w" style="font-size:38px">SHERIFF BOARD</div>
+    <div class="bstat" id="bStat">กำลังโหลด...</div>
+    <div class="tabs"><button data-t="today" class="on">วันนี้</button><button data-t="all">ตลอดกาล</button><button data-t="depts">แผนก</button></div>
+    <div class="blist" id="bList"></div>
+    <button class="btn" id="boardPlay">▶ เล่นเลย</button>
+    <div class="foot">🥇 นายอำเภอใหญ่ ≥400 ไม่พลาด · 🥈 นายอำเภอ ≥300 · 🥉 ผู้ช่วยนายอำเภอ จับครบ 6 ชนิด<br>คะแนนแผนก = รวมคะแนนดีที่สุดของแต่ละคนในแผนก</div>
   </section>
 </div>
 
@@ -228,6 +274,8 @@ function start() {
 function end() {
   running = false; clearInterval(tick); clearTimeout(spawnT);
   const best = Math.max(score, +store.get('nbmt_fire_best') || 0); store.set('nbmt_fire_best', best);
+  last = { score, kinds: caught.size, misses, hits, dur: DUR };
+  $('submitBox').style.display = score > 0 ? '' : 'none'; $('myRank').classList.remove('on'); $('submitBtn').disabled = false; $('submitBtn').textContent = '📌 ส่งคะแนน';
   $('final').textContent = score;
   $('finalSub').textContent = `จับได้ ${hits} ครั้ง · ครบ ${caught.size}/6 ชนิด · แตะผิด ${misses} · สถิติ ${best}`;
   const r = caught.size === 6 ? (misses === 0 ? '🏆 นายอำเภอตัวจริง! ไม่พลาดเลย' : '⭐ ปิดคดีครบ 6 ชนิด!') : caught.size >= 4 ? '👍 เก่งมาก ใกล้ครบแล้ว' : '🔥 ผู้ร้ายยังลอยนวล ลองอีกรอบ!';
@@ -237,6 +285,57 @@ function end() {
   $('summary').innerHTML = sec('ต', 'var(--navy)', '3ต ตรวจให้พร้อมใช้งาน') + '<div style="height:6px"></div>' + sec('จ', 'var(--green)', '3จ จัดให้ถูกที่ ถูกวิธี');
   show('end');
 }
+
+
+// ===== scoreboard =====
+const API = 'https://script.google.com/macros/s/AKfycbzOvXvj63i7BF7PMC5eRBwgE9q320kOheNnFmounEZCm4A7fqOFIK2nN12c8vh-utwPdw/exec';
+const DEPTS = ['Production', 'QC / QA', 'Maintenance', 'Engineering', 'Warehouse / Logistics', 'Safety / ENV', 'HR / Admin', 'Office / Planning', 'ผู้รับเหมา'];
+let boardData = null, tab = 'today', me = null;
+const BADGE = { gold: '🥇', silver: '🥈', bronze: '🥉' };
+const esc = (t) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+$('pDept').innerHTML += DEPTS.map(d => `<option>${d}</option>`).join('') + '<option value="__other">อื่นๆ (พิมพ์เอง)</option>';
+$('pDept').onchange = () => { $('pDeptOther').style.display = $('pDept').value === '__other' ? '' : 'none'; };
+$('pName').value = store.get('nbmt_name') || '';
+const savedDept = store.get('nbmt_dept') || '';
+if (savedDept) { if (DEPTS.includes(savedDept)) $('pDept').value = savedDept; else { $('pDept').value = '__other'; $('pDeptOther').style.display = ''; $('pDeptOther').value = savedDept; } }
+
+function renderBoard() {
+  const d = boardData; if (!d) return;
+  $('bStat').textContent = `ผู้เล่น ${d.players} คน · เล่นไปแล้ว ${d.plays} ครั้ง`;
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab));
+  let html = '';
+  if (tab === 'depts') {
+    const max = Math.max(1, ...d.depts.map(x => x.total));
+    html = d.depts.map((x, i) => `<div class="br${me && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div style="flex:1"><div class="nm">${esc(x.dept)}</div><div class="dp">${x.players} คน</div><div class="dbar" style="width:${x.total / max * 100}%"></div></div><div class="sc">${x.total.toLocaleString()}<small>คะแนนรวม</small></div></div>`).join('');
+  } else {
+    html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''}</div><div class="dp">${esc(x.dept)}</div></div><div class="sc">${x.score}</div></div>`).join('');
+  }
+  $('bList').innerHTML = html || '<div class="empty">ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!</div>';
+}
+async function loadBoard() {
+  try { const r = await fetch(API); boardData = await r.json(); renderBoard(); }
+  catch (e) { $('bStat').textContent = 'โหลดกระดานไม่สำเร็จ ลองใหม่อีกครั้ง'; }
+}
+function openBoard() { show('board'); renderBoard(); loadBoard(); }
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { tab = b.dataset.t; renderBoard(); });
+$('boardBtn').onclick = openBoard; $('boardBtn2').onclick = openBoard; $('boardPlay').onclick = start;
+
+let last = null;
+$('submitBtn').onclick = async () => {
+  const name = $('pName').value.trim(), dept = ($('pDept').value === '__other' ? $('pDeptOther').value : $('pDept').value).trim();
+  if (!name) { $('pName').focus(); return; } if (!dept) { $('pDept').focus(); return; }
+  store.set('nbmt_name', name); store.set('nbmt_dept', dept);
+  const btn = $('submitBtn'); btn.disabled = true; btn.textContent = 'กำลังส่ง...';
+  try {
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, dept, ...last }) });
+    const j = await r.json();
+    if (!j.ok) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน'; alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
+    me = { name, dept }; boardData = j.board;
+    $('submitBox').style.display = 'none';
+    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · แผนก ${esc(dept)}</small>`;
+    $('myRank').classList.add('on');
+  } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
+};
 
 $('startBtn').onclick = start;
 $('againBtn').onclick = start;
