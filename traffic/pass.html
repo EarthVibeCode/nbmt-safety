@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="th">
+<head>
+<script>
+const BUILD = '20261027224034';
+(function () { try {
+  fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
+    if (j.v && j.v !== BUILD) { const k = 'nbmt_reload_' + j.v; if (!sessionStorage.getItem(k)) { sessionStorage.setItem(k, '1'); const u = new URL(location.href); u.searchParams.set('b', j.v); location.replace(u.toString()); } }
+  }).catch(() => {});
+} catch (e) {} })();
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../favicon.svg?b=20261027224034">
+<title>AI Boarding Pass · NBMT Safe Road Save Life</title>
+<meta name="description" content="เช็คอินครบ 8 ข้อ แล้วรับบัตรผ่านกลับบ้าน พร้อมภาพการ์ตูน AI ของคุณเอง — NBMT Safety Traffic">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --navy: #0b2f6b; --blue: #1559b8; --orange: #ff7a1a; --gold: #ffd36b; --ink: #13233f; --cream: #fffdf7; --green: #0f8a3c; --line: #dbe5f3; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { min-height: 100%; }
+  body { font-family: 'Kanit', sans-serif; color: var(--ink); background: linear-gradient(180deg, #0a2f74 0%, #2a68c9 45%, #f59e5b 88%, #ffcf86 100%) fixed; }
+  .app { max-width: 480px; margin: 0 auto; padding: 14px 14px calc(26px + env(safe-area-inset-bottom)); min-height: 100dvh; display: flex; flex-direction: column; }
+  .scr { display: none; flex-direction: column; gap: 12px; flex: 1; animation: in .35s ease; }
+  .scr.on { display: flex; }
+  @keyframes in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .top { color: #fff; text-align: center; }
+  .top .a { font-family: 'Chakra Petch'; font-weight: 700; font-size: 12px; letter-spacing: 2px; opacity: .9; }
+  .top h1 { font-weight: 900; font-size: 27px; line-height: 1.15; text-shadow: 0 3px 0 #082456; }
+  .top h1 b { color: var(--gold); }
+  .steps { display: flex; gap: 6px; justify-content: center; }
+  .steps i { width: 26px; height: 6px; border-radius: 4px; background: rgba(255,255,255,.3); }
+  .steps i.on { background: var(--gold); }
+  .card { background: var(--cream); border-radius: 20px; overflow: hidden; box-shadow: 0 14px 30px rgba(5,20,60,.4); }
+  .hdr { background: linear-gradient(90deg, var(--navy), var(--blue)); color: #fff; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .hdr b { font-weight: 800; font-size: 17px; line-height: 1.15; } .hdr small { display: block; font-weight: 500; font-size: 12px; opacity: .85; }
+  .tag { font-family: 'Chakra Petch'; font-weight: 700; font-size: 12px; background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+  .body { padding: 12px 14px 14px; }
+  .btn { display: block; width: 100%; border: none; border-radius: 14px; padding: 14px; font-family: 'Kanit'; font-weight: 900; font-size: 19px; color: #fff; cursor: pointer;
+    background: linear-gradient(180deg, #ff8a2a, #e8650c); box-shadow: 0 5px 0 #8a3500; }
+  .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #8a3500; }
+  .btn:disabled { background: #b8c2d1; box-shadow: 0 5px 0 #8b95a5; cursor: not-allowed; }
+  .btn.ghost { background: #fff; color: var(--navy); box-shadow: 0 4px 0 #9fb0c8; font-size: 16px; padding: 11px; }
+  .row { display: flex; gap: 8px; } .row > * { flex: 1; min-width: 0; }
+  .back { background: none; border: none; color: #fff; font-family: 'Kanit'; font-weight: 700; font-size: 15px; cursor: pointer; text-align: left; }
+  .hero { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 14px 30px rgba(5,20,60,.4); aspect-ratio: 4/5; background: #0b2f6b; }
+  .hero img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+  .hero .ov { position: absolute; left: 0; right: 0; bottom: 0; padding: 50px 16px 14px; background: linear-gradient(180deg, transparent, rgba(5,20,60,.92)); color: #fff; }
+  .hero .ov b { display: block; font-weight: 900; font-size: 23px; line-height: 1.2; } .hero .ov b span { color: var(--gold); }
+  .hero .ov p { font-size: 14px; opacity: .9; margin-top: 4px; }
+  .hero .ai { position: absolute; top: 12px; right: 12px; background: linear-gradient(90deg, #7b5cff, #ff5ca8); color: #fff; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,.3); }
+  .how { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; color: #fff; font-size: 12px; line-height: 1.2; font-weight: 600; }
+  .how div span { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin: 0 auto 4px; border-radius: 50%; background: rgba(255,255,255,.18); font-size: 19px; }
+  .prog { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 14px; margin-bottom: 6px; }
+  .prog .bar { flex: 1; height: 10px; border-radius: 6px; background: #e3e9f3; overflow: hidden; }
+  .prog .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--orange), var(--green)); transition: width .25s; }
+  .sec { font-weight: 800; font-size: 12px; color: #fff; display: inline-block; padding: 1px 10px; border-radius: 20px; margin: 8px 0 2px; }
+  .sec.o { background: var(--orange); } .sec.b { background: var(--blue); }
+  .item { display: flex; gap: 10px; align-items: center; padding: 7px; border-radius: 14px; border: 2px solid var(--line); margin-top: 6px; cursor: pointer; background: #fff; transition: all .15s; }
+  .item img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex: none; border: 3px solid var(--line); }
+  .item .t { font-weight: 700; font-size: 15px; line-height: 1.2; } .item .d { font-size: 12.5px; color: #50607a; line-height: 1.3; margin-top: 1px; }
+  .item .ck { margin-left: auto; width: 30px; height: 30px; flex: none; border-radius: 8px; border: 3px solid #c6d2e3; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 19px; color: transparent; }
+  .item.on { border-color: var(--green); background: #f1fbf4; } .item.on img { border-color: var(--green); }
+  .item.on .ck { background: var(--green); border-color: var(--green); color: #fff; }
+  .nw { white-space: nowrap; }
+  label.l { display: block; font-weight: 700; font-size: 14px; margin: 10px 0 4px; }
+  input[type=text] { width: 100%; font-family: 'Kanit'; font-size: 17px; padding: 10px 12px; border: 2px solid #c6d2e3; border-radius: 12px; outline: none; background: #fff; }
+  input[type=text]:focus { border-color: var(--blue); }
+  .veh { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .veh button { font-family: 'Kanit'; border: 2px solid var(--line); background: #fff; border-radius: 14px; padding: 8px 2px 6px; cursor: pointer; font-weight: 700; font-size: 12px; line-height: 1.15; color: var(--ink); }
+  .veh button span { display: block; font-size: 28px; line-height: 1.1; margin-bottom: 2px; }
+  .veh button.on { border-color: var(--orange); background: #fff4ea; box-shadow: 0 0 0 3px rgba(255,122,26,.25); }
+  .cols { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cols button { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px #c6d2e3; cursor: pointer; }
+  .cols button.on { box-shadow: 0 0 0 3px var(--orange); transform: scale(1.08); }
+  .note { font-size: 12px; color: #50607a; margin-top: 8px; line-height: 1.4; }
+  .shot { position: relative; aspect-ratio: 1; border-radius: 18px; overflow: hidden; background: #e9eef6; border: 3px dashed #9fb0c8; display: flex; align-items: center; justify-content: center; text-align: center; color: #50607a; cursor: pointer; }
+  .shot.has { border-style: solid; border-color: var(--green); }
+  .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .shot .guide { position: absolute; left: 22%; top: 12%; width: 56%; height: 70%; border: 3px dashed rgba(255,255,255,.85); border-radius: 50%; box-shadow: 0 0 0 999px rgba(0,0,0,.12); pointer-events: none; }
+  .shot .ph { position: relative; z-index: 1; } .shot .ph span { font-size: 54px; display: block; } .shot .ph b { font-size: 16px; } .shot .ph small { display: block; font-size: 13px; margin-top: 2px; }
+  .tips { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 12px; text-align: center; color: #50607a; margin-top: 8px; }
+  .tips div { background: #eef4ff; border-radius: 10px; padding: 6px 4px; }
+  .modal { position: fixed; inset: 0; z-index: 50; background: rgba(5,15,40,.7); display: none; align-items: flex-end; justify-content: center; padding: 10px; }
+  .modal.on { display: flex; }
+  .sheet { background: #fff; width: 100%; max-width: 480px; max-height: 88dvh; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; animation: up .3s ease; }
+  @keyframes up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .sheet h3 { background: var(--navy); color: #fff; padding: 12px 16px; font-size: 18px; font-weight: 800; }
+  .sheet .txt { padding: 12px 16px; overflow-y: auto; font-size: 14px; line-height: 1.55; color: #2f3d55; }
+  .sheet .txt b { color: var(--ink); } .sheet .txt li { margin: 4px 0 4px 18px; }
+  .sheet .act { padding: 10px 16px 14px; border-top: 1px solid var(--line); }
+  .agree { display: flex; gap: 10px; align-items: flex-start; font-weight: 700; font-size: 14px; margin-bottom: 10px; cursor: pointer; }
+  .agree input { width: 22px; height: 22px; margin-top: 1px; flex: none; accent-color: var(--green); }
+  .gen { align-items: center; justify-content: center; text-align: center; color: #fff; }
+  .plane { font-size: 64px; animation: fly 2.2s ease-in-out infinite; }
+  @keyframes fly { 0%, 100% { transform: translate(-30px, 6px) rotate(-8deg); } 50% { transform: translate(30px, -6px) rotate(8deg); } }
+  .gen h2 { font-weight: 900; font-size: 26px; text-shadow: 0 3px 0 #082456; }
+  .board { background: #111827; border-radius: 14px; padding: 12px 14px; width: 100%; font-family: 'Chakra Petch'; font-weight: 700; text-align: left; box-shadow: 0 10px 24px rgba(0,0,0,.35); }
+  .board div { display: flex; justify-content: space-between; color: #ffd36b; font-size: 15px; padding: 4px 0; border-bottom: 1px dashed #334155; }
+  .board div:last-child { border: none; } .board div span:last-child { color: #8fd18f; }
+  .board div.wait span:last-child { color: #94a3b8; animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+  .gen .p { font-size: 14px; opacity: .9; }
+  #pass { width: 100%; border-radius: 16px; box-shadow: 0 14px 30px rgba(5,20,60,.45); display: block; }
+  .left { text-align: center; color: #fff; font-weight: 700; font-size: 14px; text-shadow: 0 1px 0 rgba(0,0,0,.3); }
+  .err { background: #fff1e6; border: 2px solid #d9480f; color: #7a1d00; border-radius: 12px; padding: 10px 12px; font-size: 14px; line-height: 1.4; display: none; }
+  .err.on { display: block; }
+  .sos { background: #fff1e6; border: 2px solid #d9480f; border-radius: 14px; padding: 8px 12px; text-align: center; font-size: 13px; }
+  .sos b { color: #b3261e; font-size: 18px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="scr on" id="s0">
+    <div class="top"><div class="a">NBMT AIRWAYS · SAFE ROAD SAVE LIFE</div><h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1></div>
+    <div class="hero"><img src="img/hero.webp?b=20261027224034" alt=""><div class="ai">✨ AI การ์ตูนตัวคุณเอง</div>
+      <div class="ov"><b>เช็คอินครบ 8 ข้อ<br>รับ <span>บัตรผ่านกลับบ้าน</span> ที่มีคุณเป็นตัวการ์ตูน!</b><p>เลือกพาหนะของคุณ ถ่ายเซลฟี่ 1 รูป แล้วแชร์ให้เพื่อนใน LINE</p></div></div>
+    <div class="how"><div><span>✅</span>เช็ค 8 ข้อ</div><div><span>🛵</span>เลือกพาหนะ</div><div><span>🤳</span>ถ่ายเซลฟี่</div><div><span>🎫</span>รับบัตรผ่าน</div></div>
+    <button class="btn" id="goCheck">✈ เริ่มเช็คอิน</button>
+  </section>
+
+  <section class="scr" id="s1">
+    <button class="back" data-go="0">‹ กลับ</button>
+    <div class="steps"><i class="on"></i><i></i><i></i><i></i></div>
+    <div class="card"><div class="hdr"><b>PRE-FLIGHT CHECKLIST<small>เช็คให้ครบ 8 ข้อ ก่อนออกเดินทาง</small></b><span class="tag">1/3</span></div>
+      <div class="body"><div class="prog"><span id="cnt">0/8</span><div class="bar"><i id="pbar"></i></div></div><div id="list"></div></div></div>
+    <button class="btn" id="toInfo" disabled>ถัดไป ›</button>
+  </section>
+
+  <section class="scr" id="s2">
+    <button class="back" data-go="1">‹ กลับ</button>
+    <div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+    <div class="card"><div class="hdr"><b>ข้อมูลผู้โดยสาร<small>PASSENGER & VEHICLE</small></b><span class="tag">2/3</span></div>
+      <div class="body">
+        <div class="row"><div><label class="l">ชื่อเล่น</label><input type="text" id="name" maxlength="20" placeholder="เช่น เอิร์ท" autocomplete="off"></div>
+          <div><label class="l">รหัสพนักงาน</label><input type="text" id="emp" maxlength="10" placeholder="เช่น 6500029" autocomplete="off"></div></div>
+        <label class="l">พาหนะที่ใช้เดินทาง</label>
+        <div class="veh" id="veh"></div>
+        <label class="l">รุ่นรถ <span style="font-weight:500;color:#7a8aa3">(ถ้ามี · พิมพ์เองได้)</span></label>
+        <input type="text" id="model" maxlength="30" placeholder="เช่น Yamaha XMAX 300, Honda Wave 110i" autocomplete="off">
+        <label class="l">สีรถ</label>
+        <div class="cols" id="cols"></div>
+        <div class="note" id="empNote">รหัสพนักงาน: คนไทยตัวเลข 7 หลัก · Japanese staff ตัวอักษร+ตัวเลข · ใช้จำกัดสิทธิ์คนละ 2 ภาพ ไม่แสดงในบัตร</div>
+      </div></div>
+    <button class="btn" id="toPhoto" disabled>ถัดไป ›</button>
+  </section>
+
+  <section class="scr" id="s3">
+    <button class="back" data-go="2">‹ กลับ</button>
+    <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+    <div class="card"><div class="hdr"><b>เซลฟี่ของคุณ<small>AI จะแปลงเป็นการ์ตูน 3D</small></b><span class="tag">3/3</span></div>
+      <div class="body">
+        <div class="shot" id="shot"><div class="ph"><span>🤳</span><b>แตะเพื่อถ่าย / เลือกรูป</b><small>หน้าตรง เห็นหน้าชัด</small></div><div class="guide"></div></div>
+        <input type="file" id="file" accept="image/*" capture="user" hidden>
+        <div class="tips"><div>☀️ แสงสว่าง</div><div>🙂 หน้าตรง</div><div>😷 ถอดแมสก์</div></div>
+      </div></div>
+    <div class="err" id="err"></div>
+    <button class="btn" id="toGen" disabled>✨ สร้างบัตรผ่านการ์ตูน</button>
+    <div class="left">สิทธิ์สร้างภาพ คนละ 2 ภาพ</div>
+  </section>
+
+  <section class="scr gen" id="s4">
+    <div class="plane">✈️</div>
+    <h2>กำลังออกบัตรผ่าน...</h2>
+    <div class="board">
+      <div><span>CHECKLIST 8/8</span><span>✓ PASSED</span></div>
+      <div id="g1" class="wait"><span>SCANNING FACE</span><span>• • •</span></div>
+      <div id="g2" class="wait"><span>DRAWING CARTOON</span><span>• • •</span></div>
+      <div id="g3" class="wait"><span>PRINTING PASS</span><span>• • •</span></div>
+    </div>
+    <div class="p">ใช้เวลาประมาณ 10–30 วินาที อย่าปิดหน้านี้นะ</div>
+  </section>
+
+  <section class="scr" id="s5">
+    <canvas id="pass" width="1080" height="2000"></canvas>
+    <div class="left" id="leftTxt"></div>
+    <div class="row"><button class="btn" id="share">📤 แชร์</button><button class="btn ghost" id="save" style="font-size:18px">💾 บันทึกรูป</button></div>
+    <button class="btn ghost" id="again">↻ สร้างอีกภาพ</button>
+    <div class="sos">เกิดอุบัติเหตุ โทร <b>1669</b> · <b>191</b> · แจ้ง Safety NBMT 196, 324</div>
+  </section>
+</div>
+
+<div class="modal" id="pdpa"><div class="sheet">
+  <h3>🔒 ขอความยินยอมใช้ภาพใบหน้า (PDPA)</h3>
+  <div class="txt">
+    <p>กิจกรรม <b>NBMT Safe Road Save Life – AI Boarding Pass</b> ขอใช้ภาพถ่ายใบหน้าของคุณ เพื่อสร้างภาพการ์ตูนของคุณบนบัตรผ่านกลับบ้าน</p>
+    <ul>
+      <li><b>ข้อมูลที่ใช้:</b> ภาพเซลฟี่ 1 ภาพ ชื่อเล่น รหัสพนักงาน และพาหนะที่เลือก</li>
+      <li><b>วิธีประมวลผล:</b> ภาพถูกส่งไปยังบริการ AI ของ Google (Gemini API) เพื่อสร้างภาพการ์ตูนเท่านั้น</li>
+      <li><b>การเก็บรักษา:</b> กิจกรรมนี้ <b>ไม่บันทึกภาพถ่ายต้นฉบับ</b> และไม่เก็บภาพการ์ตูนไว้ที่เซิร์ฟเวอร์ ภาพผลลัพธ์อยู่ในเครื่องของคุณเท่านั้น เก็บเพียงบันทึกการใช้งาน (เวลา รหัสพนักงาน ชื่อเล่น พาหนะ) เพื่อจำกัดสิทธิ์คนละ 2 ภาพ</li>
+      <li><b>ผู้ให้บริการภายนอก:</b> Google อาจประมวลผลข้อมูลตามข้อกำหนดของบริการ Gemini API</li>
+      <li><b>สิทธิ์ของคุณ:</b> การเข้าร่วมเป็นความสมัครใจ ไม่ยินยอมก็ยังทำเช็คลิสต์ได้ตามปกติ และขอลบบันทึกการใช้งานได้ที่ผู้ดูแลกิจกรรม</li>
+      <li>โปรดใช้ <b>ภาพของตัวคุณเองเท่านั้น</b> ห้ามใช้ภาพของผู้อื่นโดยไม่ได้รับอนุญาต</li>
+    </ul>
+  </div>
+  <div class="act">
+    <label class="agree"><input type="checkbox" id="agreeChk"> ฉันได้อ่านและยินยอมให้ใช้ภาพใบหน้าของฉันเพื่อสร้างภาพการ์ตูนตามรายละเอียดข้างต้น</label>
+    <div class="row"><button class="btn ghost" id="pdpaNo">ไม่ยินยอม</button><button class="btn" id="pdpaYes" disabled>ยอมรับ ✓</button></div>
+  </div>
+</div></div>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbyREr9RZjjlVNYufVsxY49e9JF5jhx6fxf2iQJI_h4sR8Zxw-cypowH4MwFnf7j5ol91A/exec';
+const ITEMS = [
+  { t: 'เตรียมคน เตรียมรถ ก่อนเดินทาง', d: 'ไม่ดื่ม ไม่กินยาที่ทำให้ง่วง · เช็คเบรก ไฟ ยาง', s: 'เตรียมคน เตรียมรถ' },
+  { t: 'วางแผนเส้นทางก่อนขับขี่', d: 'ดูเส้นทาง จราจร อากาศ · ออกเผื่อเวลา ไม่รีบ', s: 'วางแผนเส้นทาง' },
+  { t: 'ปฏิบัติตามกฎจราจร', d: 'ไม่ขับเร็ว · ไม่ใช้มือถือ · เข็มขัด · หมวกรัดคาง', s: 'ปฏิบัติตามกฎจราจร' },
+  { t: 'ขับขี่อย่างมีสติ เว้นระยะปลอดภัย', d: 'เว้นระยะคันหน้า ≥ 3 วินาที · ง่วงให้จอดพัก', s: 'มีสติ เว้นระยะ 3 วิ' },
+  { t: 'ชะลอทางแยก ให้สัญญาณล่วงหน้า', d: 'ลดความเร็ว มองรอบด้าน · เปิดไฟเลี้ยวล่วงหน้า', s: 'ชะลอทางแยก ให้สัญญาณ' },
+  { t: 'ตรวจจุดอับสายตาก่อนเลี้ยวหรือเปลี่ยนเลน', d: 'มองกระจก แล้วหันมองข้ามไหล่ทุกครั้ง', s: 'ตรวจจุดอับสายตา' },
+  { t: 'คาดการณ์ความเสี่ยง พร้อมรับเหตุฉุกเฉิน', d: 'สังเกตถนน รถ คนรอบข้าง · พร้อมเบรก', s: 'คาดการณ์ความเสี่ยง' },
+  { t: 'มีน้ำใจและเคารพเพื่อนร่วมทาง', d: 'หยุดให้คนข้ามทางม้าลาย · ไม่ปาดหน้า', s: 'มีน้ำใจ เคารพผู้อื่น' },
+];
+const VEH = [
+  { k: 'scooter', i: '🛵', t: 'สกู๊ตเตอร์' }, { k: 'moto', i: '🏍️', t: 'มอไซค์' }, { k: 'bigbike', i: '🏁', t: 'บิ๊กไบค์' }, { k: 'bicycle', i: '🚲', t: 'จักรยาน' },
+  { k: 'sedan', i: '🚗', t: 'รถเก๋ง' }, { k: 'pickup', i: '🛻', t: 'กระบะ' }, { k: 'suv', i: '🚙', t: 'SUV' }, { k: 'van', i: '🚐', t: 'รถรับส่ง' },
+];
+const COLS = [{ k: 'black', c: '#1b1b1b', t: 'ดำ' }, { k: 'white', c: '#f4f4f4', t: 'ขาว' }, { k: 'red', c: '#d62828', t: 'แดง' }, { k: 'blue', c: '#1f5fd1', t: 'น้ำเงิน' }, { k: 'grey', c: '#9aa3ad', t: 'เทา' }, { k: 'yellow', c: '#f5c518', t: 'เหลือง' }];
+const $ = (id) => document.getElementById(id);
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+const st = { on: new Set(), veh: store.get('nbmt_veh') || '', col: store.get('nbmt_col') || 'black', photo: null, consent: false, img: null };
+const nw = (t) => t.split(' ').map(w => `<span class="nw">${w}</span>`).join(' ');
+function go(n) { document.querySelectorAll('.scr').forEach(s => s.classList.toggle('on', s.id === 's' + n)); window.scrollTo(0, 0); }
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
+
+$('list').innerHTML = ITEMS.map((it, i) => (i === 0 ? '<span class="sec o">ก่อนออกเดินทาง</span>' : i === 2 ? '<br><span class="sec b">ระหว่างทาง</span>' : '') +
+  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027224034" alt=""><div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
+document.querySelectorAll('.item').forEach(el => el.onclick = () => { const i = +el.dataset.i; st.on.has(i) ? st.on.delete(i) : st.on.add(i); el.classList.toggle('on', st.on.has(i)); upd(); });
+$('goCheck').onclick = () => go(1);
+$('toInfo').onclick = () => go(2);
+
+$('name').value = store.get('nbmt_pax') || store.get('nbmt_name') || '';
+$('emp').value = store.get('nbmt_emp') || '';
+$('model').value = store.get('nbmt_model') || '';
+$('veh').innerHTML = VEH.map(v => `<button data-k="${v.k}"><span>${v.i}</span>${v.t}</button>`).join('');
+$('cols').innerHTML = COLS.map(c => `<button data-k="${c.k}" title="${c.t}" style="background:${c.c}"></button>`).join('');
+document.querySelectorAll('#veh button').forEach(b => b.onclick = () => { st.veh = b.dataset.k; upd(); });
+document.querySelectorAll('#cols button').forEach(b => b.onclick = () => { st.col = b.dataset.k; upd(); });
+['name', 'emp'].forEach(id => $(id).oninput = upd);
+$('toPhoto').onclick = () => { store.set('nbmt_pax', $('name').value.trim()); store.set('nbmt_emp', $('emp').value.trim().toUpperCase()); store.set('nbmt_veh', st.veh); store.set('nbmt_model', $('model').value.trim()); store.set('nbmt_col', st.col); go(3); };
+
+function upd() {
+  $('cnt').textContent = `${st.on.size}/8`; $('pbar').style.width = (st.on.size / 8 * 100) + '%';
+  $('toInfo').disabled = st.on.size !== 8; $('toInfo').textContent = st.on.size === 8 ? 'ถัดไป ›' : `เหลืออีก ${8 - st.on.size} ข้อ`;
+  document.querySelectorAll('#veh button').forEach(b => b.classList.toggle('on', b.dataset.k === st.veh));
+  document.querySelectorAll('#cols button').forEach(b => b.classList.toggle('on', b.dataset.k === st.col));
+  const emp = $('emp').value.trim().toUpperCase();
+  $('toPhoto').disabled = !($('name').value.trim() && /^(\d{7}|(?=[A-Z0-9]*[A-Z])(?=[A-Z0-9]*\d)[A-Z0-9]{3,10})$/.test(emp) && st.veh);
+  $('empNote').style.color = emp && !/^(\d{7}|(?=[A-Z0-9]*[A-Z])(?=[A-Z0-9]*\d)[A-Z0-9]{3,10})$/.test(emp) ? '#b3261e' : '';
+  $('toGen').disabled = !st.photo;
+}
+upd();
+
+$('shot').onclick = () => $('file').click();
+$('file').onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const url = URL.createObjectURL(f); const im = new Image(); im.src = url; await im.decode();
+  const s = Math.min(im.naturalWidth, im.naturalHeight), sx = (im.naturalWidth - s) / 2, sy = Math.max(0, (im.naturalHeight - s) * 0.35);
+  const c = document.createElement('canvas'); c.width = c.height = 768; c.getContext('2d').drawImage(im, sx, sy, s, s, 0, 0, 768, 768);
+  st.photo = c.toDataURL('image/jpeg', 0.85); URL.revokeObjectURL(url);
+  $('shot').classList.add('has'); $('shot').innerHTML = `<img src="${st.photo}" alt="">`; $('err').classList.remove('on'); upd();
+};
+
+$('toGen').onclick = () => { if (st.consent) generate(); else { $('agreeChk').checked = false; $('pdpaYes').disabled = true; $('pdpa').classList.add('on'); } };
+$('agreeChk').onchange = () => $('pdpaYes').disabled = !$('agreeChk').checked;
+$('pdpaNo').onclick = () => { $('pdpa').classList.remove('on'); showErr('ไม่เป็นไรครับ — เช็คลิสต์ของคุณครบ 8 ข้อแล้ว 👍 ถ้าเปลี่ยนใจ กด "สร้างบัตรผ่านการ์ตูน" ได้ทุกเมื่อ'); };
+$('pdpaYes').onclick = () => { st.consent = true; $('pdpa').classList.remove('on'); generate(); };
+
+function showErr(t) { $('err').innerHTML = t; $('err').classList.add('on'); }
+const ERR = {
+  quota_person: 'คุณใช้สิทธิ์สร้างภาพครบ 2 ภาพแล้ว 🙏 ขอบคุณที่ร่วมกิจกรรม!',
+  quota_day: 'วันนี้มีคนสร้างภาพครบ 100 ภาพแล้ว ⏳ กลับมาใหม่พรุ่งนี้นะ',
+  busy: 'ระบบ AI กำลังยุ่ง ลองใหม่อีกครั้งในอีกสักครู่',
+  blocked: 'AI ไม่สามารถใช้รูปนี้ได้ ลองถ่ายใหม่ให้เห็นหน้าชัด ๆ',
+  photo: 'รูปไม่ถูกต้อง ลองถ่ายใหม่อีกครั้ง',
+  emp: 'รหัสพนักงานไม่ถูกต้อง',
+  nokey: 'ระบบ AI ยังไม่เปิดใช้งาน (ผู้ดูแลกำลังตั้งค่า) ลองใหม่ภายหลังนะ',
+  paused: 'ระบบ AI ปิดชั่วคราว ⏸ ลองใหม่ภายหลัง หรือรับบัตรผ่านแบบรูปถ่ายไปก่อนได้เลย',
+  net: 'เชื่อมต่อไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่',
+};
+async function generate() {
+  go(4); ['g1', 'g2', 'g3'].forEach(id => { $(id).className = 'wait'; $(id).lastChild.textContent = '• • •'; });
+  setTimeout(() => { if ($('s4').classList.contains('on')) { $('g1').className = ''; $('g1').lastChild.textContent = '✓ DONE'; } }, 2500);
+  let j;
+  try {
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ consent: true, name: $('name').value.trim(), emp: $('emp').value.trim().toUpperCase(), vehicle: st.veh, model: $('model').value.trim(), color: st.col, photo: st.photo.split(',')[1] }) });
+    j = await r.json();
+  } catch (e) { j = { ok: false, err: 'net' }; }
+  if (!j.ok) {
+    go(3); showErr((ERR[j.err] || 'สร้างภาพไม่สำเร็จ ลองใหม่อีกครั้ง') + '<button class="btn ghost" id="plainPass" style="margin-top:8px;font-size:15px">🎫 รับบัตรผ่านแบบรูปถ่ายแทน</button>');
+    $('plainPass').onclick = async () => { st.img = st.photo; await drawPass(); $('leftTxt').textContent = 'บัตรผ่านแบบรูปถ่าย'; $('again').style.display = 'none'; go(5); };
+    if (j.err === 'quota_person') $('toGen').disabled = true; return;
+  }
+  $('g2').className = ''; $('g2').lastChild.textContent = '✓ DONE';
+  st.img = `data:${j.mime};base64,${j.image}`;
+  await drawPass(); $('g3').className = ''; $('g3').lastChild.textContent = '✓ DONE';
+  $('leftTxt').textContent = j.left > 0 ? `สร้างได้อีก ${j.left} ภาพ` : 'ใช้สิทธิ์ครบแล้ว — ขอบคุณที่ร่วมกิจกรรม!';
+  $('again').style.display = j.left > 0 ? '' : 'none';
+  setTimeout(() => go(5), 600);
+}
+$('again').onclick = () => { st.photo = null; $('shot').classList.remove('has'); $('shot').innerHTML = '<div class="ph"><span>🤳</span><b>แตะเพื่อถ่าย / เลือกรูป</b><small>หน้าตรง เห็นหน้าชัด</small></div><div class="guide"></div>'; $('file').value = ''; upd(); go(3); };
+
+const load = (src) => new Promise(ok => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = src; });
+function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function cover(c, im, x, y, w, h, fy = .4) { if (!im) return; const s = Math.max(w / im.width, h / im.height); const sw = w / s, sh = h / s; c.drawImage(im, (im.width - sw) / 2, (im.height - sh) * fy, sw, sh, x, y, w, h); }
+async function drawPass() {
+  await document.fonts.ready;
+  const c = $('pass').getContext('2d'), W = 1080, H = 2000, X = 40, Y = 190, TW = W - 80, TH = 1720;
+  const art = await load(st.img);
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0a2f74'); g.addColorStop(.55, '#2a68c9'); g.addColorStop(1, '#ffb36b'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  c.textAlign = 'center'; c.fillStyle = '#fff'; c.font = '700 30px "Chakra Petch"'; c.fillText('NBMT AIRWAYS · SAFE ROAD SAVE LIFE', W / 2, 70);
+  c.font = '900 64px Kanit'; const a = 'ทุกเที่ยวไป ', b = 'ต้องมีเที่ยวกลับ'; const wa = c.measureText(a).width, wb = c.measureText(b).width; const sx = W / 2 - (wa + wb) / 2;
+  c.textAlign = 'left'; c.fillText(a, sx, 150); c.fillStyle = '#ffd36b'; c.fillText(b, sx + wa, 150);
+  c.save(); c.shadowColor = 'rgba(5,20,60,.45)'; c.shadowBlur = 30; c.shadowOffsetY = 14; rr(c, X, Y, TW, TH, 36); c.fillStyle = '#fffdf7'; c.fill(); c.restore();
+  c.save(); rr(c, X, Y, TW, TH, 36); c.clip();
+  const hg = c.createLinearGradient(X, 0, X + TW, 0); hg.addColorStop(0, '#0b2f6b'); hg.addColorStop(1, '#1559b8'); c.fillStyle = hg; c.fillRect(X, Y, TW, 100);
+  c.fillStyle = '#fff'; c.font = '800 42px Kanit'; c.fillText('BOARDING PASS', X + 34, Y + 66); c.fillStyle = '#ffd36b'; c.font = '700 32px Kanit'; c.fillText('บัตรผ่านกลับบ้าน', X + 370, Y + 64);
+  cover(c, art, X, Y + 100, TW, 1000, .3);
+  c.restore();
+  c.save(); c.translate(X + TW - 190, Y + 1030); c.rotate(-0.14);
+  c.fillStyle = 'rgba(255,253,247,.9)'; rr(c, -160, -64, 320, 128, 18); c.fill(); c.strokeStyle = '#0f8a3c'; c.lineWidth = 9; rr(c, -160, -64, 320, 128, 18); c.stroke();
+  c.fillStyle = '#0f8a3c'; c.textAlign = 'center'; c.font = '700 46px "Chakra Petch"'; c.fillText('CHECKED 8/8', 0, 4); c.font = '700 26px Kanit'; c.fillText('ผ่านครบ ได้กลับบ้าน', 0, 44); c.restore();
+  const y = Y + 1180; c.textAlign = 'left';
+  c.fillStyle = '#0b2f6b'; c.font = '700 70px "Chakra Petch"'; c.fillText('NBMT', X + 34, y); c.textAlign = 'right'; c.fillText('HOME', X + TW - 34, y); c.textAlign = 'left';
+  c.strokeStyle = '#ff7a1a'; c.lineWidth = 6; c.setLineDash([16, 12]); c.beginPath(); c.moveTo(X + 270, y - 24); c.lineTo(X + TW - 280, y - 24); c.stroke(); c.setLineDash([]);
+  c.strokeStyle = '#c6d2e3'; c.lineWidth = 4; c.setLineDash([14, 10]); c.beginPath(); c.moveTo(X + 30, y + 26); c.lineTo(X + TW - 30, y + 26); c.stroke(); c.setLineDash([]);
+  const lab = (t, x, yy) => { c.fillStyle = '#7a8aa3'; c.font = '700 24px "Chakra Petch"'; c.fillText(t, x, yy); };
+  const val = (t, x, yy, col = '#13233f', f = '800 38px Kanit') => { c.fillStyle = col; c.font = f; c.fillText(t, x, yy); };
+  lab('PASSENGER · ผู้โดยสาร', X + 34, y + 76);
+  let fs = 74; const nm = $('name').value.trim(); c.font = `900 ${fs}px Kanit`; while (c.measureText(nm).width > TW - 80 && fs > 36) { fs -= 4; c.font = `900 ${fs}px Kanit`; }
+  val(nm, X + 34, y + 152, '#13233f', `900 ${fs}px Kanit`);
+  const v = VEH.find(x => x.k === st.veh) || VEH[0], col = COLS.find(x => x.k === st.col) || COLS[0];
+  lab('VEHICLE · พาหนะ', X + 34, y + 210); { const md = $('model').value.trim(); let t = md ? `${md} สี${col.t}` : `${v.t} สี${col.t}`; c.font = '800 38px Kanit'; let f = 38; while (c.measureText(t).width > 500 && f > 24) { f -= 2; c.font = `800 ${f}px Kanit`; } val(t, X + 34, y + 256, '#13233f', `800 ${f}px Kanit`); }
+  lab('ARRIVAL · ถึง', X + 560, y + 210); val('ปลอดภัย 100%', X + 560, y + 256, '#0f8a3c');
+  lab('CHECK-IN', X + 34, y + 314); val(new Date().toLocaleDateString('th-TH'), X + 34, y + 360);
+  lab('FLIGHT', X + 560, y + 314); val('SAFE 0008', X + 560, y + 360);
+  let cx = X + 34, cy = y + 400; c.font = '700 22px Kanit';
+  for (const it of ITEMS) { const t = '✓ ' + it.s, w = c.measureText(t).width + 24; if (cx + w > X + TW - 30) { cx = X + 34; cy += 44; } c.fillStyle = '#eaf6ee'; rr(c, cx, cy, w, 36, 18); c.fill(); c.fillStyle = '#0f8a3c'; c.fillText(t, cx + 12, cy + 26); cx += w + 8; }
+  c.textAlign = 'center'; c.fillStyle = '#13233f'; c.font = '800 44px Kanit'; c.fillText('คนที่บ้าน รอคุณอยู่', W / 2, H - 30);
+}
+const blob = () => new Promise(ok => $('pass').toBlob(ok, 'image/jpeg', 0.92));
+$('save').onclick = async () => { const a = document.createElement('a'); a.href = URL.createObjectURL(await blob()); a.download = 'NBMT-boarding-pass.jpg'; a.click(); };
+$('share').onclick = async () => {
+  const text = `${$('name').value.trim()} เช็คอินครบ 8 ข้อแล้ว ✈ ทุกเที่ยวไป ต้องมีเที่ยวกลับ — มารับบัตรผ่านการ์ตูนของคุณด้วยกัน!`;
+  try { const f = new File([await blob()], 'NBMT-boarding-pass.jpg', { type: 'image/jpeg' });
+    if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], text }); return; }
+    if (navigator.share) { await navigator.share({ text, url: location.href }); return; } } catch (e) { return; }
+  try { await navigator.clipboard.writeText(text + ' ' + location.href); $('share').textContent = '✓ คัดลอกลิงก์แล้ว'; } catch (e) {}
+};
+if (/[?&]demo=1/.test(location.search)) { $('name').value = 'เอิร์ท'; st.veh = 'scooter'; st.col = 'black'; st.img = 'img/hero.webp'; drawPass().then(() => { $('leftTxt').textContent = 'DEMO'; go(5); }); }
+</script>
+</body>
+</html>

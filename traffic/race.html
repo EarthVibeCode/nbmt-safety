@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="th">
 <head>
+<script>
+const BUILD = '20261027224034';
+// auto-update: if the server has a newer build than this page, reload once (bypassing cache)
+(function () { try {
+  fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
+    if (j.v && j.v !== BUILD) { const k = 'nbmt_reload_' + j.v; if (!sessionStorage.getItem(k)) { sessionStorage.setItem(k, '1'); const u = new URL(location.href); u.searchParams.set('b', j.v); location.replace(u.toString()); } }
+  }).catch(() => {});
+} catch (e) {} })();
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <link rel="icon" href="data:,">
@@ -143,6 +152,7 @@
   <div class="r"><button class="bad" id="tBad"></button><button class="good" id="tGood"></button></div><i class="tm"></i></div>
 <div class="ctrl"><button class="lane" id="bL">◀</button><button class="brake" id="bB">✋ เบรก</button><button class="lane" id="bR">▶</button></div>
 
+<div class="gate" id="pause"><div class="logo" style="font-size:44px">⏸ พักก่อน</div><button class="go" id="resumeBtn">▶ ขี่ต่อ</button><small>ง่วงก็จอดพักแบบนี้นะ 😴</small></div>
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
 <div class="load" id="load">กำลังเช็คอิน...<div class="b"><i id="loadBar"></i></div></div>
 <div class="ov on" id="start">
@@ -165,7 +175,7 @@
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261027224034" alt="">
   <div class="big" id="endScore">0</div>
   <div class="stats" id="stats"></div>
   <p id="endP"></p>
@@ -272,7 +282,7 @@ for (const c in CHARS) { SPR[`p_${c}`] = 2.4; for (const v in VEHS) SPR[`p_${c}_
 const PL = { c: 'earth', v: 'xmax' };
 const tex = {}; const loader = new THREE.TextureLoader();
 async function loadAll() { const ks = Object.keys(SPR); let n = 0;
-  await Promise.all(ks.map(k => new Promise(ok => loader.load(`race/${k}.webp`, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; tex[k] = t; $('loadBar').style.width = (++n / ks.length * 100) + '%'; ok(); }, undefined, () => { n++; ok(); })))); }
+  await Promise.all(ks.map(k => new Promise(ok => loader.load(`race/${k}.webp?b=${BUILD}`, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; tex[k] = t; $('loadBar').style.width = (++n / ks.length * 100) + '%'; ok(); }, undefined, () => { n++; ok(); })))); }
 function sprite(k, flip = false) { const t = tex[k]; const h = SPR[k] * (k === 'rider' || k.startsWith('p_') ? 1 : 1.3); const a = t ? t.image.width / t.image.height : 1; const w = h * a;
   const g = new THREE.PlaneGeometry(w, h); g.translate(0, h / 2, 0);
   const m = new THREE.MeshBasicMaterial({ map: t || null, color: t ? '#ffffff' : '#ff00ff', transparent: true, alphaTest: .35, side: THREE.DoubleSide });
@@ -283,7 +293,7 @@ function shadowBlob(w) { const m = new THREE.Mesh(new THREE.CircleGeometry(.5, 1
 const S = {}; let ents = [], lights = [];
 const player = new THREE.Group(); scene.add(player);
 function reset() {
-  Object.assign(S, { v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, combo: 1, brake: false, run: false, inv: 0, sleep: 0, total: 3000, nextSpawn: 70, rain: false, slow: 1, shield: false, truck: false, sleepWarned: false, gapGood: 0,
+  Object.assign(S, { paused: false, v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, combo: 1, brake: false, run: false, inv: 0, sleep: 0, total: 3000, nextSpawn: 70, rain: false, slow: 1, shield: false, truck: false, sleepWarned: false, gapGood: 0,
     stats: { red: 0, coffee: 0, phoneNo: 0, dodge: 0, crash: 0, nope: 0 }, drunk: 0, turbo: 0, heavy: 0, tmp: null, tq: shuffle(['friends', 'racer', 'hitch', 'shortcut']).map((k, i) => ({ k, at: [330, 930, 1380, 2230][i] })), call: null, nextCall: rnd(18, 26), t: 0 });
   ents.forEach(e => scene.remove(e.o)); lights.forEach(l => scene.remove(l.o)); ents = []; lights = [];
   player.clear(); const r = sprite(`p_${PL.c}_${PL.v}`); player.add(shadowBlob(1.6)); player.add(r); player.userData.spr = r;
@@ -327,7 +337,7 @@ const snd = (() => { let ac, eng, voices = {}, last = 0;
   const ctx = () => { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (ac && ac.state === 'suspended') ac.resume(); return ac; };
   function tone(f, d, type = 'square', vol = .1, slide = 0, delay = 0) { const a = ctx(); if (!a) return; const t = a.currentTime + delay; const o = a.createOscillator(), g = a.createGain(); o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, f + slide), t + d); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g).connect(a.destination); o.start(t); o.stop(t + d + .02); }
   function noise(d, vol = .2) { const a = ctx(); if (!a) return; const b = a.createBuffer(1, a.sampleRate * d, a.sampleRate), ch = b.getChannelData(0); for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / ch.length, 2); const s = a.createBufferSource(), g = a.createGain(); s.buffer = b; g.gain.value = vol; s.connect(g).connect(a.destination); s.start(); }
-  ['go', 'red', 'buffalo', 'wrongway', 'chicken', 'phone', 'sleepy', 'ouch', 'nearmiss', 'great', 'truck', 'drunk', 'crate', 'home', 't_friends', 't_racer', 't_hitch', 't_shortcut', 't_police', 't_ticket', 't_nope', 't_dizzy'].forEach(k => { const au = new Audio(`snd/${k}.mp3`); au.preload = 'auto'; voices[k] = au; });
+  ['go', 'red', 'buffalo', 'wrongway', 'chicken', 'phone', 'sleepy', 'ouch', 'nearmiss', 'great', 'truck', 'drunk', 'crate', 'home', 't_friends', 't_racer', 't_hitch', 't_shortcut', 't_police', 't_ticket', 't_nope', 't_dizzy'].forEach(k => { const au = new Audio(`snd/${k}.mp3?b=${BUILD}`); au.preload = 'auto'; voices[k] = au; });
   return {
     unlock() { ctx(); Object.values(voices).forEach(v => { v.muted = true; v.play().then(() => { v.pause(); v.currentTime = 0; v.muted = false; }).catch(() => { v.muted = false; }); }); },
     get ac() { return ctx(); },
@@ -401,7 +411,7 @@ const Music = window.Music = (() => {
   function ensure() { if (ac) return true; ac = snd.ac; if (!ac) return false; filt = ac.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 18000; bus = ac.createGain(); bus.gain.value = 0; const cp = ac.createDynamicsCompressor(); cp.threshold.value = -20; cp.ratio.value = 4; bus.connect(filt).connect(cp).connect(ac.destination); return true; }
   // ---- AI soundtrack files (Gemini / Lyria 3) via <audio> → filter → compressor ----
   const tracks = {}; let cur = null, tgain = null;
-  function trk(name) { if (tracks[name]) return tracks[name]; const a = new Audio(`race/music/${name}.m4a?b=1`); a.loop = true; a.preload = 'auto'; a.crossOrigin = 'anonymous';
+  function trk(name) { if (tracks[name]) return tracks[name]; const a = new Audio(`race/music/${name}.m4a?b=${BUILD}`); a.loop = true; a.preload = 'auto'; a.crossOrigin = 'anonymous';
     const g = ac.createGain(); g.gain.value = 0; try { ac.createMediaElementSource(a).connect(g).connect(tgain); } catch (e) {} const t = (tracks[name] = { a, g });
     a.onerror = () => { t.bad = true; if (cur === t) { cur = null; api.play(typeof S !== 'undefined' && S.run ? 'game' : 'menu'); } }; return t; }
   function playTrack(name, restart) { if (!ensure()) return false; if (!tgain) { tgain = ac.createGain(); tgain.gain.value = muted ? 0 : 1; tgain.connect(filt); }
@@ -413,6 +423,8 @@ const Music = window.Music = (() => {
     if (o.rate !== undefined) { cur.a.preservesPitch = cur.a.mozPreservesPitch = cur.a.webkitPreservesPitch = !o.wobble; cur.a.playbackRate = Math.max(.6, Math.min(1.4, o.rate)); }
     if (o.lp !== undefined) filt.frequency.setTargetAtTime(o.lp, now, .15); }
   const api = {
+    pauseAll() { try { if (cur) cur.a.pause(); } catch (e) {} try { ac && ac.suspend(); } catch (e) {} },
+    resumeAll() { try { ac && ac.resume(); } catch (e) {} try { if (cur) cur.a.play().catch(() => {}); } catch (e) {} },
     playTrack, trackTick, get hasTrack() { return !!cur; },
     stopTrack() { if (cur) { const o = cur; o.g.gain.setTargetAtTime(0, ac.currentTime, .3); setTimeout(() => o.a.pause(), 1200); cur = null; } },
     play(m) { if (!ensure()) return; if (mode === 'off') { nextT = ac.currentTime + .05; step = 0; bar = 0; } mode = m; if (!timer) timer = setInterval(tick, 25); },
@@ -542,7 +554,10 @@ function update(dt) {
   camera.position.set(S.x * .7 + sh, 5.2 + S.v * .015, 10 - S.v * .03); camera.lookAt(S.x * .5, 1, -20);
 }
 const TS = +(new URLSearchParams(location.search).get('ts') || 1);
-function loop() { const dt = Math.min(.05, clock.getDelta()); if (S.run) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
+let fpsN = 0, fpsT = 0, fpsDone = false;
+function loop() { const dt = Math.min(.05, clock.getDelta());
+  if (S.run && !S.paused && !fpsDone) { fpsN++; fpsT += dt; if (fpsT > 4) { fpsDone = true; if (fpsN / fpsT < 40 && renderer.getPixelRatio() > 1) { renderer.setPixelRatio(1); resize(); } } }
+  if (S.run && !S.paused) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
 function start() { snd.unlock(); reset(); S.run = true; if (!Music.playTrack(`${PL.c}_${PL.v}`, true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
 function finish(win) {
   if (!S.run) return; S.run = false; snd.stop(); setB(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
@@ -570,6 +585,12 @@ function renderPick() {
   document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
   document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
 }
+let pausedAt = 0;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { Music.pauseAll(); if (S.run && !S.paused) { S.paused = true; pausedAt = performance.now(); setB(false); $('pause').classList.add('on'); } }
+  else if (!S.paused && !$('gate').classList.contains('on')) Music.resumeAll();
+});
+$('resumeBtn').onclick = () => { if (S.tmp) S.tmp.t0 += performance.now() - pausedAt; S.paused = false; $('pause').classList.remove('on'); clock.getDelta(); snd.unlock(); Music.resumeAll(); };
 $('goBtn').onclick = () => { snd.unlock(); Music.playTrack(`${PL.c}_${PL.v}`); renderPick(); $('pick').classList.add('on'); $('pick').scrollTop = 0; };
 $('pkBack').onclick = () => { $('pick').classList.remove('on'); Music.playTrack('theme'); };
 $('pkGo').onclick = () => { try { localStorage.setItem('nbmt_race_c', PL.c); localStorage.setItem('nbmt_race_v', PL.v); } catch (e) {} $('pick').classList.remove('on'); start(); };
@@ -606,7 +627,7 @@ function renderBoard() {
   let html = '';
   if (tab === 'depts') { const max = Math.max(1, ...d.depts.map(x => x.total));
     html = d.depts.map((x, i) => `<div class="br${me && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div style="flex:1"><div class="nm">${esc(x.dept)}</div><div class="dp">${x.players} คน</div><div class="dbar" style="width:${x.total / max * 100}%"></div></div><div class="sc">${x.total.toLocaleString()}<small>คะแนนรวม</small></div></div>`).join('');
-  } else html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.group === x.group ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''}</div><div class="dp">${esc(x.dept)} · ${esc(x.group || '')}</div></div><div class="sc">${x.score.toLocaleString()}</div></div>`).join('');
+  } else html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.group === x.group ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''} <span style="font-size:13px;opacity:.85">${VEHS[x.veh] ? VEHS[x.veh].emo : ''}${CHARS[x.ch] ? ' ' + CHARS[x.ch] : ''}</span></div><div class="dp">${esc(x.dept)} · ${esc(x.group || '')}</div></div><div class="sc">${x.score.toLocaleString()}</div></div>`).join('');
   $('bList').innerHTML = html || '<div class="empty">ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!</div>';
 }
 async function loadBoard() { try { const r = await fetch(API + '?game=race'); boardData = await r.json(); renderBoard(); } catch (e) { $('bStat').textContent = 'โหลดกระดานไม่สำเร็จ ลองใหม่อีกครั้ง'; } }
@@ -625,7 +646,7 @@ $('submitBtn').onclick = async () => {
     const j = await r.json();
     if (!j.ok) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน';
       if (j.err === 'reserved') { const had = $('pPin').value; $('pinBox').classList.add('on'); store.set('nbmt_pin', ''); $('pPin').value = ''; $('pPin').placeholder = had ? 'PIN ไม่ถูกต้อง ลองอีกครั้ง' : 'PIN 6 หลัก'; $('pPin').focus(); return; }
-      alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : j.err === 'emp' ? 'รหัสพนักงานไม่ถูกต้อง' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
+      alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : j.err === 'emp' ? 'รหัสพนักงานไม่ถูกต้อง' : j.err === 'wait' ? 'เพิ่งส่งคะแนนไป รอสักครู่แล้วลองใหม่นะ' : j.err === 'invalid' ? 'คะแนนรอบนี้ส่งไม่ได้ ลองเล่นใหม่อีกรอบนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
     if ($('pPin').value.trim()) store.set('nbmt_pin', $('pPin').value.trim());
     $('pinBox').classList.remove('on'); me = { name, dept, group }; boardData = j.board; $('submitBox').style.display = 'none';
     $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)} · ${esc(group.split(' : ')[0])}</small>`; $('myRank').classList.add('on');
