@@ -150,10 +150,9 @@
     <div class="sub" id="submitBox">
       <div class="h">ลงชื่อบนกระดานนายอำเภอ</div>
       <input id="pName" maxlength="20" placeholder="ชื่อเล่น เช่น เอิร์ท" autocomplete="off">
-      <select id="pDept"><option value="">— เลือกแผนก —</option></select>
-      <input id="pDeptOther" maxlength="24" placeholder="พิมพ์ชื่อแผนก" style="display:none" autocomplete="off">
-      <button class="btn" id="submitBtn">📌 ส่งคะแนน</button>
-      <div class="note">ชื่อเล่นและแผนกจะแสดงบนกระดานที่ทุกคนเห็น · ไม่เก็บข้อมูลอื่น</div>
+      <select id="pDept"><option value="">— เลือกโซน 5ส ของคุณ —</option></select>
+            <button class="btn" id="submitBtn">📌 ส่งคะแนน</button>
+      <div class="note">ชื่อเล่นและโซนจะแสดงบนกระดานที่ทุกคนเห็น · ไม่เก็บข้อมูลอื่น</div>
     </div>
     <div class="myrank" id="myRank"></div>
     <div class="list" id="summary"></div>
@@ -166,10 +165,10 @@
   <section class="screen board" id="board">
     <div class="w" style="font-size:38px">SHERIFF BOARD</div>
     <div class="bstat" id="bStat">กำลังโหลด...</div>
-    <div class="tabs"><button data-t="today" class="on">วันนี้</button><button data-t="all">ตลอดกาล</button><button data-t="depts">แผนก</button></div>
+    <div class="tabs"><button data-t="today" class="on">วันนี้</button><button data-t="all">ตลอดกาล</button><button data-t="depts">โซน 5ส</button></div>
     <div class="blist" id="bList"></div>
     <button class="btn" id="boardPlay">▶ เล่นเลย</button>
-    <div class="foot">🥇 นายอำเภอใหญ่ ≥400 ไม่พลาด · 🥈 นายอำเภอ ≥300 · 🥉 ผู้ช่วยนายอำเภอ จับครบ 6 ชนิด<br>คะแนนแผนก = รวมคะแนนดีที่สุดของแต่ละคนในแผนก</div>
+    <div class="foot">🥇 นายอำเภอใหญ่ ≥400 ไม่พลาด · 🥈 นายอำเภอ ≥300 · 🥉 ผู้ช่วยนายอำเภอ จับครบ 6 ชนิด<br>คะแนนโซน = รวมคะแนนดีที่สุดของแต่ละคนในโซน · ชวนเพื่อนในโซนมาช่วยกัน!</div>
   </section>
 </div>
 
@@ -289,15 +288,18 @@ function end() {
 
 // ===== scoreboard =====
 const API = 'https://script.google.com/macros/s/AKfycbzOvXvj63i7BF7PMC5eRBwgE9q320kOheNnFmounEZCm4A7fqOFIK2nN12c8vh-utwPdw/exec';
-const DEPTS = ['Production', 'QC / QA', 'Maintenance', 'Engineering', 'Warehouse / Logistics', 'Safety / ENV', 'HR / Admin', 'Office / Planning', 'ผู้รับเหมา'];
+// ===== 5ส ZONES (ชื่อชั่วคราว — แก้ชื่อจริงตรงนี้ที่เดียว) =====
+const DEPTS = [
+  'โซน 1 · Machining A', 'โซน 2 · Machining B', 'โซน 3 · Heat Treatment', 'โซน 4 · Grinding', 'โซน 5 · Assembly',
+  'โซน 6 · Inspection / QC', 'โซน 7 · Packing', 'โซน 8 · Warehouse', 'โซน 9 · Maintenance / Utility', 'โซน 10 · Office / Canteen',
+];
 let boardData = null, tab = 'today', me = null;
 const BADGE = { gold: '🥇', silver: '🥈', bronze: '🥉' };
 const esc = (t) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-$('pDept').innerHTML += DEPTS.map(d => `<option>${d}</option>`).join('') + '<option value="__other">อื่นๆ (พิมพ์เอง)</option>';
-$('pDept').onchange = () => { $('pDeptOther').style.display = $('pDept').value === '__other' ? '' : 'none'; };
+$('pDept').innerHTML += DEPTS.map(d => `<option>${d}</option>`).join('');
 $('pName').value = store.get('nbmt_name') || '';
 const savedDept = store.get('nbmt_dept') || '';
-if (savedDept) { if (DEPTS.includes(savedDept)) $('pDept').value = savedDept; else { $('pDept').value = '__other'; $('pDeptOther').style.display = ''; $('pDeptOther').value = savedDept; } }
+if (DEPTS.includes(savedDept)) $('pDept').value = savedDept;
 
 function renderBoard() {
   const d = boardData; if (!d) return;
@@ -322,7 +324,7 @@ $('boardBtn').onclick = openBoard; $('boardBtn2').onclick = openBoard; $('boardP
 
 let last = null;
 $('submitBtn').onclick = async () => {
-  const name = $('pName').value.trim(), dept = ($('pDept').value === '__other' ? $('pDeptOther').value : $('pDept').value).trim();
+  const name = $('pName').value.trim(), dept = $('pDept').value.trim();
   if (!name) { $('pName').focus(); return; } if (!dept) { $('pDept').focus(); return; }
   store.set('nbmt_name', name); store.set('nbmt_dept', dept);
   const btn = $('submitBtn'); btn.disabled = true; btn.textContent = 'กำลังส่ง...';
@@ -332,7 +334,7 @@ $('submitBtn').onclick = async () => {
     if (!j.ok) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน'; alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
     me = { name, dept }; boardData = j.board;
     $('submitBox').style.display = 'none';
-    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · แผนก ${esc(dept)}</small>`;
+    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)}</small>`;
     $('myRank').classList.add('on');
   } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
 };
