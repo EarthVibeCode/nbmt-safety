@@ -80,6 +80,16 @@
   .it .x { margin-left: auto; font-weight: 900; font-size: 18px; color: #bbb; } .it.ok .x { color: var(--green); }
   .foot { text-align: center; color: #ffe9c4; font-size: 12px; margin-top: 8px; line-height: 1.4; }
 
+  /* ===== tap-to-start gate (unlocks sound) ===== */
+  .gate { position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center; text-align: center;
+    background: linear-gradient(180deg, rgba(30,15,5,.25), rgba(30,15,5,.85)), url(img/gate_bg.jpg) center/cover; }
+  .gate.on { display: flex; }
+  .g-w { font-family: 'Rye', serif; font-size: 64px; color: #ffcf4a; text-shadow: 0 4px 0 #8a2a00, 0 0 30px rgba(255,140,0,.8); line-height: 1; }
+  .g-t { color: #fff; font-weight: 900; font-size: 26px; line-height: 1.25; margin: 10px 0 22px; text-shadow: 0 3px 0 #000; }
+  .g-btn { font-family: 'Kanit'; font-weight: 900; font-size: 28px; color: #fff; border: none; border-radius: 40px; padding: 18px 44px; cursor: pointer;
+    background: linear-gradient(180deg, #ff7a1a, #d9480f); box-shadow: 0 6px 0 #7a1d00, 0 0 0 0 rgba(255,122,26,.7); animation: gpulse 1.4s infinite; }
+  @keyframes gpulse { 70% { box-shadow: 0 6px 0 #7a1d00, 0 0 0 22px rgba(255,122,26,0); } 100% { box-shadow: 0 6px 0 #7a1d00, 0 0 0 0 rgba(255,122,26,0); } }
+  .g-s { color: #ffe9c4; font-size: 15px; margin-top: 14px; }
   /* ===== story intro video ===== */
   .story { position: fixed; inset: 0; z-index: 50; background: #000; display: none; }
   .story.on { display: block; }
@@ -156,6 +166,10 @@
 </style>
 </head>
 <body>
+<div class="gate" id="gate">
+  <div class="g-in"><div class="g-w">WANTED</div><div class="g-t">ช่วยนายอำเภอเอิร์ท<br>จับ 6 ผู้ร้ายจุดไฟ!</div>
+  <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div></div>
+</div>
 <div class="story" id="story">
   <video id="storyVid" src="img/story.mp4" poster="img/story_poster.jpg" playsinline muted preload="auto"></video>
   <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
@@ -173,7 +187,7 @@
     <div class="w">WANTED</div>
     <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
     <div class="hero">
-      <div class="vwrap"><video id="introVid" src="img/intro.mp4" poster="img/sheriff.webp" autoplay muted loop playsinline preload="auto"></video><button class="vsnd" id="vSnd">🔈 แตะฟังเสียง</button></div>
+      <div class="vwrap"><video id="introVid" src="img/intro.mp4" poster="img/sheriff.webp" muted loop playsinline preload="auto"></video></div>
       <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
     </div>
     <div class="rules">
@@ -323,9 +337,11 @@ const SFX = (() => {
   };
 })();
 $('muteBtn').textContent = SFX.muted ? '🔇' : '🔊';
-$('vSnd').onclick = () => { const v = $('introVid'); v.muted = !v.muted; if (!v.muted) { v.currentTime = 0; v.play(); } $('vSnd').textContent = v.muted ? '🔈 แตะฟังเสียง' : '🔇 ปิดเสียง'; };
-$('muteBtn').onclick = () => { $('muteBtn').textContent = SFX.toggle() ? '🔇' : '🔊'; };
+$('muteBtn').onclick = () => { const m = SFX.toggle(); $('muteBtn').textContent = m ? '🔇' : '🔊'; syncMute(); };
 let combo = 0, lastHitAt = 0;
+let audioUnlocked = false;
+function syncMute() { const m = SFX.muted || !audioUnlocked; ['introVid', 'storyVid'].forEach(id => { const v = $(id); if (v) v.muted = m; }); const b = $('stSnd'); if (b) b.textContent = m ? '🔊 แตะเปิดเสียง' : '🔇 ปิดเสียง'; }
+function playVid(v) { syncMute(); const p = v.play(); if (p && p.catch) p.catch(() => { v.muted = true; v.play().catch(() => {}); syncMute(); }); return p; }
 
 function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); }
 function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').textContent = b ? `สถิติสูงสุดของคุณ: ${b} คะแนน` : ''; }
@@ -441,7 +457,7 @@ function end() {
   $('summary').innerHTML = sec('ต', 'var(--navy)', '3ต ตรวจให้พร้อมใช้งาน') + '<div style="height:6px"></div>' + sec('จ', 'var(--green)', '3จ จัดให้ถูกที่ ถูกวิธี');
   show('end');
 }
-const _show = show; show = (id) => { _show(id); if (id === 'intro') { try { $('introVid').play(); } catch (e) {} } };
+const _show = show; show = (id) => { _show(id); if (id === 'intro') playVid($('introVid')); };
 
 
 // ===== scoreboard =====
@@ -511,12 +527,12 @@ const Story = (() => {
   function close() {
     if (closed) return; closed = true; clearInterval(timer); try { v.pause(); } catch (e) {}
     box.classList.remove('on'); store.set('nbmt_story_seen', '1');
-    try { $('introVid').play(); } catch (e) {}
+    playVid($('introVid'));
   }
   function open() {
     closed = false; box.classList.add('on'); v.currentTime = 0; $('stSkip').disabled = true; $('stCount').parentElement.innerHTML = 'ข้ามได้ใน <b id="stCount">10</b>';
     try { $('introVid').pause(); } catch (e) {}
-    const p = v.play(); if (p && p.catch) p.catch(() => { $('stPlay').style.display = 'block'; });
+    syncMute(); const p = v.play(); if (p && p.catch) p.catch(() => { v.muted = true; v.play().catch(() => { $('stPlay').style.display = 'block'; }); });
     clearInterval(timer);
     timer = setInterval(() => {
       const t = v.currentTime, left = Math.ceil(10 - t);
@@ -528,11 +544,21 @@ const Story = (() => {
   v.addEventListener('ended', close);
   $('stSkip').onclick = () => { if (!$('stSkip').disabled) close(); };
   $('stPlay').onclick = () => { $('stPlay').style.display = 'none'; v.play(); };
-  $('stSnd').onclick = () => { v.muted = !v.muted; $('stSnd').textContent = v.muted ? '🔊 แตะเปิดเสียง' : '🔇 ปิดเสียง'; if (v.paused) v.play(); };
+  $('stSnd').onclick = () => { audioUnlocked = true; SFX.unlock(); if (SFX.muted) { SFX.toggle(); $('muteBtn').textContent = '🔊'; } else if (!v.muted) { SFX.toggle(); $('muteBtn').textContent = '🔇'; } syncMute(); if (v.paused) v.play(); };
   return { open, close };
 })();
 $('replayStory').onclick = () => Story.open();
-if (store.get('nbmt_story_seen') !== '1' && !/[?&]nostory/.test(location.search)) Story.open();
+const wantStory = store.get('nbmt_story_seen') !== '1' && !/[?&]nostory/.test(location.search);
+function boot() { audioUnlocked = true; SFX.unlock(); $('gate').classList.remove('on'); if (wantStory) Story.open(); else playVid($('introVid')); }
+$('gateBtn').onclick = boot;
+(async () => {
+  // some browsers (desktop, returning visitors) allow sound without a tap — try first
+  const v = wantStory ? $('storyVid') : $('introVid');
+  if (!SFX.muted) { try { v.muted = false; await v.play(); v.pause(); v.currentTime = 0; boot(); return; } catch (e) { v.muted = true; } }
+  else { audioUnlocked = true; }
+  if (SFX.muted) { if (wantStory) Story.open(); else playVid($('introVid')); return; }
+  $('gate').classList.add('on');
+})();
 
 $('startBtn').onclick = start;
 $('againBtn').onclick = start;
