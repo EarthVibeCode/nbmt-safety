@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027121412';
+const BUILD = '20261027123056';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -13,7 +13,7 @@ const BUILD = '20261027121412';
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="icon" href="../favicon.svg?b=20261027121412"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
+<link rel="icon" href="../favicon.svg?b=20261027123056"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
 <meta name="description" content="เกม 30 วินาที ช่วยนายอำเภอเอิร์ทจับ 6 ผู้ร้ายจุดไฟในโรงงาน — NBMT Fire Prevention 3ต 3จ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&family=Rye&display=swap" rel="stylesheet">
@@ -162,9 +162,11 @@ const BUILD = '20261027121412';
   .vwrap video { width: 100% !important; }
   .vsnd { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); font-family: Kanit; font-size: 12px; font-weight: 700; border: none; border-radius: 12px; padding: 3px 8px; background: rgba(0,0,0,.6); color: #fff; white-space: nowrap; cursor: pointer; }
   .hero video { width: 38%; border-radius: 10px; border: 4px solid var(--paper); box-shadow: 0 8px 18px rgba(0,0,0,.5); aspect-ratio: 9/16; object-fit: cover; background: #2e1a0e; }
-  .end .score .n.pop { animation: npop .6s cubic-bezier(.3,1.8,.5,1); }
+  .end .score .n.zoom { animation: npop .6s cubic-bezier(.3,1.8,.5,1); }
   @keyframes npop { 0% { transform: scale(.2); } 100% { transform: scale(1); } }
   /* ===== scoreboard ===== */
+  .row2 { display: flex; gap: 6px; } .row2 select { flex: 1.1; } .row2 input { flex: 1; }
+  #pGroup { font-size: 15px; }
   .pinbox { display: none; background: #fff1e6; border: 2px solid #d9480f; border-radius: 10px; padding: 8px 10px; font-size: 13.5px; line-height: 1.4; margin-bottom: 6px; color: #7a1d00; }
   .pinbox.on { display: block; }
   .pinbox input { margin: 6px 0 0 !important; letter-spacing: 4px; text-align: center; }
@@ -200,7 +202,7 @@ const BUILD = '20261027121412';
   <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div></div>
 </div>
 <div class="story" id="story">
-  <video id="storyVid" src="img/story.mp4?b=20261027121412" poster="img/story_poster.jpg?b=20261027121412" playsinline muted preload="auto"></video>
+  <video id="storyVid" src="img/story.mp4?b=20261027123056" poster="img/story_poster.jpg?b=20261027123056" playsinline muted preload="auto"></video>
   <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
   <button class="st-skip" id="stSkip" disabled>ข้ามได้ใน <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
@@ -216,12 +218,12 @@ const BUILD = '20261027121412';
     <div class="w">WANTED</div>
     <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
     <div class="hero">
-      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027121412" poster="img/sheriff.webp?b=20261027121412" muted loop playsinline preload="auto"></video></div>
+      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027123056" poster="img/sheriff.webp?b=20261027123056" muted loop playsinline preload="auto"></video></div>
       <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
     </div>
     <div class="rules">
-      <div class="row"><img src="img/v2.webp?b=20261027121412" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
-      <div class="row"><img class="g" src="img/c3.webp?b=20261027121412" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
+      <div class="row"><img src="img/v2.webp?b=20261027123056" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
+      <div class="row"><img class="g" src="img/c3.webp?b=20261027123056" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
       <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
@@ -252,9 +254,10 @@ const BUILD = '20261027121412';
       <div class="h">ลงชื่อบนกระดานนายอำเภอ</div>
       <input id="pName" maxlength="20" placeholder="ชื่อเล่น เช่น เอิร์ท" autocomplete="off">
       <div class="pinbox" id="pinBox"><b>🔒 ชื่อนี้สงวนไว้สำหรับนายอำเภอตัวจริง</b><br>ถ้าคุณคือเจ้าของชื่อ ใส่ PIN · ถ้าไม่ใช่ เปลี่ยนชื่อเล่นนะ<input id="pPin" inputmode="numeric" maxlength="6" placeholder="PIN 6 หลัก" autocomplete="off"></div>
-      <select id="pDept"><option value="">— เลือกโซน 5ส ของคุณ —</option></select>
+      <div class="row2"><select id="pDept"><option value="">— Zone 5ส —</option></select><input id="pEmp" maxlength="12" placeholder="รหัสพนักงาน" autocomplete="off" inputmode="text"></div>
+      <select id="pGroup" disabled><option value="">— เลือกกลุ่ม 5ส ในโซน —</option></select>
             <button class="btn" id="submitBtn">📌 ส่งคะแนน</button>
-      <div class="note">ชื่อเล่นและโซนจะแสดงบนกระดานที่ทุกคนเห็น · ไม่เก็บข้อมูลอื่น</div>
+      <div class="note">ชื่อเล่น โซน และกลุ่ม แสดงบนกระดาน · รหัสพนักงานไม่แสดง ใช้ยืนยันตัวตนและนับคะแนนดีที่สุดของแต่ละคน</div>
     </div>
     <div class="myrank" id="myRank"></div>
     <div class="list" id="summary"></div>
@@ -379,7 +382,7 @@ function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').t
 
 function build() {
   $('grid').innerHTML = SPOTS.map((s, i) => `<div class="hole" data-i="${i}"><span class="lab">${s}</span></div>`).join('');
-  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027121412" alt=""></span>`).join('');
+  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027123056" alt=""></span>`).join('');
 }
 
 function toast(html, bad) {
@@ -475,7 +478,7 @@ function begin() {
 function end() {
   running = false; clearInterval(tick); clearTimeout(spawnT);
   FX.setEmbers(0); $('glow').style.opacity = 0; SFX.end(); if (caught.size === 6) setTimeout(() => FX.burst(0, 0, 'confetti'), 300);
-  setTimeout(() => { const n = $('final'); n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); }, 30);
+  setTimeout(() => { const n = $('final'); n.classList.remove('zoom'); void n.offsetWidth; n.classList.add('zoom'); }, 30);
   const best = Math.max(score, +store.get('nbmt_fire_best') || 0); store.set('nbmt_fire_best', best);
   last = { score, kinds: caught.size, misses, hits, dur: DUR };
   $('submitBox').style.display = score > 0 ? '' : 'none'; $('myRank').classList.remove('on'); $('submitBtn').disabled = false; $('submitBtn').textContent = '📌 ส่งคะแนน';
@@ -493,19 +496,31 @@ const _show = show; show = (id) => { _show(id); if (id === 'intro') playVid($('i
 
 // ===== scoreboard =====
 const API = 'https://script.google.com/macros/s/AKfycbzOvXvj63i7BF7PMC5eRBwgE9q320kOheNnFmounEZCm4A7fqOFIK2nN12c8vh-utwPdw/exec';
-// ===== 5ส ZONES (ชื่อชั่วคราว — แก้ชื่อจริงตรงนี้ที่เดียว) =====
-const DEPTS = [
-  'โซน 1 · Machining A', 'โซน 2 · Machining B', 'โซน 3 · Heat Treatment', 'โซน 4 · Grinding', 'โซน 5 · Assembly',
-  'โซน 6 · Inspection / QC', 'โซน 7 · Packing', 'โซน 8 · Warehouse', 'โซน 9 · Maintenance / Utility', 'โซน 10 · Office / Canteen',
-];
+// ===== 5ส ZONES & GROUPS (จาก NBMT 5S System · 5S_GroupNumber_V2 · FY2026) =====
+const GROUPS = {
+  1: ['1-1 : WP Line + Meeting area', '1-2 : MCB #1-3', '1-3 : SB #5-9', '1-4 : SB #1-4', '1-5 : TP & S/R, Pack', '1-6 : NB & CR + Meeting area'],
+  2: ['2-1 : H/T & Gas Tank', '2-2 : H/T parts supply', '2-3 : HT Office', '2-4 : Central Oil', '2-5 : Water tab No.1, 2, 3', '2-6 : AHU room', '2-7 : Air Comp Room & RO', '2-8 : MDB room (Building)', '2-9 : MDB room (Outside)'],
+  3: ['3-1 : Outside (Garden, Road)', '3-2 : Canteen Floor 1-2', '3-3 : Scrap Room', '3-4 : Guard house', '3-5 : First Aid Room', '3-6 : Admin. Storeroom', '3-7 : AGV Room fac.1', '3-8 : IT room', '3-9 : Server room', '3-10 : Safety & Env. Dojo', '3-11 : G1 area', '3-12 : G1 Oil coolant', '3-13 : Chemical store', '3-14 : G1 meeting area', '3-15 : G1 PYT Area', '3-16 : Machine Testing area'],
+  4: ['4-1 : Sales Office + MD Room + Board & Prong-Sai Room', '4-2 : Planning Office', '4-3 : Im-Ex. Office + President Room + PL'],
+  5: ['5-1 : KWD #1-7', '5-2 : BWD #1-3 + PS area', '5-3 : IH-L3 #1-2 + Forklift charger', '5-4 : Office Factory 3', '5-5 : HUB3 line', '5-6 : T-HUB2.5 line', '5-7 : HUB3 Painting'],
+  6: ['6-1 : QCC training center', '6-2 : QC Room Fac#3', '6-3 : QC Room Fac#2', '6-4 : QA Office Fac#2', '6-5 : QC Receiving Office', '6-6 : Quality DOJO'],
+  7: ["7-1 : W/H FG (Zone1) + Indirect Mat' store", '7-2 : W/H FG (Zone2)', '7-3 : W/H FG (Zone3) + 2nd floor', '7-4 : W/H RM (Zone1) + Spare parts room', '7-5 : W/H RM (Zone2)', '7-6 : Scrap yard + Oil room'],
+  8: ['8-1 : Accounting office', '8-2 : SCM', '8-3 : HR & Admin', '8-4 : Document keeping area'],
+  9: ['9-1 : Locker area and Rest Area (Between Fac. 1 2)', '9-2 : Football Field', '9-3 : Road + Admin. waste', '9-4 : Gas station area', '9-5 : Outside Area (Behind Scrap Room)', '9-6 : Car Park (Inside) + Road at car park', '9-7 : Smoking Area + Rest area at APTC', '9-8 : Lobby and Office walkway', '9-9 : Walkway (Behind Front Office)', '9-10 : All office toilet', '9-11 : Meeting Room 1 2 and 3 4', '9-12 : Japanese Locker Room + Maid Room', '9-13 : Toilet, Storeroom and Union Room', '9-14 : Grassward (Front Company)', '9-15 : Car park (Outside company)'],
+  10: ['10-1 : Office Factory 1', '10-2 : Tooling shelf', '10-3 : Tooling Inhouse shop', '10-4 : Machine OH center', '10-5 : MT Shop', '10-6 : Machine Tent', '10-7 : Spare part area Factory1'],
+};
+const DEPTS = Object.keys(GROUPS).map(z => 'Zone ' + z);
 let boardData = null, tab = 'today', me = null;
 const BADGE = { gold: '🥇', silver: '🥈', bronze: '🥉' };
 const esc = (t) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 $('pDept').innerHTML += DEPTS.map(d => `<option>${d}</option>`).join('');
+function fillGroups(sel) { const z = $('pDept').value.replace('Zone ', ''); const g = GROUPS[z] || []; $('pGroup').innerHTML = '<option value="">— เลือกกลุ่ม 5ส ในโซน —</option>' + g.map(x => `<option>${x}</option>`).join(''); $('pGroup').disabled = !g.length; if (sel && g.includes(sel)) $('pGroup').value = sel; }
+$('pDept').onchange = () => fillGroups();
+$('pEmp').value = store.get('nbmt_emp') || '';
 $('pName').value = store.get('nbmt_name') || '';
 $('pName').oninput = () => $('pinBox').classList.remove('on');
 const savedDept = store.get('nbmt_dept') || '';
-if (DEPTS.includes(savedDept)) $('pDept').value = savedDept;
+if (DEPTS.includes(savedDept)) { $('pDept').value = savedDept; fillGroups(store.get('nbmt_group') || ''); }
 
 function renderBoard() {
   const d = boardData; if (!d) return;
@@ -516,7 +531,7 @@ function renderBoard() {
     const max = Math.max(1, ...d.depts.map(x => x.total));
     html = d.depts.map((x, i) => `<div class="br${me && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div style="flex:1"><div class="nm">${esc(x.dept)}</div><div class="dp">${x.players} คน</div><div class="dbar" style="width:${x.total / max * 100}%"></div></div><div class="sc">${x.total.toLocaleString()}<small>คะแนนรวม</small></div></div>`).join('');
   } else {
-    html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''}</div><div class="dp">${esc(x.dept)}</div></div><div class="sc">${x.score}</div></div>`).join('');
+    html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.group === x.group ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''}</div><div class="dp">${esc(x.dept)} · ${esc(x.group || '')}</div></div><div class="sc">${x.score}</div></div>`).join('');
   }
   $('bList').innerHTML = html || '<div class="empty">ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!</div>';
 }
@@ -531,23 +546,23 @@ $('boardBtn').onclick = openBoard; $('boardBtn2').onclick = openBoard; $('boardP
 
 let last = null;
 $('submitBtn').onclick = async () => {
-  const name = $('pName').value.trim(), dept = $('pDept').value.trim();
-  if (!name) { $('pName').focus(); return; } if (!dept) { $('pDept').focus(); return; }
-  store.set('nbmt_name', name); store.set('nbmt_dept', dept);
+  const name = $('pName').value.trim(), dept = $('pDept').value.trim(), group = $('pGroup').value.trim(), emp = $('pEmp').value.trim().toUpperCase();
+  if (!name) { $('pName').focus(); return; } if (!dept) { $('pDept').focus(); return; } if (!group) { $('pGroup').focus(); return; } if (!/^[A-Z0-9-]{3,12}$/.test(emp)) { alert('ใส่รหัสพนักงาน (ตัวเลข/ตัวอักษร 3-12 ตัว)'); $('pEmp').focus(); return; }
+  store.set('nbmt_name', name); store.set('nbmt_dept', dept); store.set('nbmt_group', group); store.set('nbmt_emp', emp);
   const btn = $('submitBtn'); btn.disabled = true; btn.textContent = 'กำลังส่ง...';
   try {
-    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, dept, pin: $('pPin').value.trim() || store.get('nbmt_pin') || '', ...last }) });
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, zone: dept, group, emp, pin: $('pPin').value.trim() || store.get('nbmt_pin') || '', ...last }) });
     const j = await r.json();
     if (!j.ok) {
       btn.disabled = false; btn.textContent = '📌 ส่งคะแนน';
       if (j.err === 'reserved') { const had = $('pPin').value; $('pinBox').classList.add('on'); store.set('nbmt_pin', ''); $('pPin').value = ''; $('pPin').placeholder = had ? 'PIN ไม่ถูกต้อง ลองอีกครั้ง' : 'PIN 6 หลัก'; $('pPin').focus(); return; }
-      alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return;
+      alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : j.err === 'emp' ? 'รหัสพนักงานไม่ถูกต้อง' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return;
     }
     if ($('pPin').value.trim()) store.set('nbmt_pin', $('pPin').value.trim());
     $('pinBox').classList.remove('on');
-    me = { name, dept }; boardData = j.board;
+    me = { name, dept, group }; boardData = j.board;
     $('submitBox').style.display = 'none';
-    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)}</small>`;
+    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)} · ${esc(group.split(' : ')[0])}</small>`;
     $('myRank').classList.add('on');
   } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
 };
