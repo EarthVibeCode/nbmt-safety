@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027183232';
+const BUILD = '20261027185612';
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
     if (j.v && j.v !== BUILD) { const k = 'nbmt_reload_' + j.v; if (!sessionStorage.getItem(k)) { sessionStorage.setItem(k, '1'); const u = new URL(location.href); u.searchParams.set('b', j.v); location.replace(u.toString()); } }
@@ -11,7 +11,7 @@ const BUILD = '20261027183232';
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" href="../favicon.svg?b=20261027183232">
+<link rel="icon" href="../favicon.svg?b=20261027185612">
 <title>AI Boarding Pass · NBMT Safe Road Save Life</title>
 <meta name="description" content="เช็คอินครบ 8 ข้อ แล้วรับบัตรผ่านกลับบ้าน พร้อมภาพการ์ตูน AI ของคุณเอง — NBMT Safety Traffic">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -114,7 +114,7 @@ const BUILD = '20261027183232';
 <div class="app">
   <section class="scr on" id="s0">
     <div class="top"><div class="a">NBMT AIRWAYS · SAFE ROAD SAVE LIFE</div><h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1></div>
-    <div class="hero"><img src="img/hero.webp?b=20261027183232" alt=""><div class="ai">✨ AI การ์ตูนตัวคุณเอง</div>
+    <div class="hero"><img src="img/hero.webp?b=20261027185612" alt=""><div class="ai">✨ AI การ์ตูนตัวคุณเอง</div>
       <div class="ov"><b>เช็คอินครบ 8 ข้อ<br>รับ <span>บัตรผ่านกลับบ้าน</span> ที่มีคุณเป็นตัวการ์ตูน!</b><p>เลือกพาหนะของคุณ ถ่ายเซลฟี่ 1 รูป แล้วแชร์ให้เพื่อนใน LINE</p></div></div>
     <div class="how"><div><span>✅</span>เช็ค 8 ข้อ</div><div><span>🛵</span>เลือกพาหนะ</div><div><span>🤳</span>ถ่ายเซลฟี่</div><div><span>🎫</span>รับบัตรผ่าน</div></div>
     <button class="btn" id="goCheck">✈ เริ่มเช็คอิน</button>
@@ -137,6 +137,8 @@ const BUILD = '20261027183232';
           <div><label class="l">รหัสพนักงาน</label><input type="text" id="emp" maxlength="12" placeholder="รหัสพนักงาน" autocomplete="off"></div></div>
         <label class="l">พาหนะที่ใช้เดินทาง</label>
         <div class="veh" id="veh"></div>
+        <label class="l">รุ่นรถ <span style="font-weight:500;color:#7a8aa3">(ถ้ามี · พิมพ์เองได้)</span></label>
+        <input type="text" id="model" maxlength="30" placeholder="เช่น Yamaha XMAX 300, Honda Wave 110i" autocomplete="off">
         <label class="l">สีรถ</label>
         <div class="cols" id="cols"></div>
         <div class="note">รหัสพนักงานใช้จำกัดสิทธิ์ คนละ 2 ภาพ และไม่แสดงในบัตร</div>
@@ -223,19 +225,20 @@ function go(n) { document.querySelectorAll('.scr').forEach(s => s.classList.togg
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
 
 $('list').innerHTML = ITEMS.map((it, i) => (i === 0 ? '<span class="sec o">ก่อนออกเดินทาง</span>' : i === 2 ? '<br><span class="sec b">ระหว่างทาง</span>' : '') +
-  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027183232" alt=""><div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
+  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027185612" alt=""><div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
 document.querySelectorAll('.item').forEach(el => el.onclick = () => { const i = +el.dataset.i; st.on.has(i) ? st.on.delete(i) : st.on.add(i); el.classList.toggle('on', st.on.has(i)); upd(); });
 $('goCheck').onclick = () => go(1);
 $('toInfo').onclick = () => go(2);
 
 $('name').value = store.get('nbmt_pax') || store.get('nbmt_name') || '';
 $('emp').value = store.get('nbmt_emp') || '';
+$('model').value = store.get('nbmt_model') || '';
 $('veh').innerHTML = VEH.map(v => `<button data-k="${v.k}"><span>${v.i}</span>${v.t}</button>`).join('');
 $('cols').innerHTML = COLS.map(c => `<button data-k="${c.k}" title="${c.t}" style="background:${c.c}"></button>`).join('');
 document.querySelectorAll('#veh button').forEach(b => b.onclick = () => { st.veh = b.dataset.k; upd(); });
 document.querySelectorAll('#cols button').forEach(b => b.onclick = () => { st.col = b.dataset.k; upd(); });
 ['name', 'emp'].forEach(id => $(id).oninput = upd);
-$('toPhoto').onclick = () => { store.set('nbmt_pax', $('name').value.trim()); store.set('nbmt_emp', $('emp').value.trim().toUpperCase()); store.set('nbmt_veh', st.veh); store.set('nbmt_col', st.col); go(3); };
+$('toPhoto').onclick = () => { store.set('nbmt_pax', $('name').value.trim()); store.set('nbmt_emp', $('emp').value.trim().toUpperCase()); store.set('nbmt_veh', st.veh); store.set('nbmt_model', $('model').value.trim()); store.set('nbmt_col', st.col); go(3); };
 
 function upd() {
   $('cnt').textContent = `${st.on.size}/8`; $('pbar').style.width = (st.on.size / 8 * 100) + '%';
@@ -281,7 +284,7 @@ async function generate() {
   let j;
   try {
     const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ consent: true, name: $('name').value.trim(), emp: $('emp').value.trim().toUpperCase(), vehicle: st.veh, color: st.col, photo: st.photo.split(',')[1] }) });
+      body: JSON.stringify({ consent: true, name: $('name').value.trim(), emp: $('emp').value.trim().toUpperCase(), vehicle: st.veh, model: $('model').value.trim(), color: st.col, photo: st.photo.split(',')[1] }) });
     j = await r.json();
   } catch (e) { j = { ok: false, err: 'net' }; }
   if (!j.ok) {
@@ -328,7 +331,7 @@ async function drawPass() {
   let fs = 74; const nm = $('name').value.trim(); c.font = `900 ${fs}px Kanit`; while (c.measureText(nm).width > TW - 80 && fs > 36) { fs -= 4; c.font = `900 ${fs}px Kanit`; }
   val(nm, X + 34, y + 152, '#13233f', `900 ${fs}px Kanit`);
   const v = VEH.find(x => x.k === st.veh) || VEH[0], col = COLS.find(x => x.k === st.col) || COLS[0];
-  lab('VEHICLE · พาหนะ', X + 34, y + 210); val(`${v.t} สี${col.t}`, X + 34, y + 256);
+  lab('VEHICLE · พาหนะ', X + 34, y + 210); { const md = $('model').value.trim(); let t = md ? `${md} สี${col.t}` : `${v.t} สี${col.t}`; c.font = '800 38px Kanit'; let f = 38; while (c.measureText(t).width > 500 && f > 24) { f -= 2; c.font = `800 ${f}px Kanit`; } val(t, X + 34, y + 256, '#13233f', `800 ${f}px Kanit`); }
   lab('ARRIVAL · ถึง', X + 560, y + 210); val('ปลอดภัย 100%', X + 560, y + 256, '#0f8a3c');
   lab('CHECK-IN', X + 34, y + 314); val(new Date().toLocaleDateString('th-TH'), X + 34, y + 360);
   lab('FLIGHT', X + 560, y + 314); val('SAFE 0008', X + 560, y + 360);
