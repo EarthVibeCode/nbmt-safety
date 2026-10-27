@@ -80,6 +80,19 @@
   .it .x { margin-left: auto; font-weight: 900; font-size: 18px; color: #bbb; } .it.ok .x { color: var(--green); }
   .foot { text-align: center; color: #ffe9c4; font-size: 12px; margin-top: 8px; line-height: 1.4; }
 
+  /* ===== story intro video ===== */
+  .story { position: fixed; inset: 0; z-index: 50; background: #000; display: none; }
+  .story.on { display: block; }
+  .story video { width: 100%; height: 100%; object-fit: cover; }
+  @media (min-aspect-ratio: 3/4) { .story video { object-fit: contain; } }
+  .story button { position: absolute; font-family: 'Kanit'; font-weight: 800; border: none; cursor: pointer; }
+  .st-snd { left: 14px; top: calc(14px + env(safe-area-inset-top)); background: rgba(0,0,0,.55); color: #fff; border: 2px solid rgba(255,255,255,.6) !important; border-radius: 22px; padding: 8px 14px; font-size: 16px; }
+  .st-skip { right: 14px; bottom: calc(30px + env(safe-area-inset-bottom)); background: rgba(0,0,0,.6); color: #fff; border: 2px solid rgba(255,255,255,.5) !important; border-radius: 10px; padding: 10px 16px; font-size: 17px; }
+  .st-skip:not(:disabled) { background: rgba(255,255,255,.92); color: #13233f; }
+  .st-skip:not(:disabled)::after { content: ' ⏭'; }
+  .st-play { left: 50%; top: 50%; transform: translate(-50%, -50%); background: linear-gradient(180deg, #ff7a1a, #d9480f); color: #fff; font-size: 24px; padding: 18px 30px; border-radius: 40px; box-shadow: 0 6px 0 #7a1d00; display: none; }
+  .st-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(255,255,255,.2); }
+  .st-bar i { display: block; height: 100%; width: 0; background: #ffcf4a; }
   /* ===== FX (A+) ===== */
   #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; }
   .fireglow { position: fixed; left: 0; right: 0; bottom: 0; height: 45vh; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 1s;
@@ -143,6 +156,13 @@
 </style>
 </head>
 <body>
+<div class="story" id="story">
+  <video id="storyVid" src="img/story.mp4" poster="img/story_poster.jpg" playsinline muted preload="auto"></video>
+  <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
+  <button class="st-skip" id="stSkip" disabled>ข้ามได้ใน <b id="stCount">10</b></button>
+  <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
+  <div class="st-bar"><i id="stBar"></i></div>
+</div>
 <canvas id="fx"></canvas><div class="fireglow" id="glow"></div><div class="flash" id="flash"></div><div class="combo" id="combo"></div><div class="cd" id="cd"></div>
 <button class="mute" id="muteBtn" aria-label="เสียง">🔊</button>
 <div class="app">
@@ -163,6 +183,7 @@
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
     <button class="btn ghost" id="boardBtn">🏆 ดูกระดานคะแนน</button>
+    <button class="btn ghost" id="replayStory" style="font-size:16px;padding:9px">🎬 ดูวิดีโอเรื่องราวอีกครั้ง</button>
     <div class="best" id="bestTxt"></div>
   </section>
 
@@ -482,6 +503,36 @@ $('submitBtn').onclick = async () => {
     $('myRank').classList.add('on');
   } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
 };
+
+
+// ===== story intro (first visit only) =====
+const Story = (() => {
+  const box = $('story'), v = $('storyVid'); let timer = null, closed = false;
+  function close() {
+    if (closed) return; closed = true; clearInterval(timer); try { v.pause(); } catch (e) {}
+    box.classList.remove('on'); store.set('nbmt_story_seen', '1');
+    try { $('introVid').play(); } catch (e) {}
+  }
+  function open() {
+    closed = false; box.classList.add('on'); v.currentTime = 0; $('stSkip').disabled = true; $('stCount').parentElement.innerHTML = 'ข้ามได้ใน <b id="stCount">10</b>';
+    try { $('introVid').pause(); } catch (e) {}
+    const p = v.play(); if (p && p.catch) p.catch(() => { $('stPlay').style.display = 'block'; });
+    clearInterval(timer);
+    timer = setInterval(() => {
+      const t = v.currentTime, left = Math.ceil(10 - t);
+      $('stBar').style.width = (v.duration ? t / v.duration * 100 : 0) + '%';
+      if (left > 0) { const c = $('stCount'); if (c) c.textContent = left; }
+      else if ($('stSkip').disabled) { $('stSkip').disabled = false; $('stSkip').textContent = 'ข้าม'; }
+    }, 200);
+  }
+  v.addEventListener('ended', close);
+  $('stSkip').onclick = () => { if (!$('stSkip').disabled) close(); };
+  $('stPlay').onclick = () => { $('stPlay').style.display = 'none'; v.play(); };
+  $('stSnd').onclick = () => { v.muted = !v.muted; $('stSnd').textContent = v.muted ? '🔊 แตะเปิดเสียง' : '🔇 ปิดเสียง'; if (v.paused) v.play(); };
+  return { open, close };
+})();
+$('replayStory').onclick = () => Story.open();
+if (store.get('nbmt_story_seen') !== '1' && !/[?&]nostory/.test(location.search)) Story.open();
 
 $('startBtn').onclick = start;
 $('againBtn').onclick = start;
