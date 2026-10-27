@@ -104,15 +104,21 @@
   .coin.gold { background: radial-gradient(circle at 35% 30%, #fff6c4, #ffd34a 45%, #c9930e); } .coin.silver { background: radial-gradient(circle at 35% 30%, #fff, #d6dde6 45%, #8b97a6); } .coin.bronze { background: radial-gradient(circle at 35% 30%, #ffe1c4, #d98b4a 45%, #8f4e1c); } .coin.top { background: radial-gradient(circle at 35% 30%, #e2f0ff, #6aa8ff 45%, #1559b8); } .coin.top b, .coin.top small { color: #fff; }
   @keyframes coin { from { transform: scale(0) rotateY(540deg); } }
   .medal h2 { font-family: 'Kanit'; font-weight: 900; font-size: 34px; color: #ffd36b; text-shadow: 0 3px 0 #7a3a00; } .medal p { font-size: 17px; line-height: 1.5; }
-  #pick { z-index: 11; background: radial-gradient(ellipse at 50% 20%, #ff8a3a55, transparent 60%), #0b2f6b; justify-content: flex-start; padding-top: calc(18px + env(safe-area-inset-top)); gap: 10px; }
-  .pk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 380px; }
+  #pick { z-index: 11; background: radial-gradient(ellipse at 50% 20%, #ff8a3a55, transparent 60%), #0b2f6b; justify-content: flex-start; height: 100%; height: 100dvh; overflow: hidden; padding: calc(1.6dvh + env(safe-area-inset-top)) 12px calc(1.6dvh + env(safe-area-inset-bottom)); gap: 1.1dvh; }
+  #pick .logo { font-size: min(34px, 4.6dvh) !important; flex: none; }
+  .pk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 420px; flex: none; }
   .pk button { font-family: 'Kanit'; color: #fff; background: rgba(255,255,255,.1); border: 3px solid rgba(255,255,255,.25); border-radius: 16px; padding: 4px 4px 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; transition: transform .15s; }
   .pk button.on { background: rgba(255,211,107,.25); border-color: #ffd36b; transform: translateY(-3px); box-shadow: 0 6px 0 rgba(0,0,0,.3); }
-  .pk img { width: 100%; aspect-ratio: 1; object-fit: contain; } .pk b { font-size: 18px; font-weight: 900; line-height: 1.1; } .pk small { font-size: 11px; opacity: .85; line-height: 1.2; }
+  .pk img { width: 100%; height: 12dvh; object-fit: contain; } #pkVeh img { height: 9dvh; } .pk b { font-size: min(18px, 2.4dvh); font-weight: 900; line-height: 1.1; } .pk small { font-size: min(11px, 1.6dvh); opacity: .85; line-height: 1.15; }
   .pk .emo { font-size: 44px; line-height: 1.3; }
-  .pkh { font-weight: 900; font-size: 18px; color: #ffd36b; align-self: center; }
-  .prev { width: min(46vw, 190px); aspect-ratio: 1; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); animation: wig .9s infinite alternate ease-in-out; }
-  .vstat { width: 100%; max-width: 330px; font-size: 13px; font-weight: 700; display: grid; grid-template-columns: 70px 1fr; gap: 4px 8px; align-items: center; text-align: left; }
+  #start { height: 100%; height: 100dvh; overflow: hidden; justify-content: space-evenly; gap: .8dvh; padding: calc(1.5dvh + env(safe-area-inset-top)) 14px calc(1.5dvh + env(safe-area-inset-bottom)); }
+  #start .logo { font-size: min(50px, 6.4dvh); flex: none; } #start h1 { font-size: min(28px, 3.5dvh); flex: none; } #start p { font-size: min(15px, 1.95dvh); flex: none; }
+  #start .cast { flex: none; gap: .7dvh 6px; } #start .cast img { height: 7.2dvh; aspect-ratio: auto; } #start .cast div { font-size: min(11px, 1.5dvh); padding: 3px; }
+  #start .how { font-size: min(13px, 1.65dvh); flex: none; } #start .go { padding: min(15px, 1.8dvh) 44px; flex: none; } #start .btn2 { padding: min(10px, 1.2dvh) 26px; flex: none; }
+  .pkbtn { display: flex; gap: 10px; align-items: center; flex: none; } .pkbtn .go { padding: min(15px, 1.8dvh) 40px; } .pkbtn .btn2 { padding: min(10px, 1.4dvh) 18px; font-size: 22px; }
+  .pkh { font-weight: 900; font-size: min(18px, 2.4dvh); color: #ffd36b; align-self: center; flex: none; }
+  .prev { flex: 1 1 0; min-height: 0; width: 100%; max-width: 300px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); animation: wig .9s infinite alternate ease-in-out; }
+  .vstat { flex: none; width: 100%; max-width: 330px; font-size: min(13px, 1.8dvh); font-weight: 700; display: grid; grid-template-columns: 90px 1fr; gap: .5dvh 8px; align-items: center; text-align: left; }
   .vstat i { display: block; height: 9px; border-radius: 5px; background: rgba(255,255,255,.15); overflow: hidden; } .vstat i::after { content: ''; display: block; height: 100%; width: var(--w); background: linear-gradient(90deg, #2bd46a, #ffd36b); border-radius: 5px; transition: width .3s; }
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
@@ -151,9 +157,7 @@
   <div class="pk" id="pkVeh"></div>
   <img class="prev" id="pkPrev" alt="">
   <div class="vstat" id="pkStat"></div>
-  <button class="go" id="pkGo">▶ ออกเดินทาง</button>
-  <button class="btn2" id="pkBack">‹ กลับ</button>
-  <div style="height:16px"></div>
+  <div class="pkbtn"><button class="btn2" id="pkBack">‹</button><button class="go" id="pkGo">▶ ออกเดินทาง</button></div>
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
@@ -475,9 +479,9 @@ $('changeBtn').onclick = () => { $('end').classList.remove('on'); $('goBtn').onc
   if (CHARS[sc[0]]) PL.c = sc[0]; if (VEHS[sc[1]]) PL.v = sc[1]; }
 function renderPick() {
   $('pkChar').innerHTML = Object.entries(CHARS).map(([k, n]) => `<button data-c="${k}" class="${PL.c === k ? 'on' : ''}"><img src="race/p_${k}.webp" alt=""><b>${n}</b></button>`).join('');
-  $('pkVeh').innerHTML = Object.entries(VEHS).map(([k, v]) => `<button data-v="${k}" class="${PL.v === k ? 'on' : ''}"><span class="emo">${v.emo}</span><b>${v.name}</b><small>${v.sub}</small></button>`).join('');
+  $('pkVeh').innerHTML = Object.entries(VEHS).map(([k, v]) => `<button data-v="${k}" class="${PL.v === k ? 'on' : ''}"><img src="race/p_${PL.c}_${k}.webp" alt=""><b>${v.emo} ${v.name}</b><small>${v.sub}</small></button>`).join('');
   $('pkPrev').src = `race/p_${PL.c}_${PL.v}.webp`;
-  const st = VEHS[PL.v].st; $('pkStat').innerHTML = ['ความเร็ว', 'คล่องตัว', 'เบรก/ทนทาน'].map((t, i) => `<span>${t}</span><i style="--w:${st[i] * 20}%"></i>`).join('');
+  const st = VEHS[PL.v].st; $('pkStat').innerHTML = ['ความเร็ว', 'คล่องตัว', 'เบรก'].map((t, i) => `<span>${t}</span><i style="--w:${st[i] * 20}%"></i>`).join('');
   document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); });
   document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); });
 }
