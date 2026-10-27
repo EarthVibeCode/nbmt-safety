@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027203538';
+const BUILD = '20261027205358';
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
     if (j.v && j.v !== BUILD) { const k = 'nbmt_reload_' + j.v; if (!sessionStorage.getItem(k)) { sessionStorage.setItem(k, '1'); const u = new URL(location.href); u.searchParams.set('b', j.v); location.replace(u.toString()); } }
@@ -11,7 +11,7 @@ const BUILD = '20261027203538';
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" href="../favicon.svg?b=20261027203538">
+<link rel="icon" href="../favicon.svg?b=20261027205358">
 <title>AI Boarding Pass · NBMT Safe Road Save Life</title>
 <meta name="description" content="เช็คอินครบ 8 ข้อ แล้วรับบัตรผ่านกลับบ้าน พร้อมภาพการ์ตูน AI ของคุณเอง — NBMT Safety Traffic">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -114,7 +114,7 @@ const BUILD = '20261027203538';
 <div class="app">
   <section class="scr on" id="s0">
     <div class="top"><div class="a">NBMT AIRWAYS · SAFE ROAD SAVE LIFE</div><h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1></div>
-    <div class="hero"><img src="img/hero.webp?b=20261027203538" alt=""><div class="ai">✨ AI การ์ตูนตัวคุณเอง</div>
+    <div class="hero"><img src="img/hero.webp?b=20261027205358" alt=""><div class="ai">✨ AI การ์ตูนตัวคุณเอง</div>
       <div class="ov"><b>เช็คอินครบ 8 ข้อ<br>รับ <span>บัตรผ่านกลับบ้าน</span> ที่มีคุณเป็นตัวการ์ตูน!</b><p>เลือกพาหนะของคุณ ถ่ายเซลฟี่ 1 รูป แล้วแชร์ให้เพื่อนใน LINE</p></div></div>
     <div class="how"><div><span>✅</span>เช็ค 8 ข้อ</div><div><span>🛵</span>เลือกพาหนะ</div><div><span>🤳</span>ถ่ายเซลฟี่</div><div><span>🎫</span>รับบัตรผ่าน</div></div>
     <button class="btn" id="goCheck">✈ เริ่มเช็คอิน</button>
@@ -225,7 +225,7 @@ function go(n) { document.querySelectorAll('.scr').forEach(s => s.classList.togg
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
 
 $('list').innerHTML = ITEMS.map((it, i) => (i === 0 ? '<span class="sec o">ก่อนออกเดินทาง</span>' : i === 2 ? '<br><span class="sec b">ระหว่างทาง</span>' : '') +
-  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027203538" alt=""><div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
+  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027205358" alt=""><div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
 document.querySelectorAll('.item').forEach(el => el.onclick = () => { const i = +el.dataset.i; st.on.has(i) ? st.on.delete(i) : st.on.add(i); el.classList.toggle('on', st.on.has(i)); upd(); });
 $('goCheck').onclick = () => go(1);
 $('toInfo').onclick = () => go(2);
