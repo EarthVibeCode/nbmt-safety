@@ -116,6 +116,7 @@
   #start .cast { flex: none; gap: .7dvh 6px; } #start .cast img { height: 7.2dvh; aspect-ratio: auto; } #start .cast div { font-size: min(11px, 1.5dvh); padding: 3px; }
   #start .how { font-size: min(13px, 1.65dvh); flex: none; } #start .go { padding: min(15px, 1.8dvh) 44px; flex: none; } #start .btn2 { padding: min(10px, 1.2dvh) 26px; flex: none; }
   .mbtn { position: fixed; right: 10px; top: calc(118px + env(safe-area-inset-top)); z-index: 16; width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,.45); background: rgba(5,20,50,.6); color: #fff; font-size: 18px; cursor: pointer; } .mbtn.off { opacity: .55; text-decoration: line-through; }
+  .gate { position: fixed; inset: 0; z-index: 18; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 22px; color: #fff; background: radial-gradient(ellipse at 50% 35%, rgba(255,140,60,.55), transparent 60%), #081637; } .gate.on { display: flex; } .gate .go { animation: pulse 1s infinite alternate; font-family: 'Kanit'; font-weight: 900; font-size: 26px; color: #fff; border: none; border-radius: 40px; padding: 16px 44px; background: linear-gradient(180deg, #ff8a2a, #e8650c); box-shadow: 0 6px 0 #8a3500; } .gate small { opacity: .8; font-size: 15px; } @keyframes pulse { to { transform: scale(1.07); } }
   .pkbtn { display: flex; gap: 10px; align-items: center; flex: none; } .pkbtn .go { padding: min(15px, 1.8dvh) 40px; } .pkbtn .btn2 { padding: min(10px, 1.4dvh) 18px; font-size: 22px; }
   .pkh { font-weight: 900; font-size: min(18px, 2.4dvh); color: #ffd36b; align-self: center; flex: none; }
   .prev { flex: 1 1 0; min-height: 0; width: 100%; max-width: 300px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); animation: wig .9s infinite alternate ease-in-out; }
@@ -142,6 +143,7 @@
   <div class="r"><button class="bad" id="tBad"></button><button class="good" id="tGood"></button></div><i class="tm"></i></div>
 <div class="ctrl"><button class="lane" id="bL">◀</button><button class="brake" id="bB">✋ เบรก</button><button class="lane" id="bR">▶</button></div>
 
+<div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
 <div class="load" id="load">กำลังเช็คอิน...<div class="b"><i id="loadBar"></i></div></div>
 <div class="ov on" id="start">
   <div class="logo">ถนนนรก<br>กลับบ้าน!</div>
@@ -397,7 +399,22 @@ const Music = window.Music = (() => {
     bus.gain.setTargetAtTime(vol, now, .08);
   }
   function ensure() { if (ac) return true; ac = snd.ac; if (!ac) return false; filt = ac.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 18000; bus = ac.createGain(); bus.gain.value = 0; const cp = ac.createDynamicsCompressor(); cp.threshold.value = -20; cp.ratio.value = 4; bus.connect(filt).connect(cp).connect(ac.destination); return true; }
-  return {
+  // ---- AI soundtrack files (Gemini / Lyria 3) via <audio> → filter → compressor ----
+  const tracks = {}; let cur = null, tgain = null;
+  function trk(name) { if (tracks[name]) return tracks[name]; const a = new Audio(`race/music/${name}.m4a?b=1`); a.loop = true; a.preload = 'auto'; a.crossOrigin = 'anonymous';
+    const g = ac.createGain(); g.gain.value = 0; try { ac.createMediaElementSource(a).connect(g).connect(tgain); } catch (e) {} const t = (tracks[name] = { a, g });
+    a.onerror = () => { t.bad = true; if (cur === t) { cur = null; api.play(typeof S !== 'undefined' && S.run ? 'game' : 'menu'); } }; return t; }
+  function playTrack(name, restart) { if (!ensure()) return false; if (!tgain) { tgain = ac.createGain(); tgain.gain.value = muted ? 0 : 1; tgain.connect(filt); }
+    const t = trk(name); if (t.bad) { if (cur) api.stopTrack(); api.play(typeof S !== 'undefined' && S.run ? 'game' : 'menu'); return true; } if (cur && cur !== t) { const o = cur; o.g.gain.setTargetAtTime(0, ac.currentTime, .25); setTimeout(() => { if (cur !== o) o.a.pause(); }, 1200); }
+    if (restart || cur !== t) { if (restart) t.a.currentTime = 0; t.a.playbackRate = 1; t.a.play().catch(() => {}); }
+    t.g.gain.setTargetAtTime(1, ac.currentTime, .2); cur = t; mode = 'off'; clearInterval(timer); timer = null; if (bus) bus.gain.setTargetAtTime(0, ac.currentTime, .05);
+    return true; }
+  function trackTick(o) { if (!cur || !tgain) return; const now = ac.currentTime; tgain.gain.setTargetAtTime(muted ? 0 : (performance.now() < duckUntil ? .45 : 1), now, .08);
+    if (o.rate !== undefined) { cur.a.preservesPitch = cur.a.mozPreservesPitch = cur.a.webkitPreservesPitch = !o.wobble; cur.a.playbackRate = Math.max(.6, Math.min(1.4, o.rate)); }
+    if (o.lp !== undefined) filt.frequency.setTargetAtTime(o.lp, now, .15); }
+  const api = {
+    playTrack, trackTick, get hasTrack() { return !!cur; },
+    stopTrack() { if (cur) { const o = cur; o.g.gain.setTargetAtTime(0, ac.currentTime, .3); setTimeout(() => o.a.pause(), 1200); cur = null; } },
     play(m) { if (!ensure()) return; if (mode === 'off') { nextT = ac.currentTime + .05; step = 0; bar = 0; } mode = m; if (!timer) timer = setInterval(tick, 25); },
     stop() { mode = 'off'; clearInterval(timer); timer = null; if (bus) bus.gain.setTargetAtTime(0, ac.currentTime, .05); },
     set(o) { if (!ac) return; if (o.bpm) bpm = o.bpm; if (o.mode && mode !== 'off') mode = o.mode; if (o.lp !== undefined) filt.frequency.setTargetAtTime(o.lp, ac.currentTime, .15); },
@@ -411,12 +428,14 @@ const Music = window.Music = (() => {
       w(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, 44100, true); dv.setUint32(28, 88200, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w(36, 'data'); dv.setUint32(40, n * 2, true);
       let peak = 0; for (let i = 0; i < n; i++) { const v = Math.max(-1, Math.min(1, L[i])); peak = Math.max(peak, Math.abs(v)); dv.setInt16(44 + i * 2, v * 32767, true); }
       let bin = ''; const u8 = new Uint8Array(dv.buffer); for (let i = 0; i < u8.length; i += 32768) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 32768)); return { peak, wav: btoa(bin) }; },
-    toggle() { muted = !muted; try { localStorage.setItem('nbmt_race_music', muted ? '0' : '1'); } catch (e) {} return muted; }, get muted() { return muted; },
+    toggle() { muted = !muted; try { localStorage.setItem('nbmt_race_music', muted ? '0' : '1'); } catch (e) {} if (tgain) tgain.gain.setTargetAtTime(muted ? 0 : 1, ac.currentTime, .05); return muted; }, get muted() { return muted; },
   };
+  return api;
 })();
 $('mBtn').classList.toggle('off', Music.muted);
-$('mBtn').onclick = (e) => { e.stopPropagation(); snd.unlock(); const m = Music.toggle(); $('mBtn').classList.toggle('off', m); if (!m && !S.run) Music.play('menu'); };
+$('mBtn').onclick = (e) => { e.stopPropagation(); snd.unlock(); const m = Music.toggle(); $('mBtn').classList.toggle('off', m); if (!m && !Music.hasTrack) Music.playTrack(S.run || $('pick').classList.contains('on') ? `${PL.c}_${PL.v}` : 'theme'); };
 function musicTick() { if (!S.run) return; const prog = S.dist / S.total; const hype = S.truck || S.turbo > 0 || prog > .9;
+  if (Music.hasTrack) { Music.trackTick({ rate: S.tmp ? .78 : S.drunk > 0 ? 1 + Math.sin(S.t * 3) * .12 : 1 + prog * .1 + (hype ? .05 : 0) + (S.turbo > 0 ? .08 : 0), wobble: S.drunk > 0, lp: S.tmp ? 900 : S.rain ? 2600 : S.call ? 1500 : 18000 }); return; }
   Music.set({ bpm: (S.tmp ? 100 : 136 + prog * 26 + (S.turbo > 0 ? 20 : 0)), mode: hype ? 'hype' : 'game', lp: S.tmp ? 900 : S.rain ? 2600 : S.call ? 1500 : 18000 }); }
 
 // ================= temptations (ฮาๆ กวนๆ) =================
@@ -524,10 +543,10 @@ function update(dt) {
 }
 const TS = +(new URLSearchParams(location.search).get('ts') || 1);
 function loop() { const dt = Math.min(.05, clock.getDelta()); if (S.run) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
-function start() { snd.unlock(); reset(); S.run = true; Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
+function start() { snd.unlock(); reset(); S.run = true; if (!Music.playTrack(`${PL.c}_${PL.v}`, true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
 function finish(win) {
   if (!S.run) return; S.run = false; snd.stop(); setB(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
-  Music.stop();
+  Music.stop(); Music.trackTick({ rate: 1, wobble: false, lp: 18000 }); Music.duck(4); if (!win) Music.trackTick({ rate: .85, wobble: true, lp: 1400 });
   if (win) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); }
   $('endT').innerHTML = win ? 'ถึงบ้านแล้ว! 🏠<br><b>คนที่บ้านรอคุณอยู่</b>' : 'ไปไม่ถึงบ้าน 😢<br><b>ขับช้าๆ ไม่ต้องรีบนะ</b>';
   $('endImg').style.display = win ? '' : 'none'; $('endScore').textContent = Math.floor(S.score);
@@ -548,11 +567,11 @@ function renderPick() {
   $('pkVeh').innerHTML = Object.entries(VEHS).map(([k, v]) => `<button data-v="${k}" class="${PL.v === k ? 'on' : ''}"><img src="race/p_${PL.c}_${k}.webp" alt=""><b>${v.emo} ${v.name}</b><small>${v.sub}</small></button>`).join('');
   $('pkPrev').src = `race/p_${PL.c}_${PL.v}.webp`;
   const st = VEHS[PL.v].st; $('pkStat').innerHTML = ['ความเร็ว', 'คล่องตัว', 'เบรก'].map((t, i) => `<span>${t}</span><i style="--w:${st[i] * 20}%"></i>`).join('');
-  document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); });
-  document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); });
+  document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
+  document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
 }
-$('goBtn').onclick = () => { snd.unlock(); Music.play('menu'); Music.set({ bpm: 112, lp: 18000 }); renderPick(); $('pick').classList.add('on'); $('pick').scrollTop = 0; };
-$('pkBack').onclick = () => $('pick').classList.remove('on');
+$('goBtn').onclick = () => { snd.unlock(); Music.playTrack(`${PL.c}_${PL.v}`); renderPick(); $('pick').classList.add('on'); $('pick').scrollTop = 0; };
+$('pkBack').onclick = () => { $('pick').classList.remove('on'); Music.playTrack('theme'); };
 $('pkGo').onclick = () => { try { localStorage.setItem('nbmt_race_c', PL.c); localStorage.setItem('nbmt_race_v', PL.v); } catch (e) {} $('pick').classList.remove('on'); start(); };
 
 // ================= scoreboard (shared backend with Fire game, tab 'race') =================
@@ -689,6 +708,7 @@ async function showCert() {
   const a = document.createElement('a'); a.href = url; a.download = 'NBMT-boarding-pass.jpg'; a.click();
 }
 buildScenery(); await document.fonts.ready; await loadAll(); $('load').style.display = 'none';
+$('gate').classList.add('on'); $('gateBtn').onclick = () => { snd.unlock(); $('gate').classList.remove('on'); Music.playTrack('theme'); };
 $('cast').innerHTML = [['buffalo', 'ควาย'], ['wrongway', 'ย้อนศร'], ['drunk', 'ขี้เมา'], ['chicken', 'ไก่'], ['pickup', 'ของหล่น'], ['truck', 'รถพ่วง'], ['coffee', 'กาแฟ'], ['phone', 'มือถือ'], ['friends', 'เพื่อนชวนดื่ม'], ['racer', 'เด็กแว้น'], ['hitch', 'ขอซ้อน'], ['shortcut', 'ทางลัด']].map(([k, t]) => `<div><img src="race/${k}.webp" alt="">${t}</div>`).join('');
 reset(); camera.position.set(0, 5.2, 10); camera.lookAt(0, 1, -20); loop();
 window.__medal = (a, b) => { me = me || { name: 'TEST', dept: 'Zone 1', group: '1-1 : x' }; medalShow(a, b); }; window.__S = S; window.__D = { get ents() { return ents; }, get lights() { return lights; } };
