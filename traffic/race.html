@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027232427';
+const BUILD = '20261027232704';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -148,7 +148,7 @@ const BUILD = '20261027232427';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
-<script src="race_i18n.js?b=20261027232427"></script>
+<script src="race_i18n.js?b=20261027232704"></script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body class="menu">
@@ -192,7 +192,7 @@ const BUILD = '20261027232427';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261027232427" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261027232704" alt="">
   <div class="big" id="endScore">0</div>
   <div class="stats" id="stats"></div>
   <div class="mlist" id="mList"></div>
@@ -392,7 +392,7 @@ $('ppeBtn').onclick = () => { if (!S.run || S.stats.ppe) return; S.stats.ppe = t
 function confetti(n = 70) { const C = ['#ffd36b', '#ff5a3a', '#2bd46a', '#33c9ff', '#ff6fb1', '#fff']; for (let i = 0; i < n; i++) { const d = document.createElement('i'); d.className = 'cf'; d.style.left = Math.random() * 100 + 'vw'; d.style.background = C[i % C.length]; d.style.animationDelay = Math.random() * .6 + 's'; d.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px'); d.style.setProperty('--r', (Math.random() * 1080 - 540) + 'deg'); document.body.appendChild(d); setTimeout(() => d.remove(), 3200); } }
 const TIPS = ['💡 ง่วงเมื่อไหร่ ชิดซ้ายจอดพักที่ 🅿️', '💡 เว้นระยะ 3 วิ หลบได้ทันเสมอ', '💡 เห็นคนข้าม ชะลอให้ได้คะแนนเพิ่ม', '💡 มือถือดัง กดไม่รับ แล้วจอดก่อนค่อยโทรกลับ', '💡 ไฟเหลือง = เตรียมหยุด ไม่ใช่เร่ง', '💡 ขับไม่เกินป้ายจำกัดความเร็ว ได้โบนัสทุกช่วง'];
 function crossDone(e) { if (e.scored || e.hit) return; e.scored = true; if (e.yielded) { S.stats.yield++; good(e.kind === 'grandma' ? 30 : 20, e.kind === 'grandma' ? 'หยุดให้คนข้าม 🙏' : 'ชะลอให้สัตว์ข้าม'); } }
-function good(n, why, voice) { const pts = n * S.combo; S.score += pts; S.combo = Math.min(5, S.combo + 1); pop(`+${pts} ${why}`, 'good', true); snd.good(); if (voice) snd.say(voice); }
+function good(n, why, voice) { const pts = n * S.combo; S.score += pts; S.combo = Math.min(5, S.combo + 1); if (navigator.vibrate) try { navigator.vibrate(12); } catch (e) {} pop(`+${pts} ${why}`, 'good', true); snd.good(); if (voice) snd.say(voice); }
 function hearts() { $('hearts').textContent = '❤️'.repeat(Math.max(0, S.hearts)) + '🤍'.repeat(3 - Math.max(0, S.hearts)) + (S.shield ? '🛡️' : ''); }
 
 const CALLERS = [['แม่โทรมา!', 'ซื้อกับข้าวด้วยนะลูก...'], ['หัวหน้าโทรมา!', 'พรุ่งนี้เข้าเช้านะ'], ['แฟนโทรมา!', 'ถึงไหนแล้ว~'], ['เบอร์แปลก', 'ยินดีด้วย คุณได้รับรางวัล...']];

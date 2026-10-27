@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027232427';
+const BUILD = '20261027232704';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -13,7 +13,7 @@ const BUILD = '20261027232427';
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="icon" href="../favicon.svg?b=20261027232427"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
+<link rel="icon" href="../favicon.svg?b=20261027232704"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
 <meta name="description" content="เกม 30 วินาที ช่วยนายอำเภอเอิร์ทจับ 6 ผู้ร้ายจุดไฟในโรงงาน — NBMT Fire Prevention 3ต 3จ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&family=Rye&display=swap" rel="stylesheet">
@@ -250,7 +250,7 @@ const BUILD = '20261027232427';
   <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div></div>
 </div>
 <div class="story" id="story">
-  <video id="storyVid" src="img/story.mp4?b=20261027232427" poster="img/story_poster.jpg?b=20261027232427" playsinline muted preload="auto"></video>
+  <video id="storyVid" src="img/story.mp4?b=20261027232704" poster="img/story_poster.jpg?b=20261027232704" playsinline muted preload="auto"></video>
   <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
   <button class="st-skip" id="stSkip" disabled>ข้ามได้ใน <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
@@ -282,12 +282,12 @@ const BUILD = '20261027232427';
     <div class="w">WANTED</div>
     <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
     <div class="hero">
-      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027232427" poster="img/sheriff.webp?b=20261027232427" muted loop playsinline preload="auto"></video></div>
+      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027232704" poster="img/sheriff.webp?b=20261027232704" muted loop playsinline preload="auto"></video></div>
       <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
     </div>
     <div class="rules">
-      <div class="row"><img src="img/v2.webp?b=20261027232427" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
-      <div class="row"><img class="g" src="img/c3.webp?b=20261027232427" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
+      <div class="row"><img src="img/v2.webp?b=20261027232704" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
+      <div class="row"><img class="g" src="img/c3.webp?b=20261027232704" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
       <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
@@ -448,7 +448,7 @@ function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').t
 
 function build() {
   $('grid').innerHTML = SPOTS.map((s, i) => `<div class="hole" data-i="${i}"><span class="lab">${s}</span></div>`).join('');
-  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027232427" alt=""></span>`).join('');
+  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027232704" alt=""></span>`).join('');
 }
 
 function toast(html, bad) {
@@ -682,7 +682,7 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 async function caseReport() {
   const R = $('rep'); R.classList.add('on');
   ['repT', 'repT2', 'repStar', 'repGo'].forEach(id => $(id).classList.remove('in')); $('repSc').textContent = '';
-  $('repMugs').innerHTML = V.map(v => `<div class="mug" id="mug${v.id}"><img src="img/v${v.id}.webp?b=20261027232427" alt=""><div class="nm">${v.name}</div><div class="st">จับแล้ว!</div></div>`).join('');
+  $('repMugs').innerHTML = V.map(v => `<div class="mug" id="mug${v.id}"><img src="img/v${v.id}.webp?b=20261027232704" alt=""><div class="nm">${v.name}</div><div class="st">จับแล้ว!</div></div>`).join('');
   await sleep(200); $('repT').classList.add('in'); SFX.miss && SFX.count(); shake(true);
   await sleep(450); $('repT2').classList.add('in');
   for (const v of V) {
