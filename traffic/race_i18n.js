@@ -1,0 +1,96 @@
+// UI translations for "ถนนนรก กลับบ้าน!" — Thai is the source; EN / JP for expat staff.
+// Phrases are replaced inside text nodes, longest first, so templates with numbers still translate.
+window.I18N = (() => {
+  const D = [
+    // ---- titles / menus ----
+    ['ถนนนรก กลับบ้าน!', 'Hell Road: Ride Home!', '地獄ロード 帰宅せよ！'],
+    ['ถนนนรก', 'Hell Road', '地獄ロード'], ['กลับบ้าน!', 'Ride Home!', '帰宅せよ！'],
+    ['ทุกเที่ยวไป ต้องมีเที่ยวกลับ', 'Every trip out must have a trip home', '行ったら、必ず無事に帰る'],
+    ['ทุกเที่ยวไป', 'Every trip out', '行ったら'], ['ต้องมีเที่ยวกลับ', 'must have a trip home', '必ず無事に帰る'],
+    ['เลือกนักบิด เอิร์ท · ปลื้ม · ฟลุ๊ค แล้วฝ่าถนนสุดป่วนจาก NBMT กลับบ้านให้รอด! ขับปลอดภัยได้คะแนน ประมาทเสียหัวใจ', 'Pick your rider and survive the crazy road from NBMT back home! Safe riding scores points — carelessness costs hearts.', 'ライダーを選んで、NBMTから家までのハチャメチャ道路を無事に帰ろう！安全運転でポイント、油断するとハートが減る。'],
+    ['◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · 🚦 ไฟแดงต้องหยุด · 😴 ง่วง = ชิดซ้ายจอดพัก 🅿️ · 📵 ไม่รับสายขณะขับ · 🚸 ชะลอให้คนข้าม · 😈 ระวังเพื่อนชวนนอกลู่นอกทาง!', '◀ ▶ / swipe = change lane · ✋ hold = brake · 🚦 stop at red lights · 😴 sleepy = pull over left at 🅿️ · 📵 no calls while riding · 🚸 slow down for crossings · 😈 beware of bad invitations!', '◀ ▶ / スワイプ = 車線変更 · ✋ 長押し = ブレーキ · 🚦 赤信号は停止 · 😴 眠い = 左に寄せて🅿️で休憩 · 📵 運転中は電話に出ない · 🚸 横断者には減速 · 😈 悪い誘いに注意！'],
+    ['🎵 แตะเพื่อเริ่ม', '🎵 Tap to start', '🎵 タップしてスタート'], ['เปิดเสียงด้วยนะ 🔊', 'Turn your sound on 🔊', 'サウンドをオンにしてね 🔊'],
+    ['กำลังเช็คอิน...', 'Checking in...', 'チェックイン中...'],
+    ['▶ ออกเดินทาง', '▶ Let\'s ride', '▶ 出発'], ['🏆 กระดานคะแนน', '🏆 Leaderboard', '🏆 ランキング'], ['🏆 กระดานคะแนน', '🏆 Leaderboard', '🏆 ランキング'],
+    ['เลือกนักบิด', 'Pick your rider', 'ライダーを選ぶ'], ['เลือกพาหนะ', 'Pick your ride', '乗り物を選ぶ'],
+    ['เอิร์ท', 'Earth', 'アース'], ['ปลื้ม', 'Pleum', 'プルーム'], ['ฟลุ๊ค', 'Fluke', 'フルーク'], ['ใบเตย', 'Baitoey', 'バイトゥーイ'],
+    ['เวฟ 110', 'Wave 110', 'ウェーブ110'], ['รถเก๋ง', 'Car', '乗用車'],
+    ['สมดุลทุกด้าน', 'Well balanced', 'バランス型'], ['คล่องตัว หลบไว', 'Nimble, quick dodges', '小回りが利く'], ['เบรกดี แต่ตัวใหญ่', 'Great brakes, but wide', 'ブレーキ◎ 車体は大きい'],
+    ['อัตราเร่ง', 'Accel', '加速'], ['คล่องตัว', 'Agility', '機動性'], ['เบรก', 'Brake', 'ブレーキ'],
+    ['⏸ พักก่อน', '⏸ Paused', '⏸ 一時停止'], ['▶ ขี่ต่อ', '▶ Resume', '▶ 再開'], ['ง่วงก็จอดพักแบบนี้นะ 😴', 'Sleepy? Take a break like this 😴', '眠いときはこうして休もう 😴'],
+    // ---- cast ----
+    ['ควาย', 'Buffalo', '水牛'], ['ย้อนศร', 'Wrong-way', '逆走'], ['ขี้เมา', 'Drunk', '酔っ払い'], ['ไก่', 'Chickens', 'ニワトリ'], ['ของหล่น', 'Falling load', '落下物'], ['รถพ่วง', 'Truck', 'トレーラー'], ['กาแฟ', 'Coffee', 'コーヒー'], ['มือถือ', 'Phone', 'スマホ'], ['เพื่อนชวนดื่ม', 'Drink invite', '飲みの誘い'], ['เด็กแว้น', 'Street racer', '暴走族'], ['ขอซ้อน', 'Pillion', '二人乗り'], ['ทางลัด', 'Shortcut', '近道'],
+    // ---- warnings ----
+    ['🛵 ย้อนศร!', '🛵 Wrong-way rider!', '🛵 逆走車！'], ['🐃 ควายข้ามถนน!', '🐃 Buffalo crossing!', '🐃 水牛が横断中！'], ['🐔 ไก่วิ่งตัดหน้า!', '🐔 Chickens dashing across!', '🐔 ニワトリが飛び出し！'], ['🐕 หมาวิ่งตัดหน้า!', '🐕 Dog dashing across!', '🐕 犬が飛び出し！'], ['👵 คนข้ามถนน! ชะลอ', '👵 Pedestrian crossing! Slow down', '👵 歩行者横断！減速'], ['🍺 รถขี้เมา! อย่าเข้าใกล้', '🍺 Drunk driver! Keep away', '🍺 飲酒運転車！近づくな'], ['📦 กระบะบรรทุกเกิน!', '📦 Overloaded pickup!', '📦 過積載トラック！'], ['🕳️ หลุมข้างหน้า!', '🕳️ Pothole ahead!', '🕳️ 前方に穴！'], ['🚛 รถพ่วงมาแล้ว!', '🚛 Big truck coming!', '🚛 トレーラー接近！'],
+    ['⬅ ซ้าย', '⬅ left', '⬅ 左'], ['⬆ กลาง', '⬆ middle', '⬆ 中央'], ['ขวา ➡', 'right ➡', '右 ➡'],
+    ['🚦 ไฟแดง! หยุดหลังเส้น', '🚦 Red light! Stop behind the line', '🚦 赤信号！停止線で止まれ'], ['🌧️ ฝนตก! ถนนลื่น เบรกยากขึ้น', '🌧️ Rain! Slippery road, longer braking', '🌧️ 雨！路面が滑りやすい'],
+    ['🛣️ ถนนใหญ่ จำกัด 80 km/h', '🛣️ Main road — limit 80 km/h', '🛣️ 幹線道路 制限80km/h'], ['🏘️ เขตชุมชน จำกัด 50 · ใกล้บ้าน = จุดเสี่ยง ชะลอ!', '🏘️ Residential 50 km/h · near home = risky, slow down!', '🏘️ 住宅地 制限50 · 家の近くこそ減速！'],
+    ['😴 ง่วงแล้ว! ชิดซ้าย ⬅ จอดพักที่ 🅿️', '😴 Sleepy! Keep left ⬅ and rest at 🅿️', '😴 眠い！左に寄せて🅿️で休憩'], ['📵 จะโทรกลับ? ชิดซ้าย ⬅ แล้วจอดก่อน', '📵 Want to call back? Pull over left ⬅ first', '📵 かけ直す？まず左に停車 ⬅'],
+    ['🍺 เมาแล้ว! ปุ่มซ้าย-ขวากลับด้าน', '🍺 Drunk! Left/right are reversed', '🍺 酔った！左右が逆に'], ['🔥 เบรกไม่อยู่! 120 km/h', '🔥 Can\'t brake! 120 km/h', '🔥 止まれない！120km/h'], ['🐘 ซ้อนท้าย หักหลบยาก!', '🐘 Extra rider — hard to steer!', '🐘 二人乗りでハンドルが重い！'], ['↩️ ย้อนศร! สวนมาเพียบ', '↩️ Wrong way! Traffic everywhere', '↩️ 逆走！対向車だらけ'],
+    ['👮 ด่านตรวจแอลกอฮอล์!', '👮 Alcohol checkpoint!', '👮 飲酒検問！'], ['🚓 ขับเร็วเกินกำหนด โดนใบสั่ง!', '🚓 Speeding — ticket!', '🚓 スピード違反で切符！'],
+    ['💡 ง่วงเมื่อไหร่ ชิดซ้ายจอดพักที่ 🅿️', '💡 Sleepy? Pull over left at 🅿️', '💡 眠くなったら左の🅿️で休憩'], ['💡 เว้นระยะ 3 วิ หลบได้ทันเสมอ', '💡 Keep a 3-second gap — always time to react', '💡 車間3秒で余裕をもって'], ['💡 เห็นคนข้าม ชะลอให้ได้คะแนนเพิ่ม', '💡 Slow down for crossings to earn points', '💡 横断者に減速するとポイント'], ['💡 มือถือดัง กดไม่รับ แล้วจอดก่อนค่อยโทรกลับ', '💡 Phone rings? Decline, pull over, then call back', '💡 電話は出ずに、停車してからかけ直す'], ['💡 ไฟเหลือง = เตรียมหยุด ไม่ใช่เร่ง', '💡 Yellow = get ready to stop, not speed up', '💡 黄色は止まる準備、加速しない'], ['💡 ขับไม่เกินป้ายจำกัดความเร็ว ได้โบนัสทุกช่วง', '💡 Stay under the speed limit for a bonus', '💡 制限速度を守るとボーナス'],
+    // ---- pops ----
+    ['👆 แตะเพื่อรัดคางหมวก ⛑️', '👆 Tap to buckle your helmet ⛑️', '👆 タップしてあご紐を締める ⛑️'], ['👆 แตะเพื่อคาดเข็มขัด 🔒', '👆 Tap to fasten your seatbelt 🔒', '👆 タップしてシートベルト 🔒'],
+    ['รัดคางแล้ว พร้อมออกเดินทาง!', 'Helmet buckled — ready to go!', 'あご紐OK、出発！'], ['คาดเข็มขัดแล้ว พร้อมออกเดินทาง!', 'Seatbelt on — ready to go!', 'ベルトOK、出発！'], ['อย่าลืมรัดคางหมวก!', 'Always buckle your helmet!', 'あご紐を忘れずに！'], ['อย่าลืมคาดเข็มขัด!', 'Always wear your seatbelt!', 'シートベルトを忘れずに！'],
+    ['ชนท้าย! เว้นระยะ 3 วิ', 'Rear-ended! Keep 3 seconds', '追突！車間3秒'], ['โดนขี้เมาเฉี่ยว!', 'Clipped by a drunk!', '酔っ払いと接触！'], ['ชนรถพ่วง! อย่าจี้ท้าย', 'Hit the truck! Don\'t tailgate', 'トレーラーに衝突！あおらない'], ['ชนคนย้อนศร!', 'Hit a wrong-way rider!', '逆走車と衝突！'], ['ชนควาย!! 🐃', 'Hit a buffalo!! 🐃', '水牛に衝突！！🐃'], ['ไก่กระจาย! 🐔', 'Chickens everywhere! 🐔', 'ニワトリ大混乱！🐔'], ['ชนน้องหมา!', 'Hit a dog!', '犬に衝突！'], ['ไม่หยุดให้คนข้าม!', 'Didn\'t stop for a pedestrian!', '歩行者に止まらなかった！'], ['ตกหลุม!', 'Pothole!', '穴に落ちた！'], ['ชนของหล่น!', 'Hit fallen cargo!', '落下物に衝突！'], ['ชน!', 'Crash!', '衝突！'],
+    ['ฝ่าไฟแดง!', 'Ran a red light!', '信号無視！'], ['หลับใน!', 'Micro-sleep!', '居眠り！'], ['ง่วงต้องจอดพัก!', 'Sleepy means stop and rest!', '眠いなら休憩！'], ['ห้ามใช้มือถือขณะขับ!', 'No phones while riding!', '運転中のスマホ禁止！'],
+    ['สมาธิช่วยไว้!', 'Focus saved you!', '集中力で回避！'], ['สมาธิเต็ม! กันชน 1 ครั้ง', 'Full focus! Blocks 1 crash', '集中MAX！1回ガード'], ['กาแฟช่วยแป๊บเดียว ง่วงต้องจอดพัก', 'Coffee only helps briefly — rest when sleepy', 'コーヒーは一時しのぎ、眠いなら休憩'],
+    ['🅿️ กำลังพัก...', '🅿️ Resting...', '🅿️ 休憩中...'], ['ง่วงจอดพัก! สดชื่นแล้ว 😌', 'Rested — feeling fresh 😌', '休憩してスッキリ 😌'], ['จอดแล้วค่อยโทรกลับ ✓', 'Pulled over to call back ✓', '停車してからかけ直し ✓'], ['ไม่รับ ขี่ต่อ', 'Declined, kept riding', '出ずに運転継続'],
+    ['หยุดให้คนข้าม 🙏', 'Stopped for a pedestrian 🙏', '歩行者に停止 🙏'], ['ชะลอให้สัตว์ข้าม', 'Slowed for animals', '動物に減速'], ['เฉียดเกินไป! −5', 'Too close! −5', '近すぎ！−5'], ['ขับไม่เกินกำหนด ✓', 'Within speed limit ✓', '制限速度を守った ✓'], ['เว้นระยะดี!', 'Good gap!', '車間バッチリ！'], ['หยุดไฟแดง!', 'Stopped at red!', '赤信号で停止！'],
+    ['ไม่หลงกล!', 'Not fooled!', '誘いに乗らない！'], ['ไม่สนใจ ขี่ต่อ', 'Ignored it, rode on', 'スルーして運転'], ['ทางลัด = ทางตาย', 'Shortcut = deadly', '近道は危険'], ['ใบสั่ง! -100 💸', 'Ticket! -100 💸', '違反切符！-100 💸'], ['หนักกก!', 'So heavy!', '重いっ！'],
+    ['เมาแล้วขับ! โดนด่านจับ 👮', 'Drunk riding! Caught at checkpoint 👮', '飲酒運転！検問で捕まった 👮'], ['ซ้อนไม่ใส่หมวก ผิดกฎหมาย! ⛑️', 'Pillion without helmet is illegal! ⛑️', 'ヘルメットなし二人乗りは違法！⛑️'], ['ไม่คาดเข็มขัด ผิดกฎหมาย! 🔒', 'No seatbelt is illegal! 🔒', 'シートベルトなしは違法！🔒'],
+    // ---- temptation cards ----
+    ['เพื่อนชวนแวะ! 🍻', 'Friends call you over! 🍻', '友達が飲みに誘う！🍻'], ['"แก้วเดียวเอง ไม่เมาหรอก~"', '"Just one glass, you won\'t get drunk~"', '「一杯だけ、酔わないって〜」'], ['🍺 แวะสักแก้ว', '🍺 Just one', '🍺 一杯だけ'], ['✋ ดื่มไม่ขับ', '✋ If I drink, I don\'t ride', '✋ 飲んだら乗らない'],
+    ['เด็กแว้นท้าแข่ง! 🏁', 'Street racer challenge! 🏁', '暴走族が挑発！🏁'], ['"แข่งกันป่ะพี่! กลัวเหรอ?"', '"Race me, bro! Scared?"', '「勝負しようぜ！怖いの？」'], ['🔥 จัดไป!', '🔥 Bring it!', '🔥 受けて立つ！'], ['😎 ไม่แข่ง', '😎 No racing', '😎 勝負しない'],
+    ['เพื่อนขอซ้อนท้าย 🙏', 'Friend wants a ride 🙏', '友達が乗せてと頼む 🙏'], ['"ไม่มีหมวกนะ ใกล้ๆ เอง~"', '"No helmet, but it\'s close~"', '「ヘルメットないけど近いから〜」'], ['👍 ขึ้นมาเลย', '👍 Hop on', '👍 乗って'], ['⛑️ ไม่มีหมวก ไม่ซ้อน', '⛑️ No helmet, no ride', '⛑️ ヘルメットなしは乗せない'],
+    ['เพื่อนขอติดรถ 🙏', 'Friend wants a lift 🙏', '友達が乗せてと頼む 🙏'], ['"นั่งเบาะหลังก็ได้ ไม่ต้องคาดเข็มขัด~"', '"I\'ll sit in the back, no seatbelt needed~"', '「後ろに座るからベルトいらないよ〜」'], ['🔒 ทุกคนต้องคาดเข็มขัด', '🔒 Everyone buckles up', '🔒 全員シートベルト'],
+    ['ทางลัด! 🤫', 'Shortcut! 🤫', '近道！🤫'], ['"ย้อนศรนิดเดียว ถึงไวกว่า"', '"Just a bit of wrong-way, it\'s faster"', '「ちょっと逆走すれば早いよ」'], ['↩️ ลัดเลย!', '↩️ Take it!', '↩️ 近道する！'], ['🛣️ อ้อมดีกว่า', '🛣️ Take the long way', '🛣️ 遠回りする'],
+    // ---- phone ----
+    ['แม่โทรมา!', 'Mom is calling!', 'お母さんから電話！'], ['ซื้อกับข้าวด้วยนะลูก...', 'Pick up some dinner, dear...', 'おかず買ってきてね...'], ['หัวหน้าโทรมา!', 'The boss is calling!', '上司から電話！'], ['พรุ่งนี้เข้าเช้านะ', 'Come in early tomorrow', '明日は早出ね'], ['แฟนโทรมา!', 'Your sweetheart is calling!', '恋人から電話！'], ['ถึงไหนแล้ว~', 'Where are you now~', '今どこ〜？'], ['เบอร์แปลก', 'Unknown number', '知らない番号'], ['ยินดีด้วย คุณได้รับรางวัล...', 'Congratulations, you won a prize...', 'おめでとう、賞品が当たり...'], [' (กำลังขับรถอยู่!)', ' (you\'re riding!)', '（運転中！）'],
+    ['📱 รับสาย', '📱 Answer', '📱 出る'], ['✖ ไม่รับ ขี่ต่อ', '✖ Decline, keep riding', '✖ 出ないで運転'],
+    // ---- end screen ----
+    ['ถึงบ้าน... แต่เมาแล้วขับ ❌', 'Home... but you rode drunk ❌', '帰宅…でも飲酒運転 ❌'], ['เมาไม่ขับ ไม่มีข้อยกเว้น', 'Drunk means don\'t ride — no exceptions', '飲んだら乗るな、例外なし'],
+    ['ถึงบ้านแล้ว! 🏠', 'Home safe! 🏠', '無事に帰宅！🏠'], ['คนที่บ้านรอคุณอยู่', 'Your family is waiting for you', '家族があなたを待っている'], ['ไปไม่ถึงบ้าน 😢', 'You didn\'t make it home 😢', '家に着けなかった 😢'], ['ขับช้าๆ ไม่ต้องรีบนะ', 'Ride slowly, no need to rush', 'ゆっくり、急がずに'],
+    ['🚦 หยุดไฟแดง', '🚦 Red-light stops', '🚦 赤信号停止'], ['🚸 หยุดให้ข้าม', '🚸 Yielded', '🚸 横断に停止'], ['🅿️ จอดพักแก้ง่วง', '🅿️ Rest stops', '🅿️ 休憩'], ['📵 ไม่ใช้มือถือ', '📵 Calls declined', '📵 スマホ不使用'], ['😇 ไม่หลงกลเพื่อน', '😇 Temptations refused', '😇 誘いを断った'], ['💥 ชน', '💥 Crashes', '💥 衝突'],
+    ['8 มาตรการขับขี่ปลอดภัย', '8 safe-riding measures', '安全運転8つの対策'], ['ด่าน', 'checkpoints', 'チェック'], ['ผ่าน', 'Passed', '合格'],
+    ['เตรียมคน เตรียมรถ', 'Prepare rider & vehicle', '人と車の準備'], ['รัดคาง/คาดเข็มขัด · ไม่ดื่ม', 'Helmet strap/seatbelt · no alcohol', 'あご紐/ベルト · 飲酒なし'], ['วางแผนเส้นทาง', 'Plan your route', 'ルート計画'], ['ไม่รีบ ไม่ลัด ไม่แข่ง', 'No rushing, shortcuts or racing', '急がない・近道しない・競わない'], ['ทำตามกฎจราจร', 'Follow traffic rules', '交通ルールを守る'], ['ไฟแดง · มือถือ · ความเร็ว', 'Red lights · phone · speed', '信号 · スマホ · 速度'],
+    ['เว้นระยะ ≥ 3 วิ', 'Keep ≥ 3-second gap', '車間3秒以上'], ['ไม่จี้ท้าย · ง่วงจอดพัก', 'No tailgating · rest when sleepy', 'あおらない · 眠ければ休憩'], ['ชะลอทางแยก', 'Slow at junctions', '交差点で減速'], ['หยุดหลังเส้นเมื่อไฟแดง', 'Stop behind the line at red', '赤で停止線に止まる'], ['ตรวจจุดอับสายตา', 'Check blind spots', '死角を確認'], ['ไม่ชนตอนเปลี่ยนเลน', 'No crash when changing lanes', '車線変更で衝突なし'],
+    ['คาดการณ์ความเสี่ยง', 'Anticipate hazards', '危険予測'], ['พร้อมเบรก ไม่ชนสิ่งกีดขวาง', 'Ready to brake, no obstacle hits', 'ブレーキ準備、障害物に衝突なし'], ['หยุดให้คนข้าม', 'Stop for pedestrians', '歩行者に止まる'], ['มีน้ำใจต่อเพื่อนร่วมทาง', 'Be kind to other road users', '他の道路利用者に思いやり'],
+    ['🍺 ดื่มแล้วขับ: คะแนนรอบนี้เหลือครึ่งเดียว และไม่ได้ตรา', '🍺 Drunk riding: score halved and no badge this round', '🍺 飲酒運転：スコア半分・バッジなし'],
+    ['หัวใจเหลือ', 'Hearts left', '残りハート'], ['ดวง', '', '個'], ['ไปได้', 'Reached', '到達'],
+    ['✈️ เช็คอินขึ้นกระดานคะแนน', '✈️ Check in to the leaderboard', '✈️ ランキングにチェックイン'], ['ชื่อเล่น เช่น ปลื้ม', 'Nickname, e.g. Pleum', 'ニックネーム 例：Pleum'],
+    ['🔒 ชื่อนี้สงวนไว้สำหรับเจ้าของชื่อตัวจริง', '🔒 This name is reserved for its real owner', '🔒 この名前は本人専用です'], ['ถ้าคุณคือเจ้าของชื่อ ใส่ PIN · ถ้าไม่ใช่ เปลี่ยนชื่อเล่นนะ', 'If it\'s you, enter the PIN · otherwise pick another nickname', '本人ならPINを入力 · 違うなら別の名前に'], ['PIN 6 หลัก', '6-digit PIN', '6桁PIN'], ['PIN ไม่ถูกต้อง ลองอีกครั้ง', 'Wrong PIN, try again', 'PINが違います'],
+    ['🔒 รหัสพนักงานใช้ยืนยันตัวตนในกิจกรรมนี้เท่านั้น · ไม่แสดงบนกระดาน · เก็บแบบเข้ารหัส', '🔒 Your employee ID is used only to verify you for this event · never shown · stored encrypted (hashed)', '🔒 社員番号は本イベントの本人確認のみに使用 · 非表示 · 暗号化して保存'],
+    ['— Zone 5ส —', '— 5S Zone —', '— 5Sゾーン —'], ['— เลือกกลุ่ม 5ส ในโซน —', '— Pick your 5S group —', '— 5Sグループを選択 —'], ['รหัสพนักงาน', 'Employee ID', '社員番号'],
+    ['📌 ส่งคะแนน (ลองใหม่)', '📌 Submit (retry)', '📌 送信（再試行）'], ['📌 ส่งคะแนน', '📌 Submit score', '📌 スコア送信'], ['กำลังส่ง...', 'Sending...', '送信中...'],
+    ['บนกระดานแสดงแค่ชื่อเล่น โซน และกลุ่ม 5ส · ใช้รหัสเพื่อนับคะแนนดีที่สุดของแต่ละคน', 'The board shows only nickname, zone and 5S group · the ID keeps one best score per person', 'ランキングにはニックネーム・ゾーン・グループのみ表示 · 番号は1人1件の最高点に使用'],
+    ['🎫 บัตรผ่านกลับบ้าน (บันทึก/แชร์)', '🎫 Boarding pass (save/share)', '🎫 搭乗券（保存/共有）'], ['📲 กดค้างที่รูปเพื่อบันทึก หรือส่งต่อใน LINE', '📲 Long-press the image to save or share in LINE', '📲 画像を長押しで保存・LINE共有'],
+    ['↻ เล่นอีกครั้ง', '↻ Play again', '↻ もう一回'], ['🔄 เปลี่ยนนักบิด/พาหนะ', '🔄 Change rider/ride', '🔄 ライダー/乗り物を変更'], ['📤 ชวนเพื่อนมาเล่น', '📤 Invite friends', '📤 友達を誘う'],
+    ['อันดับวันนี้', 'Today rank', '今日の順位'], ['ตลอดกาล', 'All-time', '総合'], ['จากผู้เล่นทั้งหมด', 'of', '全'], ['ส่งคะแนนแล้ว ✓', 'Score submitted ✓', '送信しました ✓'],
+    ['👑 คุณคืออันดับ 1 ตลอดกาล! ป้องกันแชมป์ไว้นะ', '👑 You\'re #1 all-time! Defend your title', '👑 総合1位！王座を守れ'], ['จะแซงอันดับ', 'more points to pass #', 'で次の順位'], ['จะติด Top 10', 'more points to reach Top 10', 'でトップ10入り'], ['🎯 อีก', '🎯', '🎯 あと'],
+    ['นำเป็นโซนอันดับ 1!', 'leads as the #1 zone!', 'がゾーン1位！'], ['ชวนเพื่อนในโซนมาช่วย!', 'invite your zone mates!', 'ゾーン仲間を誘おう！'], ['ตาม', 'is behind', 'は'], ['อยู่', 'by', '差'],
+    // ---- board ----
+    ['กระดานคนกลับบ้าน', 'Ride Home Leaderboard', '帰宅ランキング'], ['วันนี้', 'Today', '今日'], ['โซน 5ส', '5S zones', '5Sゾーン'], ['▶ เล่นเลย', '▶ Play', '▶ プレイ'], ['✖ ปิด', '✖ Close', '✖ 閉じる'], ['ปิด', 'Close', '閉じる'],
+    ['กำลังโหลด...', 'Loading...', '読み込み中...'], ['โหลดกระดานไม่สำเร็จ ลองใหม่อีกครั้ง', 'Couldn\'t load the board, try again', '読み込み失敗、再試行して'], ['ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!', 'No one yet — be the first!', 'まだ誰もいない — 一番乗り！'], ['ยังว่างอยู่ — มาเป็นคนต่อไป!', 'Still open — you could be next!', '空き — 次はあなた！'],
+    ['⭐ ถึงบ้านแบบไม่ชนเลย · 🏠 ถึงบ้านปลอดภัย · 😇 ไม่หลงกลเพื่อนครบ 4 ครั้ง', '⭐ home with zero crashes · 🏠 home safe · 😇 refused all 4 temptations', '⭐ 無事故で帰宅 · 🏠 無事に帰宅 · 😇 誘いを4回とも断った'], ['โซน 5ส: คะแนนรวม + เฉลี่ยต่อคน · กระดาน "วันนี้" เริ่มใหม่ทุกเที่ยงคืน', '5S zones: total + average per person · "Today" resets at midnight', '5Sゾーン：合計＋1人平均 ·「今日」は毎晩0時にリセット'],
+    ['ผู้เล่น', 'Players', 'プレイヤー'], ['เล่นไปแล้ว', 'plays', 'プレイ回数'], ['ครั้ง', '', '回'], ['รวม · เฉลี่ย', 'total · avg', '合計 · 平均'], ['คะแนน', 'pts', '点'], ['คน', 'people', '人'],
+    // ---- medal ----
+    ['ราชาถนน!', 'King of the Road!', '道路の王者！'], ['ยอดเยี่ยม!', 'Excellent!', 'すばらしい！'], ['ยินดีด้วย', 'Congratulations', 'おめでとう'], ['คุณติด', 'you placed', '順位：'], ['ของวันนี้', 'today', '今日の'], ['บนกระดานคนกลับบ้าน', 'on the Ride Home board', '帰宅ランキングで'], ['อันดับ', 'rank', '位'], ['🎫 รับบัตรผ่านกลับบ้าน', '🎫 Get your boarding pass', '🎫 搭乗券をもらう'],
+    // ---- alerts ----
+    ['ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ', 'That name can\'t be used, try another', 'その名前は使えません'], ['รหัสพนักงานไม่ถูกต้อง', 'Invalid employee ID', '社員番号が正しくありません'], ['เพิ่งส่งคะแนนไป รอสักครู่แล้วลองใหม่นะ', 'You just submitted — wait a moment and retry', '送信直後です、少し待って'], ['คะแนนรอบนี้ส่งไม่ได้ ลองเล่นใหม่อีกรอบนะ', 'This score can\'t be submitted — play again', 'このスコアは送信できません'], ['ส่งไม่สำเร็จ ลองใหม่อีกครั้ง', 'Submit failed, try again', '送信失敗、再試行して'], ['✓ คัดลอกลิงก์แล้ว', '✓ Link copied', '✓ リンクをコピー'],
+    ['ผู้ขับขี่นิรนาม', 'Anonymous rider', '名無しライダー'], ['ผู้โดยสาร / PASSENGER', 'PASSENGER', '搭乗者 / PASSENGER'], ['วันที่', 'Date', '日付'], ['พาหนะ', 'Vehicle', '乗り物'], ['หัวใจ', 'Hearts', 'ハート'],
+    ['หยุดไฟแดง', 'Red stops', '赤信号停止'], ['หยุดให้ข้าม', 'Yielded', '横断停止'], ['ไม่หลงกล', 'Refused', '断った'], ['ไม่ใช้มือถือ', 'No phone', 'スマホなし'], ['คนที่บ้าน', 'Your family', '家族は'], ['ยังรออยู่...', 'is still waiting...', 'まだ待っている...'],
+    ['DENIED · เมาไม่ขับ', 'DENIED · NO DRUNK RIDING', 'DENIED · 飲酒運転禁止'], ['คัดลอกลิงก์นี้:', 'Copy this link:', 'このリンクをコピー：'], ['กำลังขับรถอยู่นะ...', 'You are riding...', '運転中...'],
+    ['ระยะ —', 'Gap —', '車間 —'], ['ระยะ', 'Gap', '車間'], ['วิ', 's', '秒'], ['ม.', 'm', 'm'],
+  ].sort((a, b) => b[0].length - a[0].length);
+  let lang = 'th'; try { lang = localStorage.getItem('nbmt_lang') || 'th'; } catch (e) {}
+  const idx = () => (lang === 'en' ? 1 : lang === 'jp' ? 2 : 0);
+  function T(s) { if (!s || lang === 'th' || typeof s !== 'string') return s; const k = idx(); let o = s; for (const r of D) if (o.includes(r[0])) o = o.split(r[0]).join(r[k]); return o; }
+  const orig = new WeakMap();
+  function tr(root) { if (!root) return; const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: (n) => n.parentNode && /SCRIPT|STYLE/.test(n.parentNode.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
+    for (const n of nodes) { if (!orig.has(n) || (n.nodeValue !== orig.get(n).out)) orig.set(n, { th: n.nodeValue, out: null }); const o = orig.get(n); const v = T(o.th); o.out = v; if (n.nodeValue !== v) n.nodeValue = v; }
+    root.querySelectorAll && root.querySelectorAll('[placeholder]').forEach(el => { if (!el.dataset.ph) el.dataset.ph = el.placeholder; el.placeholder = T(el.dataset.ph); }); }
+  function set(l) { lang = l; try { localStorage.setItem('nbmt_lang', l); } catch (e) {} document.documentElement.lang = l === 'jp' ? 'ja' : l; tr(document.body); }
+  return { T, tr, set, get lang() { return lang; } };
+})();

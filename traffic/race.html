@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027224350';
+const BUILD = '20261027232427';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -34,7 +34,7 @@ const BUILD = '20261027224350';
   .trip { position: relative; height: 24px; background: rgba(5,20,50,.55); border-radius: 14px; border: 2px solid rgba(255,255,255,.3); }
   .trip i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 12px; background: linear-gradient(90deg, #ff7a1a, #ffd36b); width: 0; }
   .trip b { position: absolute; top: 50%; transform: translateY(-50%); font-family: 'Chakra Petch'; font-size: 11px; color: #fff; }
-  .trip .a { left: 8px; } .trip .z { right: 8px; }
+  .trip .a { left: 30px; transition: opacity .3s; } .trip .z { right: 8px; }
   .trip .me { position: absolute; top: -6px; font-size: 22px; transform: translateX(-50%) scaleX(-1); }
   .meters { display: flex; gap: 6px; }
   .meter { flex: 1; background: rgba(5,20,50,.6); border-radius: 10px; padding: 2px 8px; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
@@ -54,11 +54,11 @@ const BUILD = '20261027224350';
   .brake { flex: 1; height: 88px; font-size: 26px; background: linear-gradient(180deg, #ff5a3a, #c81e1e); border: 3px solid rgba(255,255,255,.55) !important; }
   .brake.on { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,.35); filter: brightness(1.15); }
   .lane:active { transform: translateY(3px); }
-  .call { position: fixed; left: 50%; top: 34%; z-index: 8; width: min(86vw, 330px); transform: translate(-50%, -260%); transition: transform .3s cubic-bezier(.2,1.4,.5,1); background: #fff; border-radius: 20px; padding: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.5); text-align: center; }
-  .call.on { transform: translate(-50%, -50%); }
-  .call.on .who { animation: buzz .12s infinite; } @keyframes buzz { 50% { transform: rotate(12deg); } }
+  .call { position: fixed; left: 50%; top: 34%; z-index: 8; width: min(86vw, 330px); transform: translate(-50%, -260%); transition: transform .3s cubic-bezier(.2,1.4,.5,1); background: linear-gradient(180deg, #ffffff, #e6f0ff); border: 4px solid #1a1a1a; border-radius: 22px; padding: 12px 14px 16px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,.5); text-align: center; }
+  .call.on { transform: translate(-50%, -50%) rotate(-2deg); } .call img { width: 92px; height: 92px; object-fit: contain; display: block; margin: -2px auto 0; animation: wig .12s infinite alternate; } .call .tm { position: absolute; left: 0; bottom: 0; height: 6px; background: #1559b8; width: 100%; } .call.on .tm { animation: tm 5s linear forwards; }
+  .call { box-shadow: 0 8px 0 #1a1a1a, 0 20px 40px rgba(0,0,0,.5); } @keyframes buzz { 50% { transform: rotate(12deg); } }
   .call .who { font-size: 40px; display: inline-block; } .call b { display: block; font-size: 22px; font-weight: 900; color: #13233f; } .call small { color: #50607a; font-size: 14px; }
-  .call .r { display: flex; gap: 8px; margin-top: 10px; } .call button { flex: 1; border: none; border-radius: 14px; padding: 12px 6px; font-family: 'Kanit'; font-weight: 900; font-size: 15px; color: #fff; cursor: pointer; }
+  .call .r { display: flex; gap: 8px; margin-top: 10px; } .call button { flex: 1; border: 3px solid #1a1a1a; border-radius: 14px; padding: 11px 4px; font-family: 'Kanit'; font-weight: 900; font-size: 15px; color: #fff; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 0 #1a1a1a; }
   .call .no { background: #e5484d; } .call .yes { background: #2bb36a; }
   .tempt { position: fixed; left: 50%; top: 40%; z-index: 8; width: min(90vw, 350px); transform: translate(-50%, -50%) scale(0) rotate(-6deg); transition: transform .35s cubic-bezier(.2,1.5,.5,1); background: linear-gradient(180deg, #fff7d6, #ffe08a); border: 4px solid #1a1a1a; border-radius: 22px; padding: 10px 12px 12px; box-shadow: 0 8px 0 #1a1a1a, 0 20px 40px rgba(0,0,0,.5); text-align: center; overflow: hidden; }
   .tempt.on { transform: translate(-50%, -50%) scale(1) rotate(-2deg); }
@@ -70,7 +70,7 @@ const BUILD = '20261027224350';
   .tempt .tm { position: absolute; left: 0; bottom: 0; height: 6px; background: #c81e1e; width: 100%; }
   .tempt.on .tm { animation: tm 4.5s linear forwards; } @keyframes tm { to { width: 0; } }
   body.drunk canvas#gl { animation: drunk 1.6s infinite ease-in-out; } body.drunk .vig { opacity: .8 !important; background: radial-gradient(ellipse at 50% 55%, transparent 35%, rgba(120,0,90,.55)); }
-  @keyframes drunk { 0%,100% { transform: rotate(-3.5deg) scale(1.08); filter: blur(1px) hue-rotate(0deg); } 50% { transform: rotate(3.5deg) scale(1.12) translateX(10px); filter: blur(2.2px) hue-rotate(40deg) saturate(1.6); } }
+  @keyframes drunk { 0%,100% { transform: rotate(-3.5deg) scale(1.08); filter: blur(1px) hue-rotate(0deg); } 50% { transform: rotate(3.5deg) scale(1.12) translateX(10px); filter: blur(1px) hue-rotate(40deg) saturate(1.5) drop-shadow(14px 0 0 rgba(255,80,200,.35)); } }
   .ov { position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 22px; text-align: center; color: #fff;
     background: radial-gradient(ellipse at 50% 30%, rgba(255,140,60,.4), transparent 60%), rgba(8,22,55,.9); overflow-y: auto; }
   .ov.on { display: flex; }
@@ -126,7 +126,21 @@ const BUILD = '20261027224350';
   #start .how { font-size: min(13px, 1.65dvh); flex: none; } #start .go { padding: min(15px, 1.8dvh) 44px; flex: none; } #start .btn2 { padding: min(10px, 1.2dvh) 26px; flex: none; }
   .mbtn { position: fixed; right: 10px; top: calc(118px + env(safe-area-inset-top)); z-index: 16; width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,.45); background: rgba(5,20,50,.6); color: #fff; font-size: 18px; cursor: pointer; } .mbtn.off { opacity: .55; text-decoration: line-through; } body.menu .mbtn { top: auto; bottom: calc(10px + env(safe-area-inset-bottom)); right: 10px; }
   .gate { position: fixed; inset: 0; z-index: 18; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 22px; color: #fff; background: radial-gradient(ellipse at 50% 35%, rgba(255,140,60,.55), transparent 60%), #081637; } .gate.on { display: flex; } .gate .go { animation: pulse 1s infinite alternate; font-family: 'Kanit'; font-weight: 900; font-size: 26px; color: #fff; border: none; border-radius: 40px; padding: 16px 44px; background: linear-gradient(180deg, #ff8a2a, #e8650c); box-shadow: 0 6px 0 #8a3500; } .gate small { opacity: .8; font-size: 15px; } .gate .logo { font-family: 'Kanit'; font-weight: 900; font-size: min(64px, 15vw); color: #ffd400; -webkit-text-stroke: 2px #1a1a1a; text-shadow: 5px 5px 0 #c81e1e; line-height: 1.05; transform: rotate(-4deg); text-align: center; } @keyframes pulse { to { transform: scale(1.07); } }
+  body.menu .hud, body.menu .ctrl, body.menu .warn { opacity: 0; visibility: hidden; } .hud, .ctrl { transition: opacity .3s; }
+  #end, #board { padding-bottom: 80px !important; }
+  .ov p, .bfoot, .how { text-wrap: balance; } .pk b { white-space: nowrap; }
+  .spdp { display: flex; align-items: center; gap: 4px; } .lim { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 4px solid #e01b1b; color: #111; font-size: 12px; font-weight: 900; } .spdp.over { background: rgba(200,20,20,.8); }
+  .ppe { position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 8; display: none; font-family: 'Kanit'; font-weight: 900; font-size: 22px; color: #fff; border: 4px solid #1a1a1a; border-radius: 22px; padding: 16px 22px; background: linear-gradient(180deg, #33c9ff, #1559b8); box-shadow: 0 6px 0 #1a1a1a; animation: pulse .6s infinite alternate; max-width: 88vw; text-align: center; line-height: 1.25; } .ppe.on { display: block; }
+  .mlist { width: 100%; max-width: 360px; background: rgba(255,255,255,.08); border-radius: 14px; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; text-align: left; font-size: 13px; }
+  .mlist .mh { font-weight: 900; color: #ffd36b; text-align: center; font-size: 14px; margin-bottom: 2px; } .mlist div:not(.mh) { display: grid; grid-template-columns: 22px auto 1fr; gap: 6px; align-items: baseline; } .mlist small { opacity: .7; font-size: 11px; text-align: right; } .mlist .no b { opacity: .75; } .mlist .warnrow { display: block !important; color: #ff8a8a; font-weight: 700; text-align: center; }
+  .priv { font-size: 13px; font-weight: 800; color: #0b5a2e; background: #e3f7ea; border-radius: 10px; padding: 6px 8px; line-height: 1.35; }
+  .br .tag { display: block; font-size: 11px; font-weight: 700; color: #fff; opacity: .85; } .br.ph { opacity: .45; border: 2px dashed rgba(255,255,255,.3); background: transparent; } .br.sep { justify-content: center; padding: 0; background: none; opacity: .6; }
+  .chase { font-size: 14px; font-weight: 800; color: #ffd36b; } .lineh { font-size: 12px; opacity: .8; display: none; }
+  .cf { position: fixed; top: -20px; width: 10px; height: 16px; z-index: 30; pointer-events: none; border-radius: 2px; animation: cf 2.4s cubic-bezier(.2,.6,.4,1) forwards; } @keyframes cf { to { transform: translate(var(--dx), 110vh) rotate(var(--r)); } }
+  .medal .coin { border: 6px solid rgba(255,255,255,.55); outline: 3px solid rgba(0,0,0,.25); }
+  .langs { display: flex; gap: 6px; flex: none; } .langs button { font-family: 'Kanit'; font-weight: 800; font-size: 13px; color: #fff; background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.35); border-radius: 14px; padding: 3px 12px; cursor: pointer; } .langs button.on { background: #ffd36b; color: #3a2200; border-color: #ffd36b; }
   .pkbtn { display: flex; gap: 10px; align-items: center; flex: none; } .pkbtn .go { padding: min(15px, 1.8dvh) 40px; } .pkbtn .btn2 { padding: min(10px, 1.4dvh) 18px; font-size: 22px; }
+  #pkChar { grid-template-columns: repeat(4, 1fr); } #pkChar img { height: 11dvh; }
   .pkh { font-weight: 900; font-size: min(18px, 2.4dvh); color: #ffd36b; align-self: center; flex: none; }
   .prev { flex: 1 1 0; min-height: 0; width: 100%; max-width: 300px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); animation: wig .9s infinite alternate ease-in-out; }
   .vstat { flex: none; width: 100%; max-width: 330px; font-size: min(13px, 1.8dvh); font-weight: 700; display: grid; grid-template-columns: 90px 1fr; gap: .5dvh 8px; align-items: center; text-align: left; }
@@ -134,20 +148,22 @@ const BUILD = '20261027224350';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
+<script src="race_i18n.js?b=20261027232427"></script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body class="menu">
 <canvas id="gl"></canvas>
 <div class="vig" id="vig"></div><div class="speed" id="speed"></div><div class="rain" id="rain"></div>
 <div class="hud">
-  <div class="row"><div class="pill hearts" id="hearts">❤️❤️❤️</div><div class="pill"><small>คะแนน</small><span id="score">0</span></div><div class="pill combo" id="combo" style="display:none">x1</div><div class="pill"><small>km/h</small><span id="spd">0</span></div></div>
+  <div class="row"><div class="pill hearts" id="hearts">❤️❤️❤️</div><div class="pill"><small>คะแนน</small><span id="score">0</span></div><div class="pill combo" id="combo" style="visibility:hidden">x1</div><div class="pill spdp"><span class="lim" id="lim">60</span><span id="spd">0</span><small>km/h</small></div></div>
   <div class="trip"><i id="tripBar"></i><b class="a">NBMT</b><b class="z">🏠 HOME</b><span class="me" id="tripMe">🛵</span></div>
   <div class="meters"><div class="meter">😴<div class="bar"><i id="sleepBar"></i></div></div><div class="meter">↔️ <span id="gapT">ระยะ —</span><div class="bar"><i id="gapBar"></i></div></div></div>
 </div>
 <div class="warn" id="warn">⚠️</div>
 <button class="mbtn" id="mBtn" aria-label="เพลง">🎵</button>
-<div class="call" id="call"><div class="who">📞</div><b id="callWho">แม่โทรมา!</b><small id="callSub">กำลังขับรถอยู่นะ...</small>
-  <div class="r"><button class="yes" id="callYes">รับสาย</button><button class="no" id="callNo">✖ จอดก่อนค่อยโทรกลับ</button></div></div>
+<div class="call" id="call"><img src="race/phone.webp" alt=""><b id="callWho">แม่โทรมา!</b><small id="callSub">กำลังขับรถอยู่นะ...</small>
+  <div class="r"><button class="no" id="callYes">📱 รับสาย</button><button class="yes" id="callNo">✖ ไม่รับ ขี่ต่อ</button></div><i class="tm"></i></div>
+<button class="ppe" id="ppeBtn">👆 แตะเพื่อรัดคางหมวก ⛑️</button>
 <div class="tempt" id="tempt"><img id="tImg" alt=""><b id="tWho"></b><small id="tSub"></small>
   <div class="r"><button class="bad" id="tBad"></button><button class="good" id="tGood"></button></div><i class="tm"></i></div>
 <div class="ctrl"><button class="lane" id="bL">◀</button><button class="brake" id="bB">✋ เบรก</button><button class="lane" id="bR">▶</button></div>
@@ -156,11 +172,12 @@ const BUILD = '20261027224350';
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
 <div class="load" id="load">กำลังเช็คอิน...<div class="b"><i id="loadBar"></i></div></div>
 <div class="ov on" id="start">
+  <div class="langs" id="langs"><button data-l="th">TH</button><button data-l="en">EN</button><button data-l="jp">日本語</button></div>
   <div class="logo">ถนนนรก<br>กลับบ้าน!</div>
   <h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1>
   <p>เลือกนักบิด เอิร์ท · ปลื้ม · ฟลุ๊ค แล้วฝ่าถนนสุดป่วนจาก NBMT กลับบ้านให้รอด! ขับปลอดภัยได้คะแนน ประมาทเสียหัวใจ</p>
   <div class="cast" id="cast"></div>
-  <div class="how">◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · 🚦 ไฟแดงต้องหยุด · ☕ เก็บกาแฟแก้ง่วง · 📵 อย่ารับสายขณะขับ · 😈 ระวังเพื่อนชวนนอกลู่นอกทาง!</div>
+  <div class="how">◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · 🚦 ไฟแดงต้องหยุด · 😴 ง่วง = ชิดซ้ายจอดพัก 🅿️ · 📵 ไม่รับสายขณะขับ · 🚸 ชะลอให้คนข้าม · 😈 ระวังเพื่อนชวนนอกลู่นอกทาง!</div>
   <button class="go" id="goBtn">▶ ออกเดินทาง</button>
   <button class="btn2" id="boardBtn">🏆 กระดานคะแนน</button>
 </div>
@@ -175,22 +192,25 @@ const BUILD = '20261027224350';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261027224350" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261027232427" alt="">
   <div class="big" id="endScore">0</div>
   <div class="stats" id="stats"></div>
+  <div class="mlist" id="mList"></div>
   <p id="endP"></p>
   <div class="sub" id="submitBox">
     <div class="h">✈️ เช็คอินขึ้นกระดานคะแนน</div>
     <input id="pName" maxlength="20" placeholder="ชื่อเล่น เช่น ปลื้ม" autocomplete="off">
     <div class="pinbox" id="pinBox"><b>🔒 ชื่อนี้สงวนไว้สำหรับเจ้าของชื่อตัวจริง</b><br>ถ้าคุณคือเจ้าของชื่อ ใส่ PIN · ถ้าไม่ใช่ เปลี่ยนชื่อเล่นนะ<input id="pPin" inputmode="numeric" maxlength="6" placeholder="PIN 6 หลัก" autocomplete="off"></div>
+    <div class="priv">🔒 รหัสพนักงานใช้ยืนยันตัวตนในกิจกรรมนี้เท่านั้น · ไม่แสดงบนกระดาน · เก็บแบบเข้ารหัส</div>
     <div class="row2"><select id="pDept"><option value="">— Zone 5ส —</option></select><input id="pEmp" maxlength="12" placeholder="รหัสพนักงาน" autocomplete="off"></div>
     <select id="pGroup" disabled><option value="">— เลือกกลุ่ม 5ส ในโซน —</option></select>
     <button class="sbtn" id="submitBtn">📌 ส่งคะแนน</button>
-    <div class="note">ชื่อเล่น โซน และกลุ่ม แสดงบนกระดาน · รหัสพนักงานไม่แสดง ใช้ยืนยันตัวตนและนับคะแนนดีที่สุดของแต่ละคน</div>
+    <div class="note">บนกระดานแสดงแค่ชื่อเล่น โซน และกลุ่ม 5ส · ใช้รหัสเพื่อนับคะแนนดีที่สุดของแต่ละคน</div>
   </div>
   <div class="myrank" id="myRank"></div>
   <button class="btn2" id="certBtn">🎫 บัตรผ่านกลับบ้าน (บันทึก/แชร์)</button>
   <img id="certImg" alt="บัตรผ่านกลับบ้าน">
+  <div class="lineh" id="lineH">📲 กดค้างที่รูปเพื่อบันทึก หรือส่งต่อใน LINE</div>
   <button class="go" id="againBtn">↻ เล่นอีกครั้ง</button>
   <button class="btn2" id="changeBtn">🔄 เปลี่ยนนักบิด/พาหนะ</button>
   <button class="btn2" id="boardBtn2">🏆 กระดานคะแนน</button>
@@ -204,7 +224,7 @@ const BUILD = '20261027224350';
   <div class="blist" id="bList"></div>
   <button class="go" id="boardPlay">▶ เล่นเลย</button>
   <button class="btn2" id="boardClose">✖ ปิด</button>
-  <div class="bfoot">🥇 ถึงบ้านแบบไม่ชนเลย · 🥈 ถึงบ้านปลอดภัย · 🥉 ไม่หลงกลเพื่อนครบ 4 ครั้ง<br>คะแนนโซน = รวมคะแนนดีที่สุดของแต่ละคนในโซน · ชวนเพื่อนในโซนมาช่วยกัน!</div>
+  <div class="bfoot">⭐ ถึงบ้านแบบไม่ชนเลย · 🏠 ถึงบ้านปลอดภัย · 😇 ไม่หลงกลเพื่อนครบ 4 ครั้ง<br>โซน 5ส: คะแนนรวม + เฉลี่ยต่อคน · กระดาน "วันนี้" เริ่มใหม่ทุกเที่ยงคืน</div>
   <div style="height:20px"></div>
 </div>
 <div class="ov medal" id="medal">
@@ -255,8 +275,8 @@ const scenery = [];
 function palm() { const g = new THREE.Group(); const t = new THREE.Mesh(new THREE.CylinderGeometry(.22, .32, 6, 6), M('#8a6a45')); t.position.y = 3; g.add(t);
   for (let i = 0; i < 7; i++) { const l = new THREE.Mesh(new THREE.ConeGeometry(.55, 3.4, 4), M('#2f8a3a')); l.geometry.translate(0, 1.6, 0); l.position.y = 6.1; l.rotation.z = Math.PI / 2.4; l.rotation.y = i / 7 * Math.PI * 2; g.add(l); } return g; }
 function building() { const g = new THREE.Group(), h = 6 + Math.random() * 12, w = 8 + Math.random() * 8;
-  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 10), M(pick(['#efe7da', '#d7dde6', '#f3d6be', '#cfdccf', '#f0c9c9']))); b.position.y = h / 2; g.add(b);
-  const win = M('#5a7aa8', { emissive: '#ffb26b', emissiveIntensity: .25 });
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 10), M(pick(['#f4dcc0', '#f2c9a0', '#efe1c8', '#e8c3b0', '#f7e3a8', '#d9e4c6']))); b.position.y = h / 2; g.add(b);
+  const win = M('#4a6a98', { emissive: '#ffb26b', emissiveIntensity: Math.random() < .5 ? .9 : .3 });
   for (let y = 2; y < h - 1; y += 2.6) for (let x = -w / 2 + 1.5; x < w / 2 - 1; x += 2.4) { const wn = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.2), win); wn.position.set(x, y, 5.01); g.add(wn); } return g; }
 const SLOGANS = ['ทุกเที่ยวไป ต้องมีเที่ยวกลับ', 'ดื่มไม่ขับ', 'หมวกกันน็อก + รัดคาง', 'เว้นระยะ 3 วินาที', 'ง่วงจอดพัก', 'ไม่ใช้มือถือขณะขับ', 'ชะลอทางแยก', 'มีน้ำใจ หยุดให้คนข้าม'];
 function billboard(i) { const g = new THREE.Group(); [-2, 2].forEach(x => { const p = new THREE.Mesh(new THREE.CylinderGeometry(.15, .15, 5, 6), M('#555')); p.position.set(x, 2.5, 0); g.add(p); });
@@ -268,22 +288,24 @@ function billboard(i) { const g = new THREE.Group(); [-2, 2].forEach(x => { cons
 function buildScenery() {
   for (let i = 0; i < 26; i++) { const side = i % 2 ? 1 : -1, z = -i * 11; const p = palm(); p.position.set(side * 9.5, 0, z); scenery.push({ o: p, len: 286 }); scene.add(p); }
   for (let i = 0; i < 14; i++) { const side = i % 2 ? 1 : -1, b = building(); b.position.set(side * rnd(20, 26), 0, -i * 22); scenery.push({ o: b, len: 308 }); scene.add(b); }
+  ['shop', 'cart', 'temple', 'shop', 'cart', 'shop', 'temple', 'cart'].forEach((k, i) => { const sp = sprite(k); const side = i % 2 ? -1 : 1; sp.position.set(side * rnd(10.5, 12.5), 0, -i * 37 - 15); scenery.push({ o: sp, len: 296 }); scene.add(sp); });
   for (let i = 0; i < 4; i++) { const b = billboard(i); const side = i % 2 ? 1 : -1; b.position.set(side * 13, 0, -i * 75 - 30); b.rotation.y = side * -.35; scenery.push({ o: b, len: 300 }); scene.add(b); } }
 
 // ================= sprites =================
-const SPR = { rider: 2.4, sedan: 2.6, pickup: 2.9, truck: 5.4, wrongway: 2.2, drunk: 2.7, buffalo: 2.4, chicken: 1.2, dog: 1.2, grandma: 2.0, crate: 1.4, pothole: .8, coffee: 1.1, helmet: 1.0, phone: 1.0, friends: 2.4, racer: 2.4, hitch: 2.1, shortcut: 2.0 };
-const CHARS = { earth: 'เอิร์ท', pleum: 'ปลื้ม', fluke: 'ฟลุ๊ค' };
+const SPR = { rider: 2.4, sedan: 2.6, pickup: 2.9, truck: 5.4, wrongway: 2.2, drunk: 2.7, buffalo: 2.4, chicken: 1.2, dog: 1.2, grandma: 2.0, crate: 1.4, pothole: .8, coffee: 1.1, helmet: 1.0, shield: 1.1, reststop: 2.8, shop: 4.2, temple: 5.0, cart: 2.6, phone: 1.0, friends: 2.4, racer: 2.4, hitch: 2.1, shortcut: 2.0 };
+const CHARS = { earth: 'เอิร์ท', pleum: 'ปลื้ม', fluke: 'ฟลุ๊ค', bai: 'ใบเตย' };
 const VEHS = {
-  xmax: { name: 'XMAX 300', emo: '🛵', sub: 'สมดุลทุกด้าน', h: 2.4, top: 1, lane: 8, wide: 0, brake: 1, st: [3, 3, 3] },
-  wave: { name: 'เวฟ 110', emo: '🏍️', sub: 'คล่องตัว หลบไว', h: 2.2, top: .9, lane: 12, wide: -.3, brake: 1, st: [2, 5, 3] },
-  car: { name: 'รถเก๋ง', emo: '🚗', sub: 'เร็ว เบรกดี แต่ตัวใหญ่', h: 2.5, top: 1.08, lane: 5, wide: .5, brake: 1.3, st: [5, 1, 4] },
+  xmax: { name: 'XMAX 300', emo: '🛵', sub: 'สมดุลทุกด้าน', h: 2.4, top: 1, acc: 7, lane: 8, wide: 0, brake: 1, st: [3, 3, 3] },
+  wave: { name: 'เวฟ 110', emo: '🏍️', sub: 'คล่องตัว หลบไว', h: 2.2, top: .94, acc: 6, lane: 12, wide: -.3, brake: .95, st: [2, 5, 2] },
+  car: { name: 'รถเก๋ง', emo: '🚗', sub: 'เบรกดี แต่ตัวใหญ่', h: 2.5, top: 1, acc: 9, lane: 5, wide: .5, brake: 1.3, st: [4, 1, 5] },
 };
 for (const c in CHARS) { SPR[`p_${c}`] = 2.4; for (const v in VEHS) SPR[`p_${c}_${v}`] = VEHS[v].h; }
 const PL = { c: 'earth', v: 'xmax' };
 const tex = {}; const loader = new THREE.TextureLoader();
 async function loadAll() { const ks = Object.keys(SPR); let n = 0;
   await Promise.all(ks.map(k => new Promise(ok => loader.load(`race/${k}.webp?b=${BUILD}`, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; tex[k] = t; $('loadBar').style.width = (++n / ks.length * 100) + '%'; ok(); }, undefined, () => { n++; ok(); })))); }
-function sprite(k, flip = false) { const t = tex[k]; const h = SPR[k] * (k === 'rider' || k.startsWith('p_') ? 1 : 1.3); const a = t ? t.image.width / t.image.height : 1; const w = h * a;
+const FALLBACK = { shield: 'helmet', reststop: 'coffee' };
+function sprite(k, flip = false) { const t = tex[k] || tex[FALLBACK[k]]; const h = SPR[k] * (k === 'rider' || k.startsWith('p_') ? 1 : 1.3); const a = t ? t.image.width / t.image.height : 1; const w = h * a;
   const g = new THREE.PlaneGeometry(w, h); g.translate(0, h / 2, 0);
   const m = new THREE.MeshBasicMaterial({ map: t || null, color: t ? '#ffffff' : '#ff00ff', transparent: true, alphaTest: .35, side: THREE.DoubleSide });
   const mesh = new THREE.Mesh(g, m); if (flip) mesh.scale.x = -1; mesh.userData.w = w; return mesh; }
@@ -294,7 +316,7 @@ const S = {}; let ents = [], lights = [];
 const player = new THREE.Group(); scene.add(player);
 function reset() {
   Object.assign(S, { paused: false, v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, combo: 1, brake: false, run: false, inv: 0, sleep: 0, total: 3000, nextSpawn: 70, rain: false, slow: 1, shield: false, truck: false, sleepWarned: false, gapGood: 0,
-    stats: { red: 0, coffee: 0, phoneNo: 0, dodge: 0, crash: 0, nope: 0 }, drunk: 0, turbo: 0, heavy: 0, tmp: null, tq: shuffle(['friends', 'racer', 'hitch', 'shortcut']).map((k, i) => ({ k, at: [330, 930, 1380, 2230][i] })), call: null, nextCall: rnd(18, 26), t: 0 });
+    stats: { red: 0, coffee: 0, phoneNo: 0, declined: 0, dodge: 0, crash: 0, nope: 0, ppe: false, drank: false, rush: false, speeding: false, redRun: 0, phoneAns: 0, rear: 0, micro: 0, blind: 0, haz: 0, walk: 0, yield: 0, crossSeen: 0, rest: 0 }, zone: 0, zoneSped: false, laneT: -9, callback: 0, cbT: 0, restT: 0, ppeT: 0, drunk: 0, turbo: 0, heavy: 0, tmp: null, tq: shuffle(['friends', 'racer', 'hitch', 'shortcut']).map((k, i) => ({ k, at: [330, 930, 1380, 2230][i] })), call: null, nextCall: rnd(18, 26), t: 0 });
   ents.forEach(e => scene.remove(e.o)); lights.forEach(l => scene.remove(l.o)); ents = []; lights = [];
   player.clear(); const r = sprite(`p_${PL.c}_${PL.v}`); player.add(shadowBlob(1.6)); player.add(r); player.userData.spr = r;
   [520, 1650, 2550].forEach(addLight);
@@ -307,7 +329,7 @@ function addLight(at) { const g = new THREE.Group(); const pole = new THREE.Mesh
   scene.add(g); const L = { at, o: g, lamps, state: 'green', t: 0, done: false }; setL(L, 'green'); lights.push(L); }
 function setL(L, s) { L.state = s; L.lamps.forEach((m, i) => m.material.emissiveIntensity = s === ['red', 'yellow', 'green'][i] ? 2.6 : 0); }
 
-const KINDS = ['sedan', 'sedan', 'pickup', 'drunk', 'wrongway', 'buffalo', 'chicken', 'dog', 'grandma', 'pothole', 'coffee', 'helmet'];
+const KINDS = ['sedan', 'sedan', 'pickup', 'drunk', 'wrongway', 'buffalo', 'chicken', 'dog', 'grandma', 'pothole', 'coffee', 'shield'];
 const CROSS = ['buffalo', 'chicken', 'dog', 'grandma'];
 function spawn(kind, ahead = 120, lane) {
   const e = { kind, pos: S.dist + ahead, lane: lane ?? Math.floor(Math.random() * 3), x: 0, v: 0, vx: 0, len: 4, hit: false, passed: false };
@@ -317,13 +339,13 @@ function spawn(kind, ahead = 120, lane) {
   if (kind === 'wrongway') { e.v = -12; e.len = 2.4; e.x = LANES[e.lane]; }
   if (CROSS.includes(kind)) { const fromL = Math.random() < .5; e.x = fromL ? -9 : 9; e.vx = (fromL ? 1 : -1) * { buffalo: 1.7, chicken: 4.4, dog: 3.8, grandma: 1.5 }[kind]; e.len = 2; e.cross = true; if (!fromL) sp.scale.x = -1; e.wide = { buffalo: 2.4, chicken: 1.4, dog: 1.2, grandma: 1 }[kind]; }
   if (kind === 'pothole' || kind === 'crate') { e.x = LANES[e.lane]; e.len = 2.2; }
-  if (kind === 'coffee' || kind === 'helmet') { e.x = LANES[e.lane]; e.len = 2; e.item = true; }
+  if (kind === 'coffee' || kind === 'shield') { e.x = LANES[e.lane]; e.len = 2; e.item = true; }
   o.position.x = e.x; scene.add(o); ents.push(e); return e;
 }
 const WARN = { wrongway: ['🛵 ย้อนศร!', 'wrongway'], buffalo: ['🐃 ควายข้ามถนน!', 'buffalo'], chicken: ['🐔 ไก่วิ่งตัดหน้า!', 'chicken'], dog: ['🐕 หมาวิ่งตัดหน้า!', null], grandma: ['👵 คนข้ามถนน! ชะลอ', null], drunk: ['🍺 รถขี้เมา! อย่าเข้าใกล้', 'drunk'], pickup: ['📦 กระบะบรรทุกเกิน!', null], pothole: ['🕳️ หลุมข้างหน้า!', null], truck: ['🚛 รถพ่วงมาแล้ว!', 'truck'] };
 
 // ================= input =================
-function laneTo(d) { if (!S.run) return; if (S.drunk > 0) d = -d; const n = Math.max(0, Math.min(2, S.lane + d)); if (n !== S.lane) { S.lane = n; snd.whoosh(); } }
+function laneTo(d) { if (!S.run) return; if (S.drunk > 0) d = -d; const n = Math.max(0, Math.min(2, S.lane + d)); if (n !== S.lane) { S.lane = n; S.laneT = S.t; snd.whoosh(); } }
 $('bL').onpointerdown = (e) => { e.preventDefault(); laneTo(-1); }; $('bR').onpointerdown = (e) => { e.preventDefault(); laneTo(1); };
 const bB = $('bB'); const setB = (v) => { S.brake = v; bB.classList.toggle('on', v); };
 bB.onpointerdown = (e) => { e.preventDefault(); setB(true); }; bB.onpointerup = bB.onpointerleave = bB.onpointercancel = () => setB(false);
@@ -351,23 +373,32 @@ const snd = (() => { let ac, eng, voices = {}, last = 0;
   }; })();
 
 // ================= feedback =================
-let popN = 0; function pop(txt, kind = '', th = false, x = innerWidth / 2, y = innerHeight * .4) { y += (popN++ % 3) * 46; setTimeout(() => popN = Math.max(0, popN - 1), 700); const d = document.createElement('div'); d.className = 'pop ' + kind + (th ? ' th' : ''); d.textContent = txt; d.style.left = x + 'px'; d.style.top = y + 'px'; document.body.appendChild(d); setTimeout(() => d.remove(), 1000); }
+let popN = 0; function pop(txt, kind = '', th = false, x = innerWidth / 2, y = innerHeight * .4) { y += (popN++ % 3) * 46; setTimeout(() => popN = Math.max(0, popN - 1), 700); const d = document.createElement('div'); d.className = 'pop ' + kind + (th ? ' th' : ''); d.textContent = I18N.T(txt); d.style.left = x + 'px'; d.style.top = y + 'px'; document.body.appendChild(d); setTimeout(() => d.remove(), 1000); }
 let shakeT = 0, warnT = null;
-function warn(t) { const w = $('warn'); w.textContent = t; w.classList.add('on'); clearTimeout(warnT); warnT = setTimeout(() => w.classList.remove('on'), 1800); }
-function hurt(why, voice = 'ouch') {
+function warn(t) { const w = $('warn'); w.textContent = I18N.T(t); w.classList.add('on'); clearTimeout(warnT); warnT = setTimeout(() => w.classList.remove('on'), 1800); }
+function hurt(why, voice = 'ouch', kind = '') {
   if (S.inv > 0 || !S.run) return false;
-  if (S.shield) { S.shield = false; S.inv = 1.2; pop('หมวกช่วยไว้!', 'good', true); snd.good(); hearts(); return false; }
+  { const st = S.stats; if (['sedan', 'pickup', 'truck'].includes(kind)) st.rear++; if (['drunk', 'wrongway', 'sedan', 'pickup', 'truck'].includes(kind) && S.t - S.laneT < .9) st.blind++; if (['pothole', 'crate', 'buffalo', 'chicken', 'dog'].includes(kind)) st.haz++; if (kind === 'grandma') st.walk++; if (kind === 'red') st.redRun++; if (kind === 'phone') st.phoneAns++; if (kind === 'sleep') st.micro++; }
+  if (S.shield) { S.shield = false; S.inv = 1.2; pop('สมาธิช่วยไว้!', 'good', true); snd.good(); hearts(); return false; }
   S.hearts--; S.inv = 1.8; S.combo = 1; S.stats.crash++; shakeT = .5; S.slow = .25; setTimeout(() => S.slow = 1, 450);
   pop(pick(['POW!', 'BOOM!', 'CRASH!', 'BONK!']), 'bad'); setTimeout(() => pop(why, 'bad', true, innerWidth / 2, innerHeight * .5), 250);
   snd.crash(); snd.say(voice, true); if (navigator.vibrate) navigator.vibrate([80, 40, 80]); hearts(); if (S.hearts <= 0) setTimeout(() => finish(false), 700); return true;
 }
+function restTick(dt) { const rs = ents.find(e => e.kind === 'reststop' && !e.dead); if (!rs) { S.restT = 0; return; }
+  const rel = rs.pos - S.dist; if (rel < 14 && rel > -8 && S.lane === 0 && S.v < .8) { if (S.restT === 0) pop('🅿️ กำลังพัก...', 'good', true); S.restT += dt; if (S.restT > 1.3) { S.sleep = 0; S.sleepWarned = false; S.stats.rest++; good(40, 'ง่วงจอดพัก! สดชื่นแล้ว 😌'); rs.dead = true; scene.remove(rs.o); S.restT = 0; } } else S.restT = 0; }
+function callbackTick(dt) { if (!S.callback) return; if (S.t > S.callback) { S.callback = 0; return; } if (S.lane === 0 && S.v < .8) { S.cbT += dt; if (S.cbT > 1.2) { S.callback = 0; S.cbT = 0; S.stats.phoneNo++; good(30, 'จอดแล้วค่อยโทรกลับ ✓'); } } else S.cbT = 0; }
+function ppeTick(dt) { if (S.ppeT <= 0) return; S.ppeT -= dt; if (S.ppeT <= 0 && $('ppeBtn').classList.contains('on')) { $('ppeBtn').classList.remove('on'); pop(PL.v === 'car' ? 'อย่าลืมคาดเข็มขัด!' : 'อย่าลืมรัดคางหมวก!', 'bad', true); } }
+$('ppeBtn').onclick = () => { if (!S.run || S.stats.ppe) return; S.stats.ppe = true; $('ppeBtn').classList.remove('on'); good(20, PL.v === 'car' ? 'คาดเข็มขัดแล้ว พร้อมออกเดินทาง!' : 'รัดคางแล้ว พร้อมออกเดินทาง!'); };
+function confetti(n = 70) { const C = ['#ffd36b', '#ff5a3a', '#2bd46a', '#33c9ff', '#ff6fb1', '#fff']; for (let i = 0; i < n; i++) { const d = document.createElement('i'); d.className = 'cf'; d.style.left = Math.random() * 100 + 'vw'; d.style.background = C[i % C.length]; d.style.animationDelay = Math.random() * .6 + 's'; d.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px'); d.style.setProperty('--r', (Math.random() * 1080 - 540) + 'deg'); document.body.appendChild(d); setTimeout(() => d.remove(), 3200); } }
+const TIPS = ['💡 ง่วงเมื่อไหร่ ชิดซ้ายจอดพักที่ 🅿️', '💡 เว้นระยะ 3 วิ หลบได้ทันเสมอ', '💡 เห็นคนข้าม ชะลอให้ได้คะแนนเพิ่ม', '💡 มือถือดัง กดไม่รับ แล้วจอดก่อนค่อยโทรกลับ', '💡 ไฟเหลือง = เตรียมหยุด ไม่ใช่เร่ง', '💡 ขับไม่เกินป้ายจำกัดความเร็ว ได้โบนัสทุกช่วง'];
+function crossDone(e) { if (e.scored || e.hit) return; e.scored = true; if (e.yielded) { S.stats.yield++; good(e.kind === 'grandma' ? 30 : 20, e.kind === 'grandma' ? 'หยุดให้คนข้าม 🙏' : 'ชะลอให้สัตว์ข้าม'); } }
 function good(n, why, voice) { const pts = n * S.combo; S.score += pts; S.combo = Math.min(5, S.combo + 1); pop(`+${pts} ${why}`, 'good', true); snd.good(); if (voice) snd.say(voice); }
-function hearts() { $('hearts').textContent = '❤️'.repeat(Math.max(0, S.hearts)) + '🤍'.repeat(3 - Math.max(0, S.hearts)) + (S.shield ? '⛑️' : ''); }
+function hearts() { $('hearts').textContent = '❤️'.repeat(Math.max(0, S.hearts)) + '🤍'.repeat(3 - Math.max(0, S.hearts)) + (S.shield ? '🛡️' : ''); }
 
 const CALLERS = [['แม่โทรมา!', 'ซื้อกับข้าวด้วยนะลูก...'], ['หัวหน้าโทรมา!', 'พรุ่งนี้เข้าเช้านะ'], ['แฟนโทรมา!', 'ถึงไหนแล้ว~'], ['เบอร์แปลก', 'ยินดีด้วย คุณได้รับรางวัล...']];
 function ringPhone() { const c = pick(CALLERS); $('callWho').textContent = c[0]; $('callSub').textContent = c[1] + ' (กำลังขับรถอยู่!)'; $('call').classList.add('on'); S.call = { t: 0 }; snd.ring(); setTimeout(() => snd.say('phone'), 900); }
-$('callYes').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; $('gl').style.filter = 'blur(5px)'; setTimeout(() => $('gl').style.filter = '', 1500); hurt('ห้ามใช้มือถือขณะขับ!'); };
-$('callNo').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; S.stats.phoneNo++; good(30, 'มีสติ! ไว้โทรกลับ'); };
+$('callYes').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; $('gl').style.filter = 'blur(5px)'; setTimeout(() => $('gl').style.filter = '', 1500); hurt('ห้ามใช้มือถือขณะขับ!', 'ouch', 'phone'); };
+$('callNo').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; S.stats.declined++; good(10, 'ไม่รับ ขี่ต่อ'); S.callback = S.t + 25; setTimeout(() => S.run && warn('📵 จะโทรกลับ? ชิดซ้าย ⬅ แล้วจอดก่อน'), 900); };
 
 // ================= music: procedural chiptune × Thai pentatonic (adaptive) =================
 const Music = window.Music = (() => {
@@ -454,7 +485,7 @@ function musicTick() { if (!S.run) return; const prog = S.dist / S.total; const 
 const TEMPTS = {
   friends: { who: 'เพื่อนชวนแวะ! 🍻', sub: '"แก้วเดียวเอง ไม่เมาหรอก~"', bad: '🍺 แวะสักแก้ว', good: '✋ ดื่มไม่ขับ', v: 't_friends' },
   racer: { who: 'เด็กแว้นท้าแข่ง! 🏁', sub: '"แข่งกันป่ะพี่! กลัวเหรอ?"', bad: '🔥 จัดไป!', good: '😎 ไม่แข่ง', v: 't_racer' },
-  hitch: { who: 'เพื่อนขอซ้อนท้าย 🙏', sub: '"ไม่มีหมวกนะ ใกล้ๆ เอง~"', bad: '👍 ขึ้นมาเลย', good: '⛑️ ไม่มีหมวก ไม่ซ้อน', v: 't_hitch', car: { who: 'เพื่อนขอติดรถ 🙏', sub: '"นั่งกระบะหลังก็ได้ ไม่ต้องคาดเข็มขัด~"', bad: '👍 ขึ้นมาเลย', good: '🔒 ทุกคนต้องคาดเข็มขัด' } },
+  hitch: { who: 'เพื่อนขอซ้อนท้าย 🙏', sub: '"ไม่มีหมวกนะ ใกล้ๆ เอง~"', bad: '👍 ขึ้นมาเลย', good: '⛑️ ไม่มีหมวก ไม่ซ้อน', v: 't_hitch', car: { who: 'เพื่อนขอติดรถ 🙏', sub: '"นั่งเบาะหลังก็ได้ ไม่ต้องคาดเข็มขัด~"', bad: '👍 ขึ้นมาเลย', good: '🔒 ทุกคนต้องคาดเข็มขัด' } },
   shortcut: { who: 'ทางลัด! 🤫', sub: '"ย้อนศรนิดเดียว ถึงไวกว่า"', bad: '↩️ ลัดเลย!', good: '🛣️ อ้อมดีกว่า', v: 't_shortcut' },
 };
 let tSide = 1;
@@ -465,27 +496,29 @@ function startTempt(k) { const T = { ...TEMPTS[k], ...((PL.v === 'car' && TEMPTS
 }
 function endTempt(bad, timeout) { const k = S.tmp && S.tmp.k; if (!k) return; S.tmp = null; $('tempt').classList.remove('on');
   if (!bad) { S.stats.nope++; if (timeout) good(10, 'ไม่สนใจ ขี่ต่อ'); else good(40, 'ไม่หลงกล!', 't_nope'); return; }
-  if (k === 'friends') { S.drunk = 8; document.body.classList.add('drunk'); pop('HIC!', 'bad'); warn('🍺 เมาแล้ว! ปุ่มซ้าย-ขวากลับด้าน'); setTimeout(() => S.run && snd.say('t_dizzy', true), 1200); }
-  if (k === 'racer') { S.turbo = 6; pop('VROOOM!', 'bad'); warn('🔥 เบรกไม่อยู่! 120 km/h'); [30, 55, 80, 105].forEach((d, i) => setTimeout(() => S.run && spawn('sedan', 70, Math.floor(Math.random() * 3)), i * 900)); }
-  if (k === 'hitch') { S.heavy = 7; S.shield = false; hearts(); pop('หนักกก!', 'bad'); warn('🐘 ซ้อนท้าย หักหลบยาก!'); if (PL.v !== 'car') { const h = sprite('hitch'); h.scale.setScalar(.62); h.position.set(.15, .55, .5); player.add(h); player.userData.hitch = h; } }
-  if (k === 'shortcut') { S.score = Math.max(0, S.score - 50); pop('ทางลัด = ทางตาย', 'bad', true); warn('↩️ ย้อนศร! สวนมาเพียบ'); [0, 1, 2, 3, 4].forEach(i => setTimeout(() => { if (S.run) { const e = spawn('wrongway', 90, Math.floor(Math.random() * 3)); e.v = -15; } }, i * 1100)); }
+  if (k === 'friends') { S.stats.drank = true; S.drunk = 8; document.body.classList.add('drunk'); pop('HIC!', 'bad'); warn('🍺 เมาแล้ว! ปุ่มซ้าย-ขวากลับด้าน'); setTimeout(() => S.run && snd.say('t_dizzy', true), 1200); }
+  if (k === 'racer') { S.stats.rush = S.stats.speeding = true; S.zoneSped = true; S.turbo = 6; pop('VROOOM!', 'bad'); warn('🔥 เบรกไม่อยู่! 120 km/h'); [30, 55, 80, 105].forEach((d, i) => setTimeout(() => S.run && spawn('sedan', 70, Math.floor(Math.random() * 3)), i * 900)); }
+  if (k === 'hitch') { S.stats.pillion = true; S.heavy = 7; S.shield = false; hearts(); pop('หนักกก!', 'bad'); warn('🐘 ซ้อนท้าย หักหลบยาก!'); if (PL.v !== 'car') { const h = sprite('hitch'); h.scale.setScalar(.62); h.position.set(.15, .55, .5); player.add(h); player.userData.hitch = h; } }
+  if (k === 'shortcut') { S.stats.rush = true; S.score = Math.max(0, S.score - 50); pop('ทางลัด = ทางตาย', 'bad', true); warn('↩️ ย้อนศร! สวนมาเพียบ'); [0, 1, 2, 3, 4].forEach(i => setTimeout(() => { if (S.run) { const e = spawn('wrongway', 90, Math.floor(Math.random() * 3)); e.v = -15; } }, i * 1100)); }
 }
 $('tBad').onclick = () => endTempt(true); $('tGood').onclick = () => endTempt(false);
 function temptTick(dt) {
   if (S.tmp && performance.now() - S.tmp.t0 > 4900) endTempt(false, true);
   if (!S.tmp && !S.call && S.tq.length && S.dist > S.tq[0].at) startTempt(S.tq.shift().k);
   if (S.drunk > 0) { S.drunk -= dt; if (S.drunk <= 0) { document.body.classList.remove('drunk'); warn('👮 ด่านตรวจแอลกอฮอล์!'); hurt('เมาแล้วขับ! โดนด่านจับ 👮', 't_police'); } }
-  if (S.turbo > 0) { S.turbo -= dt; if (S.turbo <= 0) { S.score = Math.max(0, S.score - 100); pop('ใบสั่ง! -100 💸', 'bad', true); snd.say('t_ticket', true); } }
-  if (S.heavy > 0) { S.heavy -= dt; if (S.heavy <= 0) { const h = player.userData.hitch; if (h) { player.remove(h); player.userData.hitch = null; } hurt(PL.v === 'car' ? 'ไม่คาดเข็มขัด ผิดกฎหมาย! 🔒' : 'ซ้อนไม่ใส่หมวก ผิดกฎหมาย! ⛑️', 't_ticket'); } }
+  if (S.turbo > 0) { S.turbo -= dt; if (S.turbo <= 0) { S.score = Math.max(0, S.score - 100); pop('ใบสั่ง! -100 💸', 'bad', true); warn('🚓 ขับเร็วเกินกำหนด โดนใบสั่ง!'); snd.say('t_ticket', true); } }
+  if (S.heavy > 0) { S.heavy -= dt; if (S.heavy <= 0) { const h = player.userData.hitch; if (h) { player.remove(h); player.userData.hitch = null; } hurt(PL.v === 'car' ? 'ไม่คาดเข็มขัด ผิดกฎหมาย! 🔒' : 'ซ้อนไม่ใส่หมวก ผิดกฎหมาย! ⛑️', 't_ticket', 'ppe'); } }
 }
 
 // ================= loop =================
 const clock = new THREE.Clock();
 function update(dt) {
   S.t += dt; musicTick(); const prog = S.dist / S.total;
-  const VH = VEHS[PL.v]; const cruise = (52 + prog * 30) / 3.6 * (S.rain ? .9 : 1) * VH.top, brakeP = (S.rain ? 15 : 24) * VH.brake;
+  const VH = VEHS[PL.v]; const zone = S.dist < 900 ? 0 : S.dist < 2600 ? 1 : 2, LIM = [60, 80, 50][zone];
+  if (zone !== S.zone) { if (!S.zoneSped) good(20, 'ขับไม่เกินกำหนด ✓'); S.zone = zone; S.zoneSped = false; $('lim').textContent = LIM; warn(zone === 1 ? '🛣️ ถนนใหญ่ จำกัด 80 km/h' : '🏘️ เขตชุมชน จำกัด 50 · ใกล้บ้าน = จุดเสี่ยง ชะลอ!'); }
+  const cruise = (LIM - 4) / 3.6 * (S.rain ? .9 : 1) * VH.top, brakeP = (S.rain ? 15 : 24) * VH.brake;
   temptTick(dt);
-  if (S.turbo > 0) S.v = Math.min(120 / 3.6, S.v + 14 * dt); else if (S.brake) S.v = Math.max(0, S.v - brakeP * dt); else S.v = S.v > cruise ? Math.max(cruise, S.v - 10 * dt) : Math.min(cruise, S.v + 7 * dt);
+  if (S.turbo > 0) S.v = Math.min(120 / 3.6, S.v + 14 * dt); else if (S.brake) S.v = Math.max(0, S.v - brakeP * dt); else S.v = S.v > cruise ? Math.max(cruise, S.v - 10 * dt) : Math.min(cruise, S.v + VH.acc * dt);
   const dz = S.v * dt; S.dist += dz; roadTex.offset.y += dz / 20;
   for (const s of scenery) { s.o.position.z += dz; if (s.o.position.z > 14) s.o.position.z -= s.len; }
   const rainNow = S.dist > 1250 && S.dist < 2100; if (rainNow !== S.rain) { S.rain = rainNow; $('rain').style.opacity = rainNow ? 1 : 0; roadMat.roughness = rainNow ? .25 : .7; roadMat.metalness = rainNow ? .4 : 0; if (rainNow) warn('🌧️ ฝนตก! ถนนลื่น เบรกยากขึ้น'); }
@@ -496,15 +529,15 @@ function update(dt) {
   S.sleep = Math.min(1, S.sleep + dt / 60); $('sleepBar').style.width = S.sleep * 100 + '%';
   $('vig').style.opacity = Math.max(0, (S.sleep - .5) * 2);
   if (!S.call) $('gl').style.filter = S.sleep > .75 ? `blur(${((S.sleep - .75) * 8).toFixed(1)}px)` : '';
-  if (S.sleep > .7 && !S.sleepWarned) { S.sleepWarned = true; snd.say('sleepy', true); warn('😴 ง่วงแล้ว! เก็บกาแฟ ☕'); spawn('coffee', 70); }
-  if (S.sleep >= 1) { S.sleep = .55; S.sleepWarned = false; pop('หลับใน!', 'bad'); hurt('ง่วงให้จอดพัก!'); }
+  if (S.sleep > .7 && !S.sleepWarned) { S.sleepWarned = true; snd.say('sleepy', true); warn('😴 ง่วงแล้ว! ชิดซ้าย ⬅ จอดพักที่ 🅿️'); const rs = spawn('reststop', 110); rs.prop = true; rs.x = -6.9; rs.o.position.x = rs.x; }
+  if (S.sleep >= 1) { S.sleep = .55; S.sleepWarned = false; pop('หลับใน!', 'bad'); hurt('ง่วงต้องจอดพัก!', 'ouch', 'sleep'); }
   // phone
   if (!S.call && !S.tmp && S.t > S.nextCall) { ringPhone(); S.nextCall = S.t + rnd(28, 40); }
   if (S.call) { S.call.t += dt; if (S.call.t > 5) { $('call').classList.remove('on'); S.call = null; } }
   // spawning
   if (S.dist > S.nextSpawn && S.dist < S.total - 120) {
     const nearLight = lights.some(L => !L.done && L.at - S.dist < 150 && L.at - S.dist > -10);
-    if (!nearLight) { let k = pick(KINDS); if (S.dist > 2700 && !S.truck) { k = 'truck'; S.truck = true; } spawn(k); const w = WARN[k]; if (w) setTimeout(() => { if (S.run) { warn(w[0]); if (w[1]) snd.say(w[1]); } }, 300); }
+    if (!nearLight) { let k = pick(KINDS); if (S.dist > 2700 && !S.truck) { k = 'truck'; S.truck = true; } const se = spawn(k); const w = WARN[k]; const side = se.cross ? (se.x < 0 ? ' ⬅' : ' ➡') : ['drunk', 'truck'].includes(k) ? '' : [' ⬅ ซ้าย', ' ⬆ กลาง', ' ขวา ➡'][se.lane]; if (w) setTimeout(() => { if (S.run) { warn(w[0] + side); if (w[1]) snd.say(w[1]); } }, 300); }
     S.nextSpawn = S.dist + rnd(55, 85) * (1 - prog * .45);
   }
   // entities
@@ -519,18 +552,19 @@ function update(dt) {
     const z = -(e.pos - S.dist);
     e.o.position.set(e.x, e.item ? .3 + Math.abs(Math.sin(S.t * 4)) * .3 : (e.hit && !e.item ? e.o.position.y : 0), z);
     if (e.hit && !e.item) { e.spr.rotation.z += dt * 6; e.o.position.y = Math.min(2.5, e.o.position.y + dt * 4); }
-    if (z > 14 || Math.abs(e.x) > 12) { e.dead = true; scene.remove(e.o); continue; }
+    if (e.cross && !e.hit) { const rel = e.pos - S.dist; if (Math.abs(e.x) < 7 && rel > -1 && rel < 35) { if (!e.seen) { e.seen = true; S.stats.crossSeen++; } if (S.v < 3) e.yielded = true; } }
+    if (z > 14 || Math.abs(e.x) > 12) { if (e.cross) crossDone(e); e.dead = true; scene.remove(e.o); continue; }
     if (e.prop) continue;
     const halfW = e.cross ? e.wide / 2 + .4 : (e.kind === 'truck' ? 2.4 : 1.1);
     const overlapX = Math.abs(e.x - S.x) < halfW + .5 + VH.wide, overlapZ = z > -e.len / 2 - 1.2 && z < e.len / 2 + .6;
     if (!e.hit && overlapX && overlapZ) {
       e.hit = true;
-      if (e.kind === 'coffee') { S.sleep = 0; S.sleepWarned = false; S.stats.coffee++; good(25, 'สดชื่น!'); e.dead = true; scene.remove(e.o); continue; }
-      if (e.kind === 'helmet') { S.shield = true; hearts(); good(25, PL.v === 'car' ? 'คาดเข็มขัด กันชน!' : 'หมวกกันน็อกกันชน!'); e.dead = true; scene.remove(e.o); continue; }
+      if (e.kind === 'coffee') { S.sleep = Math.max(0, S.sleep - .3); S.stats.coffee++; good(5, 'กาแฟช่วยแป๊บเดียว ง่วงต้องจอดพัก'); e.dead = true; scene.remove(e.o); continue; }
+      if (e.kind === 'shield') { S.shield = true; hearts(); good(20, 'สมาธิเต็ม! กันชน 1 ครั้ง'); e.dead = true; scene.remove(e.o); continue; }
       const why = { sedan: 'ชนท้าย! เว้นระยะ 3 วิ', pickup: 'ชนท้าย! เว้นระยะ 3 วิ', drunk: 'โดนขี้เมาเฉี่ยว!', truck: 'ชนรถพ่วง! อย่าจี้ท้าย', wrongway: 'ชนคนย้อนศร!', buffalo: 'ชนควาย!! 🐃', chicken: 'ไก่กระจาย! 🐔', dog: 'ชนน้องหมา!', grandma: 'ไม่หยุดให้คนข้าม!', pothole: 'ตกหลุม!', crate: 'ชนของหล่น!' }[e.kind] || 'ชน!';
-      hurt(why); if (e.v > 0) e.pos += 6;
+      hurt(why, 'ouch', e.kind); if (e.v > 0) e.pos += 6;
     }
-    if (!e.passed && z > 3 && !e.item) { e.passed = true; if (!e.hit) { S.stats.dodge++; if (Math.abs(e.x - S.x) < 4.2 && S.v > 8) good(15, pick(['หลบสวย!', 'รอดหวุดหวิด!', 'เทพ!']), Math.random() < .3 ? 'nearmiss' : null); else S.score += 5; } }
+    if (!e.passed && z > 3 && !e.item) { e.passed = true; if (e.cross) crossDone(e); else if (!e.hit) { S.stats.dodge++; if (Math.abs(e.x - S.x) < 2.4 && S.v > 8) { S.score = Math.max(0, S.score - 5); S.combo = 1; pop('เฉียดเกินไป! −5', 'bad', true); } else S.score += 5; } }
     if (!e.cross && !e.item && !e.hit && Math.abs(e.x - S.x) < 1.6 && z < 0 && z > -60 && (!nearest || z > nearest.z) && e.v >= 0) nearest = { e, z };
   }
   ents = ents.filter(e => !e.dead);
@@ -538,36 +572,42 @@ function update(dt) {
     $('gapT').textContent = `ระยะ ${sec.toFixed(1)} วิ`; $('gapBar').style.width = k * 100 + '%'; $('gapBar').style.background = sec >= 3 ? '#2bd46a' : sec >= 1.5 ? '#ffcc33' : '#ff4d4d';
     S.gapGood = sec >= 3 ? S.gapGood + dt : 0; if (S.gapGood > 4) { S.gapGood = 0; good(20, 'เว้นระยะดี!'); } }
   else { $('gapT').textContent = 'ระยะ —'; $('gapBar').style.width = '0'; }
+  $('gapBar').closest('.meter').style.opacity = nearest && S.v > 2 ? 1 : .35;
   for (const L of lights) { const z = -(L.at - S.dist); L.o.position.z = z; if (L.done) continue;
     if (L.state === 'green' && L.at - S.dist < 100) { setL(L, 'yellow'); L.t = 1.1; }
     else if (L.state === 'yellow') { L.t -= dt; if (L.t <= 0) { setL(L, 'red'); warn('🚦 ไฟแดง! หยุดหลังเส้น'); snd.say('red', true); } }
     else if (L.state === 'red') { const gap = (L.at - 2.5) - S.dist;
       if (S.v < .6 && gap > -.5 && gap < 70) { L.t += dt; if (L.t > 1.5) { setL(L, 'green'); L.done = true; S.stats.red++; good(50, 'หยุดไฟแดง!', 'great'); } }
-      if (gap < -1) { L.done = true; setL(L, 'green'); hurt('ฝ่าไฟแดง!'); } } }
-  S.score += dz * .05; $('score').textContent = Math.floor(S.score); $('spd').textContent = Math.round(S.v * 3.6);
-  $('combo').style.display = S.combo > 1 ? '' : 'none'; $('combo').textContent = 'x' + S.combo;
-  $('tripBar').style.width = Math.min(100, prog * 100) + '%'; $('tripMe').style.left = `calc(${8 + Math.min(1, prog) * 84}%)`;
+      if (gap < -1) { L.done = true; setL(L, 'green'); hurt('ฝ่าไฟแดง!', 'ouch', 'red'); } } }
+  S.score += dz * .05; $('score').textContent = Math.floor(S.score); $('spd').textContent = Math.round(S.v * 3.6); $('spd').parentElement.classList.toggle('over', S.v * 3.6 > LIM + 2);
+  restTick(dt); callbackTick(dt); ppeTick(dt);
+  $('combo').style.visibility = S.combo > 1 ? 'visible' : 'hidden'; $('combo').textContent = 'x' + S.combo;
+  $('tripBar').style.width = Math.min(100, prog * 100) + '%'; $('tripMe').style.left = `calc(${8 + Math.min(1, prog) * 84}%)`; document.querySelector('.trip .a').style.opacity = prog > .005 ? 0 : 1;
   $('speed').style.opacity = Math.max(0, (S.v * 3.6 - 60) / 30);
   snd.engine(S.v * 3.6);
   if (S.dist >= S.total) finish(true);
   const sh = shakeT > 0 ? (shakeT -= dt, (Math.random() - .5) * .5) : 0;
-  camera.position.set(S.x * .7 + sh, 5.2 + S.v * .015, 10 - S.v * .03); camera.lookAt(S.x * .5, 1, -20);
+  camera.position.set(S.x * .7 + sh, 5.6 + S.v * .012, 10.5 - S.v * .03); camera.lookAt(S.x * .5, 0, -16);
 }
 const TS = +(new URLSearchParams(location.search).get('ts') || 1);
 let fpsN = 0, fpsT = 0, fpsDone = false;
 function loop() { const dt = Math.min(.05, clock.getDelta());
   if (S.run && !S.paused && !fpsDone) { fpsN++; fpsT += dt; if (fpsT > 4) { fpsDone = true; if (fpsN / fpsT < 40 && renderer.getPixelRatio() > 1) { renderer.setPixelRatio(1); resize(); } } }
   if (S.run && !S.paused) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
-function start() { snd.unlock(); reset(); S.run = true; document.body.classList.remove('menu'); if (!Music.playTrack(`${PL.c}_${PL.v}`, true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
+function start() { snd.unlock(); reset(); S.run = true; document.body.classList.remove('menu'); $('lim').textContent = 60; S.ppeT = 4.5; $('ppeBtn').textContent = PL.v === 'car' ? '👆 แตะเพื่อคาดเข็มขัด 🔒' : '👆 แตะเพื่อรัดคางหมวก ⛑️'; $('ppeBtn').classList.add('on'); setTimeout(() => S.run && warn(pick(TIPS)), 5200); if (!Music.playTrack(`${PL.c}_${PL.v}`, true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
+const MEASURES = [['เตรียมคน เตรียมรถ', 'รัดคาง/คาดเข็มขัด · ไม่ดื่ม'], ['วางแผนเส้นทาง', 'ไม่รีบ ไม่ลัด ไม่แข่ง'], ['ทำตามกฎจราจร', 'ไฟแดง · มือถือ · ความเร็ว'], ['เว้นระยะ ≥ 3 วิ', 'ไม่จี้ท้าย · ง่วงจอดพัก'], ['ชะลอทางแยก', 'หยุดหลังเส้นเมื่อไฟแดง'], ['ตรวจจุดอับสายตา', 'ไม่ชนตอนเปลี่ยนเลน'], ['คาดการณ์ความเสี่ยง', 'พร้อมเบรก ไม่ชนสิ่งกีดขวาง'], ['หยุดให้คนข้าม', 'มีน้ำใจต่อเพื่อนร่วมทาง']];
+function measures() { const st = S.stats; return [st.ppe && !st.drank && !st.pillion, !st.rush, !st.redRun && !st.phoneAns && !st.speeding, !st.rear && !st.micro, st.red > 0 && !st.redRun, !st.blind, !st.haz, !st.walk && (st.yield > 0 || !st.crossSeen)]; }
 function finish(win) {
   if (!S.run) return; S.run = false; document.body.classList.add('menu'); snd.stop(); setB(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
   Music.stop(); Music.trackTick({ rate: 1, wobble: false, lp: 18000 }); Music.duck(4); if (!win) Music.trackTick({ rate: .85, wobble: true, lp: 1400 });
-  if (win) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); }
-  $('endT').innerHTML = win ? 'ถึงบ้านแล้ว! 🏠<br><b>คนที่บ้านรอคุณอยู่</b>' : 'ไปไม่ถึงบ้าน 😢<br><b>ขับช้าๆ ไม่ต้องรีบนะ</b>';
-  $('endImg').style.display = win ? '' : 'none'; $('endScore').textContent = Math.floor(S.score);
-  const st = S.stats; $('stats').innerHTML = `<div>🚦 หยุดไฟแดง<br><b>${st.red}</b></div><div>🛡️ หลบอันตราย<br><b>${st.dodge}</b></div><div>☕ แก้ง่วง<br><b>${st.coffee}</b></div><div>📵 ไม่รับสาย<br><b>${st.phoneNo}</b></div><div>😇 ไม่หลงกลเพื่อน<br><b>${st.nope}/4</b></div><div>💥 ชน<br><b>${st.crash}</b></div>`;
-  $('endP').textContent = win ? `หัวใจเหลือ ${S.hearts} ดวง (+${S.hearts * 150})` : `ไปได้ ${Math.round(S.dist)} / ${S.total} ม.`;
-  last = { char: PL.c, veh: PL.v, game: 'race', score: Math.floor(S.score), dist: Math.round(Math.min(S.dist, S.total)), hearts: Math.max(0, S.hearts), crash: st.crash, nope: st.nope, sim: Math.round(S.t), win, red: st.red, dodge: st.dodge, coffee: st.coffee, phoneNo: st.phoneNo };
+  const drank = S.stats.drank; if (win) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); if (!S.stats.drank) setTimeout(() => confetti(90), 300); }
+  const ms = measures(), mok = ms.filter(Boolean).length; S.score += mok * 25; if (drank) S.score = Math.floor(S.score * .5);
+  $('endT').innerHTML = win && drank ? 'ถึงบ้าน... แต่เมาแล้วขับ ❌<br><b>เมาไม่ขับ ไม่มีข้อยกเว้น</b>' : win ? 'ถึงบ้านแล้ว! 🏠<br><b>คนที่บ้านรอคุณอยู่</b>' : 'ไปไม่ถึงบ้าน 😢<br><b>ขับช้าๆ ไม่ต้องรีบนะ</b>';
+  $('mList').innerHTML = `<div class="mh">✈ ผ่าน ${mok}/8 ด่าน · 8 มาตรการขับขี่ปลอดภัย (+${mok * 25})</div>` + MEASURES.map((m, i) => `<div class="${ms[i] ? 'ok' : 'no'}"><span>${ms[i] ? '✅' : '❌'}</span><b>${i + 1}. ${m[0]}</b><small>${m[1]}</small></div>`).join('') + (drank ? '<div class="no warnrow">🍺 ดื่มแล้วขับ: คะแนนรอบนี้เหลือครึ่งเดียว และไม่ได้ตรา</div>' : '');
+  $('endScore').textContent = Math.floor(S.score);
+  const st = S.stats; $('stats').innerHTML = `<div>🚦 หยุดไฟแดง<br><b>${st.red}</b></div><div>🚸 หยุดให้ข้าม<br><b>${st.yield}</b></div><div>🅿️ จอดพักแก้ง่วง<br><b>${st.rest}</b></div><div>📵 ไม่ใช้มือถือ<br><b>${st.declined}</b></div><div>😇 ไม่หลงกลเพื่อน<br><b>${st.nope}/4</b></div><div>💥 ชน<br><b>${st.crash}</b></div>`;
+  $('endP').textContent = win ? `หัวใจเหลือ ${S.hearts} ดวง (+${S.hearts * 150})` : `ไปได้ ${Math.round(S.dist)} / ${S.total} ม.`; $('endImg').style.display = win && !drank ? '' : 'none';
+  last = { char: PL.c, veh: PL.v, game: 'race', score: Math.floor(S.score), dist: Math.round(Math.min(S.dist, S.total)), hearts: Math.max(0, S.hearts), crash: st.crash, nope: st.nope, sim: Math.round(S.t), win, drank, ms, mok, red: st.red, dodge: st.dodge, yield: st.yield, rest: st.rest, coffee: st.coffee, phoneNo: st.declined };
   $('submitBox').style.display = last.score > 0 ? '' : 'none'; $('myRank').classList.remove('on'); $('submitBtn').disabled = false; $('submitBtn').textContent = '📌 ส่งคะแนน'; $('certImg').style.display = 'none';
   me = me ? { name: me.name, dept: me.dept, group: me.group } : null;
   $('end').classList.add('on'); $('end').scrollTop = 0;
@@ -581,7 +621,7 @@ function renderPick() {
   $('pkChar').innerHTML = Object.entries(CHARS).map(([k, n]) => `<button data-c="${k}" class="${PL.c === k ? 'on' : ''}"><img src="race/p_${k}.webp" alt=""><b>${n}</b></button>`).join('');
   $('pkVeh').innerHTML = Object.entries(VEHS).map(([k, v]) => `<button data-v="${k}" class="${PL.v === k ? 'on' : ''}"><img src="race/p_${PL.c}_${k}.webp" alt=""><b>${v.emo} ${v.name}</b><small>${v.sub}</small></button>`).join('');
   $('pkPrev').src = `race/p_${PL.c}_${PL.v}.webp`;
-  const st = VEHS[PL.v].st; $('pkStat').innerHTML = ['ความเร็ว', 'คล่องตัว', 'เบรก'].map((t, i) => `<span>${t}</span><i style="--w:${st[i] * 20}%"></i>`).join('');
+  const st = VEHS[PL.v].st; $('pkStat').innerHTML = ['อัตราเร่ง', 'คล่องตัว', 'เบรก'].map((t, i) => `<span>${t}</span><i style="--w:${st[i] * 20}%"></i>`).join('');
   document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
   document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
 }
@@ -612,7 +652,7 @@ const GROUPS = {
 };
 const DEPTS = Object.keys(GROUPS).map(z => 'Zone ' + z);
 let boardData = null, tab = 'today', me = null, last = null;
-const BADGE = { gold: '🥇', silver: '🥈', bronze: '🥉' };
+const BADGE = { gold: '⭐', silver: '🏠', bronze: '😇' };
 const esc = (t) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 $('pDept').innerHTML += DEPTS.map(d => `<option>${d}</option>`).join('');
 function fillGroups(sel) { const z = $('pDept').value.replace('Zone ', ''); const g = GROUPS[z] || []; $('pGroup').innerHTML = '<option value="">— เลือกกลุ่ม 5ส ในโซน —</option>' + g.map(x => `<option>${x}</option>`).join(''); $('pGroup').disabled = !g.length; if (sel && g.includes(sel)) $('pGroup').value = sel; }
@@ -626,12 +666,17 @@ function renderBoard() {
   document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab));
   let html = '';
   if (tab === 'depts') { const max = Math.max(1, ...d.depts.map(x => x.total));
-    html = d.depts.map((x, i) => `<div class="br${me && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div style="flex:1"><div class="nm">${esc(x.dept)}</div><div class="dp">${x.players} คน</div><div class="dbar" style="width:${x.total / max * 100}%"></div></div><div class="sc">${x.total.toLocaleString()}<small>คะแนนรวม</small></div></div>`).join('');
-  } else html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.group === x.group ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''} <span style="font-size:13px;opacity:.85">${VEHS[x.veh] ? VEHS[x.veh].emo : ''}${CHARS[x.ch] ? ' ' + CHARS[x.ch] : ''}</span></div><div class="dp">${esc(x.dept)} · ${esc(x.group || '')}</div></div><div class="sc">${x.score.toLocaleString()}</div></div>`).join('');
+    html = d.depts.map((x, i) => `<div class="br${me && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div style="flex:1"><div class="nm">${esc(x.dept)}</div><div class="dp">${x.players} คน</div><div class="dbar" style="width:${x.total / max * 100}%"></div></div><div class="sc">${x.total.toLocaleString()}<small>รวม · เฉลี่ย ${Math.round(x.total / Math.max(1, x.players)).toLocaleString()}/คน</small></div></div>`).join('');
+  } else { const row = (x, n, cls) => `<div class="br${cls}"><div class="no">${n}</div><div><div class="nm">${esc(x.name)} <span style="font-size:13px;opacity:.85">${VEHS[x.veh] ? VEHS[x.veh].emo : ''}${CHARS[x.ch] ? ' ' + CHARS[x.ch] : ''}</span></div><div class="dp">${esc(x.dept)} · ${esc(x.group || '')}</div></div><div class="sc">${x.score.toLocaleString()}${BADGE[x.badge] ? `<span class="tag">${BADGE[x.badge]}</span>` : ''}</div></div>`;
+    const list = d[tab]; let mine = -1; html = list.map((x, i) => { const isMe = me && me.name === x.name && me.group === x.group; if (isMe) mine = i; return row(x, i + 1, isMe ? ' me' : ''); }).join('');
+    const myRank = me && me.rank ? me.rank[tab] : 0;
+    if (me && me.rank && mine < 0 && myRank > 0) html += `<div class="br sep">• • •</div>` + row({ name: me.name, dept: me.dept, group: me.group, score: me.rank.score, ch: PL.c, veh: PL.v }, myRank, ' me');
+    for (let i = list.length; i < 5; i++) html += `<div class="br ph"><div class="no">${i + 1}</div><div class="nm">ยังว่างอยู่ — มาเป็นคนต่อไป!</div></div>`; }
   $('bList').innerHTML = html || '<div class="empty">ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!</div>';
+  const meRow = $('bList').querySelector('.br.me'); if (meRow) setTimeout(() => meRow.scrollIntoView({ block: 'center', behavior: 'smooth' }), 200);
 }
 async function loadBoard() { try { const r = await fetch(API + '?game=race'); boardData = await r.json(); renderBoard(); } catch (e) { $('bStat').textContent = 'โหลดกระดานไม่สำเร็จ ลองใหม่อีกครั้ง'; } }
-function openBoard() { $('board').classList.add('on'); $('board').scrollTop = 0; renderBoard(); loadBoard(); }
+function openBoard() { if (me && me.medal) tab = me.medal.useAll ? 'all' : 'today'; $('board').classList.add('on'); $('board').scrollTop = 0; renderBoard(); loadBoard(); }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { tab = b.dataset.t; renderBoard(); });
 $('boardBtn').onclick = openBoard; $('boardBtn2').onclick = openBoard; $('boardClose').onclick = () => $('board').classList.remove('on');
 $('boardPlay').onclick = () => { $('board').classList.remove('on'); start(); };
@@ -648,8 +693,13 @@ $('submitBtn').onclick = async () => {
       if (j.err === 'reserved') { const had = $('pPin').value; $('pinBox').classList.add('on'); store.set('nbmt_pin', ''); $('pPin').value = ''; $('pPin').placeholder = had ? 'PIN ไม่ถูกต้อง ลองอีกครั้ง' : 'PIN 6 หลัก'; $('pPin').focus(); return; }
       alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : j.err === 'emp' ? 'รหัสพนักงานไม่ถูกต้อง' : j.err === 'wait' ? 'เพิ่งส่งคะแนนไป รอสักครู่แล้วลองใหม่นะ' : j.err === 'invalid' ? 'คะแนนรอบนี้ส่งไม่ได้ ลองเล่นใหม่อีกรอบนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
     if ($('pPin').value.trim()) store.set('nbmt_pin', $('pPin').value.trim());
-    $('pinBox').classList.remove('on'); me = { name, dept, group }; boardData = j.board; $('submitBox').style.display = 'none';
-    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)} · ${esc(group.split(' : ')[0])}</small>`; $('myRank').classList.add('on');
+    $('pinBox').classList.remove('on'); me = { name, dept, group, rank: { today: j.rankToday, all: j.rankAll, score: last.score } }; boardData = j.board; $('submitBox').style.display = 'none';
+    const al = j.board.all || [], ra = j.rankAll; let chase = '';
+    if (ra === 1) chase = '👑 คุณคืออันดับ 1 ตลอดกาล! ป้องกันแชมป์ไว้นะ';
+    else if (ra > 1 && ra <= al.length) chase = `🎯 อีก ${(al[ra - 2].score - al[ra - 1].score + 1).toLocaleString()} คะแนน จะแซงอันดับ ${ra - 1} (${esc(al[ra - 2].name)})`;
+    else if (al.length >= 10) chase = `🎯 อีก ${Math.max(1, al[9].score - last.score + 1).toLocaleString()} คะแนน จะติด Top 10`;
+    const zs = (j.board.depts || []), zi = zs.findIndex(z => z.dept === dept); if (zi > 0) chase += `<br>🏭 ${esc(dept)} ตาม ${esc(zs[zi - 1].dept)} อยู่ ${(zs[zi - 1].total - zs[zi].total).toLocaleString()} คะแนน ชวนเพื่อนในโซนมาช่วย!`; else if (zi === 0) chase += `<br>🏭 ${esc(dept)} นำเป็นโซนอันดับ 1!`;
+    $('myRank').innerHTML = (ra ? `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${ra}` : 'ส่งคะแนนแล้ว ✓') + `<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)} · ${esc(group.split(' : ')[0])}</small>` + (chase ? `<div class="chase">${chase}</div>` : ''); $('myRank').classList.add('on');
     setTimeout(() => medalShow(j.rankToday, j.rankAll), 400);
   } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
 };
@@ -660,7 +710,7 @@ function medalShow(rankToday, rankAll) {
   $('mCoin').className = 'coin ' + cls; $('mNum').textContent = r; $('mLab').textContent = useAll ? 'ALL-TIME' : 'TODAY';
   $('mT').textContent = r === 1 ? 'ราชาถนน!' : r <= 3 ? 'ยอดเยี่ยม!' : 'TOP 10!';
   $('mP').innerHTML = `ยินดีด้วย <b>${esc(me.name)}</b><br>คุณติด<b>อันดับ ${r}</b> ${useAll ? 'ตลอดกาล' : 'ของวันนี้'} บนกระดานคนกลับบ้าน 🎉<br><span style="font-size:14px;opacity:.85">${esc(me.dept)} · ${esc(me.group.split(' : ')[0])}</span>`;
-  $('medal').classList.add('on'); snd.win(); me.medal = { r, cls, useAll }; return true;
+  $('medal').classList.add('on'); snd.win(); confetti(110); me.medal = { r, cls, useAll }; return true;
 }
 $('mClose').onclick = () => $('medal').classList.remove('on');
 $('mCert').onclick = async () => { $('medal').classList.remove('on'); await showCert(); };
@@ -677,7 +727,7 @@ function rrect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x 
 function fitText(c, t, max, size, weight = 900) { let fs = size; c.font = `${weight} ${fs}px Kanit`; while (c.measureText(t).width > max && fs > 28) { fs -= 4; c.font = `${weight} ${fs}px Kanit`; } }
 async function makeCert() {
   await document.fonts.ready; const L = last || {}; const win = !!L.win;
-  const W = 1080, H = 1620, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+  const W = 1080, H = 1620, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d'); { const ft = c.fillText.bind(c), mt = c.measureText.bind(c); c.fillText = (t, x, y) => ft(I18N.T(String(t)), x, y); c.measureText = (t) => mt(I18N.T(String(t))); }
   const [rider, fam] = await Promise.all([loadImg(`race/p_${PL.c}_${PL.v}.webp`), loadImg('img/family.webp')]);
   let g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#ff9a4a'); g.addColorStop(.5, '#e8650c'); g.addColorStop(1, '#0b2f6b'); c.fillStyle = g; c.fillRect(0, 0, W, H);
   const X = 60, Y = 60, PW = W - 120, PH = H - 120;
@@ -698,40 +748,47 @@ async function makeCert() {
     c.save(); c.shadowColor = 'rgba(0,0,0,.4)'; c.shadowBlur = 18; c.beginPath(); c.arc(mx, my, 88, 0, 7); c.fillStyle = rg; c.fill(); c.restore();
     c.textAlign = 'center'; c.fillStyle = me.medal.cls === 'top' ? '#fff' : 'rgba(70,40,0,.85)'; c.font = '80px Bangers'; c.fillText(String(me.medal.r), mx, my + 26); c.font = '800 20px Kanit'; c.fillText(me.medal.useAll ? 'ALL-TIME' : 'TODAY', mx, my + 56); c.textAlign = 'left'; }
   // info row
-  const cells = [['วันที่', new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' })], ['พาหนะ', VEHS[PL.v].name], ['หัวใจ', '❤️'.repeat(L.hearts || 0) + '🤍'.repeat(3 - (L.hearts || 0))], ['ระยะ', `${L.dist || 0} ม.`]];
+  const cells = [['วันที่', new Date().toLocaleDateString(I18N.lang === 'en' ? 'en-GB' : I18N.lang === 'jp' ? 'ja-JP' : 'th-TH', { day: 'numeric', month: 'short', year: '2-digit' })], ['พาหนะ', VEHS[PL.v].name], ['หัวใจ', '❤️'.repeat(L.hearts || 0) + '🤍'.repeat(3 - (L.hearts || 0))], ['ระยะ', `${L.dist || 0} ม.`]];
   cells.forEach(([k, v], i) => { const x = X + 50 + i * 235; c.fillStyle = '#5a6a85'; c.font = '700 24px Kanit'; c.fillText(k, x, Y + 510); c.fillStyle = '#13233f'; c.font = '800 34px Kanit'; c.fillText(v, x, Y + 558); });
   // dashed tear line
   c.strokeStyle = '#c9d3e3'; c.lineWidth = 4; c.setLineDash([18, 14]); c.beginPath(); c.moveTo(X + 30, Y + 610); c.lineTo(X + PW - 30, Y + 610); c.stroke(); c.setLineDash([]);
   c.fillStyle = '#e8650c'; c.beginPath(); c.arc(X, Y + 610, 30, 0, 7); c.arc(X + PW, Y + 610, 30, 0, 7); c.fill();
   // pictures
-  const py = Y + 650, ph = 380;
+  const py = Y + 650, ph = 320;
   c.save(); rrect(c, X + 50, py, 420, ph, 24); c.clip(); g = c.createLinearGradient(0, py, 0, py + ph); g.addColorStop(0, '#ffd9a8'); g.addColorStop(1, '#f6a560'); c.fillStyle = g; c.fillRect(X + 50, py, 420, ph);
   if (rider) { const s = Math.min(380 / rider.width, 390 / rider.height); c.drawImage(rider, X + 50 + (420 - rider.width * s) / 2, py + ph - rider.height * s - 10, rider.width * s, rider.height * s); } c.restore();
-  c.save(); rrect(c, X + 490, py, PW - 540, ph, 24); c.clip(); if (fam && win) { const s = Math.max((PW - 540) / fam.width, ph / fam.height); c.drawImage(fam, X + 490 + (PW - 540 - fam.width * s) / 2, py + (ph - fam.height * s) / 2, fam.width * s, fam.height * s); } else { c.fillStyle = '#dfe6f1'; c.fillRect(X + 490, py, PW - 540, ph); c.fillStyle = '#5a6a85'; c.textAlign = 'center'; c.font = '900 40px Kanit'; c.fillText('คนที่บ้าน', X + 490 + (PW - 540) / 2, py + ph / 2 - 10); c.fillText('ยังรออยู่...', X + 490 + (PW - 540) / 2, py + ph / 2 + 44); c.textAlign = 'left'; } c.restore();
+  c.save(); rrect(c, X + 490, py, PW - 540, ph, 24); c.clip(); if (fam && win && !L.drank) { const s = Math.max((PW - 540) / fam.width, ph / fam.height); c.drawImage(fam, X + 490 + (PW - 540 - fam.width * s) / 2, py + (ph - fam.height * s) / 2, fam.width * s, fam.height * s); } else { c.fillStyle = '#dfe6f1'; c.fillRect(X + 490, py, PW - 540, ph); c.fillStyle = '#5a6a85'; c.textAlign = 'center'; c.font = '900 40px Kanit'; c.fillText('คนที่บ้าน', X + 490 + (PW - 540) / 2, py + ph / 2 - 10); c.fillText('ยังรออยู่...', X + 490 + (PW - 540) / 2, py + ph / 2 + 44); c.textAlign = 'left'; } c.restore();
   // stamp
-  c.save(); c.translate(X + PW - 230, py + ph - 60); c.rotate(-.18); const stc = win ? '#1a8a4c' : '#c81e1e', stt = win ? 'ARRIVED SAFELY' : 'MISSED FLIGHT';
+  c.save(); c.translate(X + PW - 230, py + ph - 60); c.rotate(-.18); const den = L.drank, stc = win && !den ? '#1a8a4c' : '#c81e1e', stt = den ? 'DENIED · เมาไม่ขับ' : win ? 'ARRIVED SAFELY' : 'MISSED FLIGHT';
   c.font = '64px Bangers'; const tw = c.measureText(stt).width + 40; c.fillStyle = 'rgba(255,255,255,.82)'; rrect(c, -tw / 2, -50, tw, 84, 12); c.fill(); c.strokeStyle = stc; c.lineWidth = 8; rrect(c, -tw / 2, -50, tw, 84, 12); c.stroke(); c.fillStyle = stc; c.textAlign = 'center'; c.fillText(stt, 0, 18); c.restore();
   // score + stats
   c.textAlign = 'center'; const sy = py + ph + 110; c.fillStyle = '#5a6a85'; c.font = '700 28px Kanit'; c.fillText('คะแนน / SCORE', W / 2, sy - 70);
   c.fillStyle = '#e8650c'; c.font = '120px Bangers'; c.fillText((L.score || 0).toLocaleString(), W / 2, sy + 40);
-  const st = [['🚦', 'หยุดไฟแดง', L.red || 0], ['🛡️', 'หลบอันตราย', L.dodge || 0], ['😇', 'ไม่หลงกล', `${L.nope || 0}/4`], ['📵', 'ไม่รับสาย', L.phoneNo || 0]];
+  const st = [['🚦', 'หยุดไฟแดง', L.red || 0], ['🚸', 'หยุดให้ข้าม', L.yield || 0], ['😇', 'ไม่หลงกล', `${L.nope || 0}/4`], ['📵', 'ไม่ใช้มือถือ', L.phoneNo || 0]];
   st.forEach(([e, k, v], i) => { const x = X + 120 + i * ((PW - 240) / 3); c.font = '44px Kanit'; c.fillText(e, x, sy + 125); c.fillStyle = '#13233f'; c.font = '900 40px Kanit'; c.fillText(String(v), x, sy + 175); c.fillStyle = '#5a6a85'; c.font = '600 22px Kanit'; c.fillText(k, x, sy + 208); });
+  // 8 measures row
+  if (L.ms) { c.textAlign = 'center'; c.fillStyle = '#0b2f6b'; c.font = '800 26px Kanit'; c.fillText(`ผ่าน ${L.mok}/8 ด่าน · 8 มาตรการขับขี่ปลอดภัย`, W / 2, H - 252); L.ms.forEach((ok, i) => { const bx2 = W / 2 - 4 * 74 + i * 74 + 37; c.fillStyle = ok ? '#1a8a4c' : '#c9d3e3'; rrect(c, bx2 - 30, H - 238, 60, 34, 10); c.fill(); c.fillStyle = '#fff'; c.font = '900 22px Kanit'; c.fillText((ok ? '✓' : '✕') + (i + 1), bx2, H - 213); }); }
   // barcode + slogan
-  c.fillStyle = '#13233f'; let bx = X + 80; const seed = (nm + (L.score || 0)).split('').reduce((a, ch) => a + ch.charCodeAt(0), 7); for (let i = 0; bx < X + PW - 80; i++) { const w = 3 + ((seed * (i + 3)) % 7); if (i % 2 === 0) c.fillRect(bx, H - 205, w, 46); bx += w + 2; }
+  c.fillStyle = '#13233f'; let bx = X + 80; const seed = (nm + (L.score || 0)).split('').reduce((a, ch) => a + ch.charCodeAt(0), 7); for (let i = 0; bx < X + PW - 80; i++) { const w = 3 + ((seed * (i + 3)) % 7); if (i % 2 === 0) c.fillRect(bx, H - 190, w, 34); bx += w + 2; }
   c.fillStyle = '#0b2f6b'; c.font = '900 40px Kanit'; c.fillText('ทุกเที่ยวไป ต้องมีเที่ยวกลับ', W / 2, H - 96);
   return cv;
 }
 async function showCert() {
   const cv = await makeCert(); const url = cv.toDataURL('image/jpeg', .9);
-  $('certImg').src = url; $('certImg').style.display = 'block'; $('certImg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  $('certImg').src = url; $('certImg').style.display = 'block'; $('lineH').style.display = 'block'; $('certImg').scrollIntoView({ behavior: 'smooth', block: 'center' });
   const blob = await new Promise(ok => cv.toBlob(ok, 'image/jpeg', .9)); const f = new File([blob], 'NBMT-boarding-pass.jpg', { type: 'image/jpeg' });
   try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], text: `ขี่กลับบ้านผ่านถนนนรกได้ ${last ? last.score : 0} คะแนน! 🛵 ${location.href}` }); return; } } catch (e) { return; }
   const a = document.createElement('a'); a.href = url; a.download = 'NBMT-boarding-pass.jpg'; a.click();
 }
-buildScenery(); await document.fonts.ready; await loadAll(); $('load').style.display = 'none';
+await document.fonts.ready; await loadAll(); buildScenery(); $('load').style.display = 'none';
+{ const _al = window.alert.bind(window); window.alert = (m) => _al(I18N.T(m)); }
+function setLang(l) { I18N.set(l); document.querySelectorAll('#langs button').forEach(b => b.classList.toggle('on', b.dataset.l === I18N.lang)); }
+document.querySelectorAll('#langs button').forEach(b => b.onclick = () => { snd.whoosh(); setLang(b.dataset.l); });
+new MutationObserver((ms) => { if (I18N.lang === 'th') return; for (const m of ms) { if (m.type === 'characterData') I18N.tr(m.target.parentNode); else m.addedNodes.forEach(n => I18N.tr(n.nodeType === 3 ? n.parentNode : n)); } }).observe(document.body, { subtree: true, childList: true, characterData: true });
+setLang(I18N.lang);
 $('gate').classList.add('on'); $('gateBtn').onclick = () => { snd.unlock(); $('gate').classList.remove('on'); Music.playTrack('theme'); };
 $('cast').innerHTML = [['buffalo', 'ควาย'], ['wrongway', 'ย้อนศร'], ['drunk', 'ขี้เมา'], ['chicken', 'ไก่'], ['pickup', 'ของหล่น'], ['truck', 'รถพ่วง'], ['coffee', 'กาแฟ'], ['phone', 'มือถือ'], ['friends', 'เพื่อนชวนดื่ม'], ['racer', 'เด็กแว้น'], ['hitch', 'ขอซ้อน'], ['shortcut', 'ทางลัด']].map(([k, t]) => `<div><img src="race/${k}.webp" alt="">${t}</div>`).join('');
-reset(); camera.position.set(0, 5.2, 10); camera.lookAt(0, 1, -20); loop();
+reset(); camera.position.set(0, 5.6, 10.5); camera.lookAt(0, 0, -16); loop();
 window.__medal = (a, b) => { me = me || { name: 'TEST', dept: 'Zone 1', group: '1-1 : x' }; medalShow(a, b); }; window.__S = S; window.__D = { get ents() { return ents; }, get lights() { return lights; } };
 </script>
 </body>
