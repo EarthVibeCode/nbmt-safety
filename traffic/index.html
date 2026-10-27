@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027105251';
+const BUILD = '20261027111356';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -13,7 +13,7 @@ const BUILD = '20261027105251';
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="../favicon.svg?b=20261027105251"><title>Online Check-in · NBMT Safe Road Save Life</title>
+<link rel="icon" href="../favicon.svg?b=20261027111356"><title>Online Check-in · NBMT Safe Road Save Life</title>
 <meta name="description" content="เช็คอินครบ 8 ข้อ รับบัตรผ่านกลับบ้านชื่อคุณเอง — NBMT Safety Traffic 8 มาตรการขับขี่ปลอดภัย">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet">
@@ -112,7 +112,7 @@ const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { ret
 
 $('list').innerHTML = ITEMS.map((it, i) =>
   (i === 0 ? '<span class="sec o">ก่อนออกเดินทาง</span>' : i === 2 ? '<br><span class="sec b">ระหว่างทาง</span>' : '') +
-  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027105251" alt=""><div><div class="no">ข้อ ${i + 1}</div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
+  `<div class="item" data-i="${i}"><img src="img/s${i + 1}.webp?b=20261027111356" alt=""><div><div class="no">ข้อ ${i + 1}</div><div class="t">${nw(it.t)}</div><div class="d">${nw(it.d)}</div></div><div class="ck">✓</div></div>`).join('');
 document.querySelectorAll('.item').forEach(el => el.onclick = () => {
   const i = +el.dataset.i; on.has(i) ? on.delete(i) : on.add(i); el.classList.toggle('on', on.has(i)); upd();
 });
