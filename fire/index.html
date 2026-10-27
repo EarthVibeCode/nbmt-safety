@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261027111356';
+const BUILD = '20261027121412';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -13,7 +13,7 @@ const BUILD = '20261027111356';
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="icon" href="../favicon.svg?b=20261027111356"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
+<link rel="icon" href="../favicon.svg?b=20261027121412"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
 <meta name="description" content="เกม 30 วินาที ช่วยนายอำเภอเอิร์ทจับ 6 ผู้ร้ายจุดไฟในโรงงาน — NBMT Fire Prevention 3ต 3จ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&family=Rye&display=swap" rel="stylesheet">
@@ -103,6 +103,7 @@ const BUILD = '20261027111356';
   .intro .rules img { width: clamp(26px, 3.6vh, 34px); height: clamp(26px, 3.6vh, 34px); }
   .intro .btn { margin-top: 0; padding: clamp(9px, 1.6vh, 14px); font-size: clamp(18px, 2.7vh, 22px); }
   .intro .btn.ghost { font-size: clamp(15px, 2.2vh, 18px); padding: clamp(7px, 1.2vh, 11px); }
+  #boardHome { margin-top: 8px; }
   .linkbtn { background: none; border: none; color: #ffe9c4; font-family: 'Kanit'; font-weight: 600; font-size: 14px; text-decoration: underline; cursor: pointer; padding: 2px; }
   .intro .best { margin-top: 0; }
   .mute { top: 8px !important; bottom: auto !important; right: 8px !important; width: 34px !important; height: 34px !important; font-size: 15px !important; }
@@ -199,7 +200,7 @@ const BUILD = '20261027111356';
   <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div></div>
 </div>
 <div class="story" id="story">
-  <video id="storyVid" src="img/story.mp4?b=20261027111356" poster="img/story_poster.jpg?b=20261027111356" playsinline muted preload="auto"></video>
+  <video id="storyVid" src="img/story.mp4?b=20261027121412" poster="img/story_poster.jpg?b=20261027121412" playsinline muted preload="auto"></video>
   <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
   <button class="st-skip" id="stSkip" disabled>ข้ามได้ใน <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
@@ -215,12 +216,12 @@ const BUILD = '20261027111356';
     <div class="w">WANTED</div>
     <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
     <div class="hero">
-      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027111356" poster="img/sheriff.webp?b=20261027111356" muted loop playsinline preload="auto"></video></div>
+      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261027121412" poster="img/sheriff.webp?b=20261027121412" muted loop playsinline preload="auto"></video></div>
       <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
     </div>
     <div class="rules">
-      <div class="row"><img src="img/v2.webp?b=20261027111356" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
-      <div class="row"><img class="g" src="img/c3.webp?b=20261027111356" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
+      <div class="row"><img src="img/v2.webp?b=20261027121412" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
+      <div class="row"><img class="g" src="img/c3.webp?b=20261027121412" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
       <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
@@ -260,15 +261,17 @@ const BUILD = '20261027111356';
     <button class="btn" id="againBtn">↻ เล่นอีกครั้ง</button>
     <button class="btn ghost" id="shareBtn">📤 แชร์ให้เพื่อนมาเล่น</button>
     <button class="btn ghost" id="boardBtn2">🏆 กระดานคะแนน</button>
+    <button class="linkbtn" id="endHome" style="display:block;margin:10px auto 0">🏠 กลับหน้าแรก</button>
     <div class="foot">พบเห็นผู้ร้ายจริงในโรงงาน: <b>หยุดใช้ · แจ้งหัวหน้างาน · ให้ผู้รับผิดชอบแก้ไข</b><br>เกิดเพลิงไหม้: กดสัญญาณแจ้งเหตุ · โทร 199 · Safety NBMT 196, 324</div>
   </section>
   <!-- BOARD -->
   <section class="screen board" id="board">
-    <div class="w" style="font-size:38px">SHERIFF BOARD</div>
+    <div class="w" style="font-size:clamp(28px,8.5vw,38px);padding:0 36px">SHERIFF BOARD</div>
     <div class="bstat" id="bStat">กำลังโหลด...</div>
     <div class="tabs"><button data-t="today" class="on">วันนี้</button><button data-t="all">ตลอดกาล</button><button data-t="depts">โซน 5ส</button></div>
     <div class="blist" id="bList"></div>
     <button class="btn" id="boardPlay">▶ เล่นเลย</button>
+    <button class="btn ghost" id="boardHome">🏠 กลับหน้าแรก</button>
     <div class="foot">🥇 นายอำเภอใหญ่ ≥400 ไม่พลาด · 🥈 นายอำเภอ ≥300 · 🥉 ผู้ช่วยนายอำเภอ จับครบ 6 ชนิด<br>คะแนนโซน = รวมคะแนนดีที่สุดของแต่ละคนในโซน · ชวนเพื่อนในโซนมาช่วยกัน!</div>
   </section>
 </div>
@@ -376,7 +379,7 @@ function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').t
 
 function build() {
   $('grid').innerHTML = SPOTS.map((s, i) => `<div class="hole" data-i="${i}"><span class="lab">${s}</span></div>`).join('');
-  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027111356" alt=""></span>`).join('');
+  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261027121412" alt=""></span>`).join('');
 }
 
 function toast(html, bad) {
@@ -523,6 +526,7 @@ async function loadBoard() {
 }
 function openBoard() { show('board'); renderBoard(); loadBoard(); }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { tab = b.dataset.t; renderBoard(); });
+$('boardHome').onclick = () => show('intro'); $('endHome').onclick = () => show('intro');
 $('boardBtn').onclick = openBoard; $('boardBtn2').onclick = openBoard; $('boardPlay').onclick = start;
 
 let last = null;
