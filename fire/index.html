@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261028123649';
+const BUILD = '20261028125121';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -13,7 +13,7 @@ const BUILD = '20261028123649';
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="icon" href="../favicon.svg?b=20261028123649"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
+<link rel="icon" href="../favicon.svg?b=20261028125121"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
 <meta name="description" content="เกม 30 วินาที ช่วยนายอำเภอเอิร์ทจับ 6 ผู้ร้ายจุดไฟในโรงงาน — NBMT Fire Prevention 3ต 3จ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&family=Rye&display=swap" rel="stylesheet">
@@ -241,16 +241,18 @@ const BUILD = '20261028123649';
   .br .sc small { display: block; font-size: 11px; font-weight: 600; color: #6b4a2a; }
   .br.me { background: #fff3c4; border-radius: 8px; padding-left: 6px; padding-right: 6px; }
   .dbar { height: 8px; border-radius: 4px; background: linear-gradient(90deg, #ff7a1a, #d9480f); margin-top: 3px; }
+  .langs { display: flex; gap: 6px; justify-content: center; } .langs button { font-family: 'Kanit'; font-weight: 800; font-size: 13px; color: #fff; background: rgba(0,0,0,.25); border: 2px solid rgba(255,255,255,.4); border-radius: 14px; padding: 3px 12px; cursor: pointer; } .langs button.on { background: #ffcf4a; color: #3a2200; border-color: #ffcf4a; }
+  .gate .langs { margin-top: 18px; }
   .empty { text-align: center; padding: 30px 0; color: #6b4a2a; }
 </style>
 </head>
 <body>
 <div class="gate" id="gate">
   <div class="g-in"><div class="g-w">WANTED</div><div class="g-t">ช่วยนายอำเภอเอิร์ท<br>จับ 6 ผู้ร้ายจุดไฟ!</div>
-  <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div></div>
+  <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div><div class="langs"><button data-l="th">TH</button><button data-l="en">EN</button><button data-l="jp">日本語</button></div></div>
 </div>
 <div class="story" id="story">
-  <video id="storyVid" src="img/story.mp4?b=20261028123649" poster="img/story_poster.jpg?b=20261028123649" playsinline muted preload="auto"></video>
+  <video id="storyVid" src="img/story.mp4?b=20261028125121" poster="img/story_poster.jpg?b=20261028125121" playsinline muted preload="auto"></video>
   <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
   <button class="st-skip" id="stSkip" disabled>ข้ามได้ใน <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
@@ -278,16 +280,17 @@ const BUILD = '20261028123649';
 
   <!-- INTRO -->
   <section class="screen intro on" id="intro">
+    <div class="langs"><button data-l="th">TH</button><button data-l="en">EN</button><button data-l="jp">日本語</button></div>
     <div class="brand">NBMT FIRE PREVENTION · 3ต 3จ</div>
     <div class="w">WANTED</div>
     <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
     <div class="hero">
-      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261028123649" poster="img/sheriff.webp?b=20261028123649" muted loop playsinline preload="auto"></video></div>
+      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261028125121" poster="img/sheriff.webp?b=20261028125121" muted loop playsinline preload="auto"></video></div>
       <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
     </div>
     <div class="rules">
-      <div class="row"><img src="img/v2.webp?b=20261028123649" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
-      <div class="row"><img class="g" src="img/c3.webp?b=20261028123649" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
+      <div class="row"><img src="img/v2.webp?b=20261028125121" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
+      <div class="row"><img class="g" src="img/c3.webp?b=20261028125121" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
       <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
@@ -345,6 +348,7 @@ const BUILD = '20261028123649';
   </section>
 </div>
 
+<script src="fire_i18n.js?b=20261028125121"></script>
 <script>
 const V = [
   { id: 1, g: 'ต', name: 'เจ้าปลั๊กค้าง', how: 'ตรวจสอบการใช้งานและถอดปลั๊กอุปกรณ์ไฟฟ้าหลังใช้งาน', tip: 'เลิกงาน = ปิดสวิตช์ ถอดปลั๊ก' },
@@ -448,7 +452,7 @@ function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').t
 
 function build() {
   $('grid').innerHTML = SPOTS.map((s, i) => `<div class="hole" data-i="${i}"><span class="lab">${s}</span></div>`).join('');
-  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261028123649" alt=""></span>`).join('');
+  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261028125121" alt=""></span>`).join('');
 }
 
 function toast(html, bad) {
@@ -599,7 +603,7 @@ function renderBoard() {
     const max = Math.max(1, ...d.depts.map(x => x.total));
     html = d.depts.map((x, i) => `<div class="br${me && me.dept === x.dept ? ' me' : ''}"><div class="no">${i + 1}</div><div style="flex:1"><div class="nm">${esc(x.dept)}</div><div class="dp">${x.players} คน</div><div class="dbar" style="width:${x.total / max * 100}%"></div></div><div class="sc">${x.total.toLocaleString()}<small>คะแนนรวม</small></div></div>`).join('');
   } else {
-    html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.group === x.group ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''}</div><div class="dp">${esc(x.dept)} · ${esc(x.group || '')}</div></div><div class="sc">${x.score}</div></div>`).join('');
+    html = d[tab].map((x, i) => `<div class="br${me && me.name === x.name && me.group === x.group ? ' me' : ''}"><div class="no">${i + 1}</div><div><div class="nm">${esc(x.name)} ${BADGE[x.badge] || ''}</div><div class="dp" data-notr>${esc(x.dept)} · ${esc(x.group || '')}</div></div><div class="sc">${x.score}</div></div>`).join('');
   }
   $('bList').innerHTML = html || '<div class="empty">ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!</div>';
 }
@@ -630,7 +634,7 @@ $('submitBtn').onclick = async () => {
     $('pinBox').classList.remove('on');
     me = { name, dept, group }; boardData = j.board;
     $('submitBox').style.display = 'none';
-    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · ${esc(dept)} · ${esc(group.split(' : ')[0])}</small>`;
+    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · <span data-notr>${esc(dept)} · ${esc(group.split(' : ')[0])}</span></small>`;
     $('myRank').classList.add('on');
     setTimeout(() => medalShow(j.rankToday, j.rankAll), 400);
   } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
@@ -682,7 +686,7 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 async function caseReport() {
   const R = $('rep'); R.classList.add('on');
   ['repT', 'repT2', 'repStar', 'repGo'].forEach(id => $(id).classList.remove('in')); $('repSc').textContent = '';
-  $('repMugs').innerHTML = V.map(v => `<div class="mug" id="mug${v.id}"><img src="img/v${v.id}.webp?b=20261028123649" alt=""><div class="nm">${v.name}</div><div class="st">จับแล้ว!</div></div>`).join('');
+  $('repMugs').innerHTML = V.map(v => `<div class="mug" id="mug${v.id}"><img src="img/v${v.id}.webp?b=20261028125121" alt=""><div class="nm">${v.name}</div><div class="st">จับแล้ว!</div></div>`).join('');
   await sleep(200); $('repT').classList.add('in'); SFX.miss && SFX.count(); shake(true);
   await sleep(450); $('repT2').classList.add('in');
   for (const v of V) {
@@ -704,7 +708,7 @@ function medalShow(rankToday, rankAll) {
   $('mCoin').className = 'coin ' + cls; $('mNum').textContent = r; $('mLab').textContent = useAll ? 'ALL-TIME' : 'TODAY';
   const title = r === 1 ? 'นายอำเภอใหญ่!' : r <= 3 ? 'ยอดเยี่ยม!' : 'TOP 10!';
   $('mT').textContent = title;
-  $('mP').innerHTML = `ยินดีด้วย <b>${esc(me.name)}</b><br>คุณติด<b>อันดับ ${r}</b> ${useAll ? 'ตลอดกาล' : 'ของวันนี้'} บนกระดานนายอำเภอ 🎉<br><span style="font-size:14px;opacity:.85">${esc(me.dept)} · ${esc(me.group.split(' : ')[0])}</span>`;
+  $('mP').innerHTML = `ยินดีด้วย <b data-notr>${esc(me.name)}</b><br>คุณติด<b>อันดับ ${r}</b> ${useAll ? 'ตลอดกาล' : 'ของวันนี้'} บนกระดานนายอำเภอ 🎉<br><span style="font-size:14px;opacity:.85">${esc(me.dept)} · ${esc(me.group.split(' : ')[0])}</span>`;
   $('medal').classList.add('on'); SFX.end(); setTimeout(() => FX.burst(0, 0, 'confetti'), 500); setTimeout(() => FX.burst(0, 0, 'confetti'), 1500);
   me.medal = { r, cls, useAll };
   return true;
@@ -717,7 +721,7 @@ const loadImg = (src) => new Promise(ok => { const im = new Image(); im.onload =
 function rrect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
 async function makeCert() {
   await document.fonts.ready;
-  const W = 1080, H = 1580, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+  const W = 1080, H = 1580, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d'); const rawText = c.fillText.bind(c), rawMeasure = c.measureText.bind(c); c.fillText = (t, x, y) => rawText(I18N.T(String(t)), x, y); c.measureText = (t) => rawMeasure(I18N.T(String(t)));
   const imgs = await Promise.all(V.map(v => loadImg(`img/v${v.id}.webp`))); const sheriff = await loadImg('img/sheriff.webp');
   // wood + fire glow
   let g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#5a3a22'); g.addColorStop(.6, '#3f2716'); g.addColorStop(1, '#2e1a0e'); c.fillStyle = g; c.fillRect(0, 0, W, H);
@@ -751,13 +755,13 @@ async function makeCert() {
   if (sheriff) { c.save(); rrect(c, 110, by, 240, 330, 12); c.clip(); const s = Math.max(240 / sheriff.width, 330 / sheriff.height); c.drawImage(sheriff, 110 + (240 - sheriff.width * s) / 2, by, sheriff.width * s, sheriff.height * s); c.restore(); c.strokeStyle = '#6b3a12'; c.lineWidth = 6; rrect(c, 110, by, 240, 330, 12); c.stroke(); }
   c.textAlign = 'left';
   c.fillStyle = '#7a1d00'; c.font = '700 26px Kanit'; c.fillText('ผู้ช่วยนายอำเภอ', 390, by + 40);
-  const nm = (me && me.name) || $('pName').value.trim() || 'นักสืบนิรนาม'; const nmMax = (me && me.medal) ? 380 : 560; let fs = 66; c.font = `900 ${fs}px Kanit`; while (c.measureText(nm).width > nmMax && fs > 34) { fs -= 4; c.font = `900 ${fs}px Kanit`; }
-  c.fillStyle = '#2b1a0e'; c.fillText(nm, 390, by + 108);
+  const nm = (me && me.name) || $('pName').value.trim() || I18N.T('นักสืบนิรนาม'); const nmMax = (me && me.medal) ? 380 : 560; let fs = 66; c.font = `900 ${fs}px Kanit`; while (rawMeasure(nm).width > nmMax && fs > 34) { fs -= 4; c.font = `900 ${fs}px Kanit`; }
+  c.fillStyle = '#2b1a0e'; rawText(nm, 390, by + 108);
   const zone = (me && me.dept) || $('pDept').value || '', grp = (me && me.group) || $('pGroup').value || '';
-  c.fillStyle = '#5a2a0a'; c.font = '600 26px Kanit'; c.fillText([zone, grp.split(' : ')[0]].filter(Boolean).join(' · '), 390, by + 148);
+  c.fillStyle = '#5a2a0a'; c.font = '600 26px Kanit'; rawText([zone, grp.split(' : ')[0]].filter(Boolean).join(' · '), 390, by + 148);
   c.fillStyle = '#b3261e'; c.font = '900 96px Kanit'; c.fillText(String(score), 390, by + 255);
   c.fillStyle = '#5a2a0a'; c.font = '700 28px Kanit'; c.fillText(`คะแนน · จับครบ ${caught.size}/6 · แตะผิด ${misses}`, 390, by + 300);
-  c.font = '500 22px Kanit'; c.fillText(new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' }), 390, by + 340);
+  c.font = '500 22px Kanit'; c.fillText(new Date().toLocaleDateString(I18N.lang === 'en' ? 'en-GB' : I18N.lang === 'jp' ? 'ja-JP' : 'th-TH', { day: 'numeric', month: 'long', year: 'numeric' }), 390, by + 340);
   // medal badge on certificate
   if (me && me.medal) {
     const mx = 870, my = by + 170, cols = { gold: ['#fff6c4', '#ffd34a', '#c9930e'], silver: ['#ffffff', '#d6dde6', '#8b97a6'], bronze: ['#ffe1c4', '#d98b4a', '#8f4e1c'], top: ['#e2f0ff', '#6aa8ff', '#1559b8'] }[me.medal.cls];
@@ -778,18 +782,24 @@ async function showCert() {
   $('certImg').src = url; $('certImg').style.display = 'block'; $('certImg').scrollIntoView({ behavior: 'smooth', block: 'center' });
   const blob = await new Promise(ok => cv.toBlob(ok, 'image/jpeg', .9));
   const f = new File([blob], 'NBMT-case-closed.jpg', { type: 'image/jpeg' });
-  try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], text: `ปิดคดีจับผู้ร้ายจุดไฟได้ ${score} คะแนน! 🔥 NBMT Fire Prevention ${location.href}` }); return; } } catch (e) { return; }
+  try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], text: I18N.T(`ปิดคดีจับผู้ร้ายจุดไฟได้ ${score} คะแนน! 🔥 NBMT Fire Prevention`) + ' ' + location.href }); return; } } catch (e) { return; }
   const a = document.createElement('a'); a.href = url; a.download = 'NBMT-case-closed.jpg'; a.click();
 }
 
 $('startBtn').onclick = start;
 $('againBtn').onclick = start;
 $('shareBtn').onclick = async () => {
-  const text = `ฉันช่วยนายอำเภอเอิร์ทจับผู้ร้ายจุดไฟได้ ${score} คะแนน (${caught.size}/6 ชนิด) มาแข่งกัน! 🔥 NBMT Fire Prevention 3ต 3จ`;
-  try { if (navigator.share) { await navigator.share({ title: 'จับ 6 ผู้ร้ายจุดไฟ', text, url: location.href }); return; } } catch (e) { return; }
+  const text = I18N.T(`ฉันช่วยนายอำเภอเอิร์ทจับผู้ร้ายจุดไฟได้ ${score} คะแนน (${caught.size}/6 ชนิด) มาแข่งกัน! 🔥 NBMT Fire Prevention 3ต 3จ`);
+  try { if (navigator.share) { await navigator.share({ title: I18N.T('จับ 6 ผู้ร้ายจุดไฟ'), text, url: location.href }); return; } } catch (e) { return; }
   try { await navigator.clipboard.writeText(text + ' ' + location.href); $('shareBtn').textContent = '✓ คัดลอกลิงก์แล้ว'; } catch (e) { prompt('คัดลอกลิงก์นี้:', location.href); }
 };
 bestTxt();
+// ===== language TH / EN / JP (shared with the Traffic game via localStorage nbmt_lang) =====
+{ const _al = window.alert.bind(window), _pr = window.prompt.bind(window); window.alert = (m) => _al(I18N.T(m)); window.prompt = (m, d) => _pr(I18N.T(m), d); }
+function setLang(l) { I18N.set(l); document.querySelectorAll('.langs button').forEach(b => b.classList.toggle('on', b.dataset.l === I18N.lang)); }
+document.querySelectorAll('.langs button').forEach(b => b.onclick = (e) => { e.stopPropagation(); setLang(b.dataset.l); });
+new MutationObserver((ms) => { if (I18N.lang === 'th') return; for (const m of ms) { if (m.type === 'characterData') I18N.tr(m.target.parentNode); else m.addedNodes.forEach(n => I18N.tr(n.nodeType === 3 ? n.parentNode : n)); } }).observe(document.body, { subtree: true, childList: true, characterData: true });
+setLang(I18N.lang);
 </script>
 </body>
 </html>
