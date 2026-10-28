@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261028070737';
+const BUILD = '20261028123649';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -136,6 +136,15 @@ const BUILD = '20261028070737';
   .priv { font-size: 13px; font-weight: 800; color: #0b5a2e; background: #e3f7ea; border-radius: 10px; padding: 6px 8px; line-height: 1.35; }
   .br .tag { display: block; font-size: 11px; font-weight: 700; color: #fff; opacity: .85; } .br.ph { opacity: .45; border: 2px dashed rgba(255,255,255,.3); background: transparent; } .br.sep { justify-content: center; padding: 0; background: none; opacity: .6; }
   .chase { font-size: 14px; font-weight: 800; color: #4a2200; background: rgba(255,255,255,.55); border-radius: 10px; padding: 4px 8px; margin-top: 6px; } .lineh { font-size: 12px; opacity: .8; display: none; }
+  /* ===== story intro video (first visit) ===== */
+  .story { position: fixed; inset: 0; z-index: 40; background: #000; display: none; } .story.on { display: block; }
+  .story video { width: 100%; height: 100%; object-fit: cover; } @media (min-aspect-ratio: 3/4) { .story video { object-fit: contain; } }
+  .story button { position: absolute; font-family: 'Kanit'; font-weight: 800; border: none; cursor: pointer; }
+  .st-skip { right: 14px; bottom: calc(30px + env(safe-area-inset-bottom)); background: rgba(0,0,0,.6); color: #fff; border: 2px solid rgba(255,255,255,.5) !important; border-radius: 10px; padding: 10px 16px; font-size: 17px; }
+  .st-skip:not(:disabled) { background: rgba(255,255,255,.92); color: #13233f; }
+  .st-play { left: 50%; top: 50%; transform: translate(-50%, -50%); background: linear-gradient(180deg, #ff8a2a, #e8650c); color: #fff; font-size: 24px; padding: 18px 30px; border-radius: 40px; box-shadow: 0 6px 0 #8a3500; display: none; }
+  .st-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(255,255,255,.2); } .st-bar i { display: block; height: 100%; width: 0; background: #ffd400; }
+  .linkbtn { background: none; border: none; color: #ffe9c4; font-family: 'Kanit'; font-size: 15px; text-decoration: underline; cursor: pointer; padding: 4px; }
   .cf { position: fixed; top: -20px; width: 10px; height: 16px; z-index: 30; pointer-events: none; border-radius: 2px; animation: cf 1.6s cubic-bezier(.2,.6,.4,1) forwards; } @keyframes cf { 80% { opacity: 1; } to { transform: translate(var(--dx), 55vh) rotate(var(--r)); opacity: 0; } }
   .medal .coin { border: 6px solid rgba(255,255,255,.55); outline: 3px solid rgba(0,0,0,.25); }
   .langs { display: flex; gap: 6px; flex: none; } .langs button { font-family: 'Kanit'; font-weight: 800; font-size: 13px; color: #fff; background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.35); border-radius: 14px; padding: 3px 12px; cursor: pointer; } .langs button.on { background: #ffd36b; color: #3a2200; border-color: #ffd36b; }
@@ -155,7 +164,7 @@ const BUILD = '20261028070737';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
-<script src="race_i18n.js?b=20261028070737"></script>
+<script src="race_i18n.js?b=20261028123649"></script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body class="menu">
@@ -177,6 +186,12 @@ const BUILD = '20261028070737';
 
 <div class="gate" id="pause"><div class="logo" style="font-size:44px">⏸ พักก่อน</div><button class="go" id="resumeBtn">▶ ขี่ต่อ</button><small>ง่วงก็จอดพักแบบนี้นะ 😴</small></div>
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
+<div class="story" id="story">
+  <video id="storyVid" src="race/story.mp4" poster="race/story_poster.jpg" playsinline preload="auto"></video>
+  <button class="st-skip" id="stSkip" disabled><span id="stTxt">ข้ามได้ใน</span> <b id="stCount">10</b></button>
+  <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
+  <div class="st-bar"><i id="stBar"></i></div>
+</div>
 <div class="load" id="load">กำลังเช็คอิน...<div class="b"><i id="loadBar"></i></div></div>
 <div class="ov on" id="start">
   <div class="langs" id="langs"><button data-l="th">TH</button><button data-l="en">EN</button><button data-l="jp">日本語</button></div>
@@ -187,6 +202,7 @@ const BUILD = '20261028070737';
   <div class="how">◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · ขับปลอดภัยแบบไหน เดี๋ยวเกมบอกระหว่างทาง!</div>
   <button class="go" id="goBtn">▶ ออกเดินทาง</button>
   <button class="btn2" id="boardBtn">🏆 กระดานคะแนน</button>
+  <button class="linkbtn" id="replayStory">🎬 ดูวิดีโอเรื่องราว</button>
 </div>
 <div class="ov" id="pick">
   <div class="logo" style="font-size:34px">เลือกนักบิด</div>
@@ -199,7 +215,7 @@ const BUILD = '20261028070737';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261028070737" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261028123649" alt="">
   <div class="big" id="endScore">0</div>
   <p id="endP"></p>
   <div class="drunkbox" id="drunkBox" style="display:none">🚫 รอบที่ดื่มแล้วขับ ไม่นับคะแนน ไม่ขึ้นกระดาน<br><b>เล่นใหม่แบบ "ดื่มไม่ขับ" นะ</b></div>
@@ -804,7 +820,33 @@ function setLang(l) { I18N.set(l); document.querySelectorAll('#langs button').fo
 document.querySelectorAll('#langs button').forEach(b => b.onclick = () => { snd.whoosh(); setLang(b.dataset.l); });
 new MutationObserver((ms) => { if (I18N.lang === 'th') return; for (const m of ms) { if (m.type === 'characterData') I18N.tr(m.target.parentNode); else m.addedNodes.forEach(n => I18N.tr(n.nodeType === 3 ? n.parentNode : n)); } }).observe(document.body, { subtree: true, childList: true, characterData: true });
 setLang(I18N.lang);
-$('gate').classList.add('on'); $('gateBtn').onclick = () => { snd.unlock(); $('gate').classList.remove('on'); Music.playTrack('theme'); };
+// ===== story intro video (first visit only; ?nostory skips for tests) =====
+const Story = (() => {
+  const box = $('story'), v = $('storyVid'); let timer = null, closed = true;
+  function close() {
+    if (closed) return; closed = true; clearInterval(timer); try { v.pause(); } catch (e) {}
+    box.classList.remove('on'); store.set('nbmt_race_story', '1'); Music.playTrack('theme');
+  }
+  function open() {
+    closed = false; box.classList.add('on'); v.currentTime = 0; $('stSkip').disabled = true; $('stTxt').textContent = 'ข้ามได้ใน'; $('stCount').textContent = 10;
+    Music.stopTrack(); v.muted = Music.muted;
+    const p = v.play(); if (p && p.catch) p.catch(() => { v.muted = true; v.play().catch(() => { $('stPlay').style.display = 'block'; }); });
+    clearInterval(timer);
+    timer = setInterval(() => {
+      const t = v.currentTime, left = Math.ceil(10 - t);
+      $('stBar').style.width = (v.duration ? t / v.duration * 100 : 0) + '%';
+      if (left > 0) $('stCount').textContent = left;
+      else if ($('stSkip').disabled) { $('stSkip').disabled = false; $('stTxt').textContent = 'ข้าม ⏭'; $('stCount').textContent = ''; }
+    }, 200);
+  }
+  v.addEventListener('ended', close);
+  $('stSkip').onclick = () => { if (!$('stSkip').disabled) close(); };
+  $('stPlay').onclick = () => { $('stPlay').style.display = 'none'; v.play(); };
+  return { open, close };
+})();
+$('replayStory').onclick = () => { snd.unlock(); Story.open(); };
+const wantStory = store.get('nbmt_race_story') !== '1' && !/[?&]nostory/.test(location.search);
+$('gate').classList.add('on'); $('gateBtn').onclick = () => { snd.unlock(); $('gate').classList.remove('on'); if (wantStory) Story.open(); else Music.playTrack('theme'); };
 $('cast').innerHTML = [['buffalo', 'ควาย'], ['wrongway', 'ย้อนศร'], ['drunk', 'ขี้เมา'], ['chicken', 'ไก่'], ['pickup', 'ของหล่น'], ['truck', 'รถพ่วง'], ['coffee', 'กาแฟ'], ['phone', 'มือถือ'], ['friends', 'เพื่อนชวนดื่ม'], ['racer', 'เด็กแว้น'], ['hitch', 'ขอซ้อน'], ['shortcut', 'ทางลัด']].map(([k, t]) => `<div><img src="race/${k}.webp" alt="">${t}</div>`).join('');
 reset(); camera.position.set(0, 5.6, 10.5); camera.lookAt(0, 0, -16); loop();
 window.__medal = (a, b) => { me = me || { name: 'TEST', dept: 'Zone 1', group: '1-1 : x' }; medalShow(a, b); }; window.__S = S; window.__D = { get ents() { return ents; }, get lights() { return lights; } };
