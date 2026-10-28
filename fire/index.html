@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261028194328';
+const BUILD = '20261028232819';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -13,7 +13,7 @@ const BUILD = '20261028194328';
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="icon" href="../favicon.svg?b=20261028194328"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
+<link rel="icon" href="../favicon.svg?b=20261028232819"><title>จับ 6 ผู้ร้ายจุดไฟ · NBMT Fire Prevention</title>
 <meta name="description" content="เกม 30 วินาที ช่วยนายอำเภอเอิร์ทจับ 6 ผู้ร้ายจุดไฟในโรงงาน — NBMT Fire Prevention 3ต 3จ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&family=Rye&display=swap" rel="stylesheet">
@@ -252,7 +252,7 @@ const BUILD = '20261028194328';
   <button class="g-btn" id="gateBtn">▶ แตะเพื่อเริ่ม</button><div class="g-s">🔊 เปิดเสียงด้วยนะ</div><div class="langs"><button data-l="th">TH</button><button data-l="en">EN</button><button data-l="jp">日本語</button></div></div>
 </div>
 <div class="story" id="story">
-  <video id="storyVid" src="img/story.mp4?b=20261028194328" poster="img/story_poster.jpg?b=20261028194328" playsinline muted preload="auto"></video>
+  <video id="storyVid" src="img/story.mp4?b=20261028232819" poster="img/story_poster.jpg?b=20261028232819" playsinline muted preload="auto"></video>
   <button class="st-snd" id="stSnd">🔊 แตะเปิดเสียง</button>
   <button class="st-skip" id="stSkip" disabled>ข้ามได้ใน <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
@@ -285,12 +285,12 @@ const BUILD = '20261028194328';
     <div class="w">WANTED</div>
     <h1>ช่วยกันจับ <b>6 ผู้ร้ายจุดไฟ</b></h1>
     <div class="hero">
-      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261028194328" poster="img/sheriff.webp?b=20261028194328" muted loop playsinline preload="auto"></video></div>
+      <div class="vwrap"><video id="introVid" src="img/intro.mp4?b=20261028232819" poster="img/sheriff.webp?b=20261028232819" muted loop playsinline preload="auto"></video></div>
       <div class="bubble">นายอำเภอเอิร์ทจับ<b>เจ้าปลั๊กค้าง</b>ได้แล้ว 1 ตัว! เหลืออีก 5 ตัวซ่อนอยู่ในโรงงาน ช่วยกันจับใน <b>30 วินาที</b>!</div>
     </div>
     <div class="rules">
-      <div class="row"><img src="img/v2.webp?b=20261028194328" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
-      <div class="row"><img class="g" src="img/c3.webp?b=20261028194328" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
+      <div class="row"><img src="img/v2.webp?b=20261028232819" alt=""> แตะ <b>ผู้ร้าย</b> (กรอบแดง) = +10 คะแนน</div>
+      <div class="row"><img class="g" src="img/c3.webp?b=20261028232819" alt=""> อย่าแตะ <b>ของดี</b> (กรอบเขียว) = −5 คะแนน</div>
       <div class="row">🎯 จับให้ครบ 6 ชนิด ได้โบนัส +50</div>
     </div>
     <button class="btn" id="startBtn">▶ เริ่มเกม</button>
@@ -348,7 +348,7 @@ const BUILD = '20261028194328';
   </section>
 </div>
 
-<script src="fire_i18n.js?b=20261028194328"></script>
+<script src="fire_i18n.js?b=20261028232819"></script>
 <script>
 const V = [
   { id: 1, g: 'ต', name: 'เจ้าปลั๊กค้าง', how: 'ตรวจสอบการใช้งานและถอดปลั๊กอุปกรณ์ไฟฟ้าหลังใช้งาน', tip: 'เลิกงาน = ปิดสวิตช์ ถอดปลั๊ก' },
@@ -452,7 +452,7 @@ function bestTxt() { const b = +store.get('nbmt_fire_best') || 0; $('bestTxt').t
 
 function build() {
   $('grid').innerHTML = SPOTS.map((s, i) => `<div class="hole" data-i="${i}"><span class="lab">${s}</span></div>`).join('');
-  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261028194328" alt=""></span>`).join('');
+  $('caughtRow').innerHTML = V.map(v => `<span id="cr${v.id}"><img src="img/v${v.id}.webp?b=20261028232819" alt=""></span>`).join('');
 }
 
 function toast(html, bad) {
@@ -557,6 +557,7 @@ function end() {
   setTimeout(() => { const n = $('final'); n.classList.remove('zoom'); void n.offsetWidth; n.classList.add('zoom'); }, 30);
   const best = Math.max(score, +store.get('nbmt_fire_best') || 0); store.set('nbmt_fire_best', best);
   last = { score, kinds: caught.size, misses, hits, dur: DUR };
+  playPing('fire', score, caught.size + '/6');
   $('submitBox').style.display = score > 0 ? '' : 'none'; $('myRank').classList.remove('on'); $('submitBtn').disabled = false; $('submitBtn').textContent = '📌 ส่งคะแนน';
   $('final').textContent = score;
   $('finalSub').textContent = `จับได้ ${hits} ครั้ง · ครบ ${caught.size}/6 ชนิด · แตะผิด ${misses} · สถิติ ${best}`;
@@ -574,6 +575,31 @@ const _show = show; show = (id) => { _show(id); if (id === 'intro') playVid($('i
 
 // ===== scoreboard =====
 const API = 'https://script.google.com/macros/s/AKfycbzOvXvj63i7BF7PMC5eRBwgE9q320kOheNnFmounEZCm4A7fqOFIK2nN12c8vh-utwPdw/exec';
+
+// Apps Script rejects requests when too many run at once ("too many simultaneous invocations",
+// returned as an HTML page). Retry with backoff so a crowd just waits a few seconds instead of failing.
+// A POST retried after a lost reply may answer 'wait' (the first try was saved): treat that as success.
+async function api(opts, q, boardQ) {
+  let lastErr;
+  for (let i = 0; i < 5; i++) {
+    try {
+      const r = await fetch(API + (q || ''), opts), j = JSON.parse(await r.text());
+      if (j.err === 'busy') throw new Error('busy');
+      if (i > 0 && j.err === 'wait' && boardQ != null) { const b = await api(undefined, boardQ); return { ok: true, board: b, total: b.players }; }
+      return j;
+    } catch (e) { lastErr = e; }
+    await new Promise(ok => setTimeout(ok, 1200 * 2 ** i + Math.random() * 1500));
+  }
+  throw lastErr;
+}
+
+// Count every finished round (even when the player never submits). Background only: failures are ignored.
+// device = random id kept on this phone; emp is sent only if this phone already entered one before.
+function playPing(game, score, result) {
+  let dev = store.get('nbmt_dev');
+  if (!dev) { dev = Math.random().toString(36).slice(2, 10) + Date.now().toString(36); store.set('nbmt_dev', dev); }
+  api({ method: 'POST', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ type: 'play', game, score, dev, emp: store.get('nbmt_emp') || '', lang: store.get('nbmt_lang') || 'th', result }) }).catch(() => {});
+}
 // ===== 5ส ZONES & GROUPS (จาก NBMT 5S System · 5S_GroupNumber_V2 · FY2026) =====
 const GROUPS = {
   1: ['1-1 : WP Line + Meeting area', '1-2 : MCB #1-3', '1-3 : SB #5-9', '1-4 : SB #1-4', '1-5 : TP & S/R, Pack', '1-6 : NB & CR + Meeting area'],
@@ -614,7 +640,7 @@ function renderBoard() {
   $('bList').innerHTML = html || '<div class="empty">ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!</div>';
 }
 async function loadBoard() {
-  try { const r = await fetch(API); boardData = await r.json(); renderBoard(); }
+  try { boardData = await api(undefined, ''); renderBoard(); }
   catch (e) { $('bStat').textContent = 'โหลดกระดานไม่สำเร็จ ลองใหม่อีกครั้ง'; }
 }
 function openBoard() { show('board'); renderBoard(); loadBoard(); }
@@ -629,8 +655,7 @@ $('submitBtn').onclick = async () => {
   store.set('nbmt_name', name); store.set('nbmt_dept', dept); store.set('nbmt_group', group); store.set('nbmt_emp', emp);
   const btn = $('submitBtn'); btn.disabled = true; btn.textContent = 'กำลังส่ง...';
   try {
-    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, zone: dept, group, emp, pin: $('pPin').value.trim() || store.get('nbmt_pin') || '', ...last }) });
-    const j = await r.json();
+    const j = await api({ method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, zone: dept, group, emp, pin: $('pPin').value.trim() || store.get('nbmt_pin') || '', ...last }) }, '', '');
     if (!j.ok) {
       btn.disabled = false; btn.textContent = '📌 ส่งคะแนน';
       if (j.err === 'reserved') { const had = $('pPin').value; $('pinBox').classList.add('on'); store.set('nbmt_pin', ''); $('pPin').value = ''; $('pPin').placeholder = had ? 'PIN ไม่ถูกต้อง ลองอีกครั้ง' : 'PIN 6 หลัก'; $('pPin').focus(); return; }
@@ -640,7 +665,7 @@ $('submitBtn').onclick = async () => {
     $('pinBox').classList.remove('on');
     me = { name, dept, group }; boardData = j.board;
     $('submitBox').style.display = 'none';
-    $('myRank').innerHTML = `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}<small>จากผู้เล่นทั้งหมด ${j.total} คน · <span data-notr>${esc(dept)} · ${esc(group.split(' : ')[0])}</span></small>`;
+    $('myRank').innerHTML = (j.rankAll ? `อันดับวันนี้ #${j.rankToday} · ตลอดกาล #${j.rankAll}` : 'ส่งคะแนนแล้ว ✓') + `<small>จากผู้เล่นทั้งหมด ${j.total} คน · <span data-notr>${esc(dept)} · ${esc(group.split(' : ')[0])}</span></small>`;
     $('myRank').classList.add('on');
     setTimeout(() => medalShow(j.rankToday, j.rankAll), 400);
   } catch (e) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน (ลองใหม่)'; }
@@ -692,7 +717,7 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 async function caseReport() {
   const R = $('rep'); R.classList.add('on');
   ['repT', 'repT2', 'repStar', 'repGo'].forEach(id => $(id).classList.remove('in')); $('repSc').textContent = '';
-  $('repMugs').innerHTML = V.map(v => `<div class="mug" id="mug${v.id}"><img src="img/v${v.id}.webp?b=20261028194328" alt=""><div class="nm">${v.name}</div><div class="st">จับแล้ว!</div></div>`).join('');
+  $('repMugs').innerHTML = V.map(v => `<div class="mug" id="mug${v.id}"><img src="img/v${v.id}.webp?b=20261028232819" alt=""><div class="nm">${v.name}</div><div class="st">จับแล้ว!</div></div>`).join('');
   await sleep(200); $('repT').classList.add('in'); SFX.miss && SFX.count(); shake(true);
   await sleep(450); $('repT2').classList.add('in');
   for (const v of V) {

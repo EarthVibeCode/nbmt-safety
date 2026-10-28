@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261028194328';
+const BUILD = '20261028232819';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -164,7 +164,7 @@ const BUILD = '20261028194328';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
-<script src="race_i18n.js?b=20261028194328"></script>
+<script src="race_i18n.js?b=20261028232819"></script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body class="menu">
@@ -187,7 +187,7 @@ const BUILD = '20261028194328';
 <div class="gate" id="pause"><div class="logo" style="font-size:44px">⏸ พักก่อน</div><button class="go" id="resumeBtn">▶ ขี่ต่อ</button><small>ง่วงก็จอดพักแบบนี้นะ 😴</small></div>
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
 <div class="story" id="story">
-  <video id="storyVid" src="race/story.mp4?b=20261028194328" poster="race/story_poster.jpg?b=20261028194328" playsinline preload="auto"></video>
+  <video id="storyVid" src="race/story.mp4?b=20261028232819" poster="race/story_poster.jpg?b=20261028232819" playsinline preload="auto"></video>
   <button class="st-skip" id="stSkip" disabled><span id="stTxt">ข้ามได้ใน</span> <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
   <div class="st-bar"><i id="stBar"></i></div>
@@ -215,7 +215,7 @@ const BUILD = '20261028194328';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261028194328" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261028232819" alt="">
   <div class="big" id="endScore">0</div>
   <p id="endP"></p>
   <div class="drunkbox" id="drunkBox" style="display:none">🚫 รอบที่ดื่มแล้วขับ ไม่นับคะแนน ไม่ขึ้นกระดาน<br><b>เล่นใหม่แบบ "ดื่มไม่ขับ" นะ</b></div>
@@ -640,6 +640,7 @@ function finish(win) {
   const st = S.stats; $('stats').innerHTML = `<div>🚦 หยุดไฟแดง<br><b>${st.red}</b></div><div>🚸 หยุดให้ข้าม<br><b>${st.yield}</b></div><div>🅿️ จอดพักแก้ง่วง<br><b>${st.rest}</b></div><div>📵 ไม่ใช้มือถือ<br><b>${st.declined}</b></div><div>😇 ไม่หลงกลเพื่อน<br><b>${st.nope}/4</b></div><div>💥 ชน<br><b>${st.crash}</b></div>`;
   $('endP').innerHTML = drank ? '<span style="white-space:nowrap">ถ้าเป็นถนนจริง ด่านตรวจ:</span> <span style="white-space:nowrap">ยึดรถ · ปรับ · จำคุก</span> — <span style="white-space:nowrap">ไม่มีโบนัสสำหรับคนเมาแล้วขับ</span>' : win ? `หัวใจเหลือ ${S.hearts} ดวง (+${S.hearts * 150})` : `ไปได้ ${Math.round(S.dist)} / ${S.total} ม.`; $('endImg').style.display = win && !drank ? '' : 'none';
   last = { char: PL.c, veh: PL.v, game: 'race', score: Math.floor(S.score), dist: Math.round(Math.min(S.dist, S.total)), hearts: Math.max(0, S.hearts), crash: st.crash, nope: st.nope, sim: Math.round(S.t), win, drank, ms, mok, red: st.red, dodge: st.dodge, yield: st.yield, rest: st.rest, coffee: st.coffee, phoneNo: st.declined };
+  playPing('race', last.score, drank ? 'drank' : win ? 'home' : 'fail');
   $('submitBox').style.display = last.score > 0 && !drank ? '' : 'none'; $('myRank').classList.remove('on'); $('submitBtn').disabled = false; $('submitBtn').textContent = '📌 ส่งคะแนน'; $('certImg').style.display = 'none';
   me = me ? { name: me.name, dept: me.dept, group: me.group } : null;
   $('end').classList.add('on'); $('end').scrollTop = 0;
@@ -670,6 +671,31 @@ $('pkGo').onclick = () => { try { localStorage.setItem('nbmt_race_c', PL.c); loc
 
 // ================= scoreboard (shared backend with Fire game, tab 'race') =================
 const API = 'https://script.google.com/macros/s/AKfycbzOvXvj63i7BF7PMC5eRBwgE9q320kOheNnFmounEZCm4A7fqOFIK2nN12c8vh-utwPdw/exec';
+
+// Apps Script rejects requests when too many run at once ("too many simultaneous invocations",
+// returned as an HTML page). Retry with backoff so a crowd just waits a few seconds instead of failing.
+// A POST retried after a lost reply may answer 'wait' (the first try was saved): treat that as success.
+async function api(opts, q, boardQ) {
+  let lastErr;
+  for (let i = 0; i < 5; i++) {
+    try {
+      const r = await fetch(API + (q || ''), opts), j = JSON.parse(await r.text());
+      if (j.err === 'busy') throw new Error('busy');
+      if (i > 0 && j.err === 'wait' && boardQ != null) { const b = await api(undefined, boardQ); return { ok: true, board: b, total: b.players }; }
+      return j;
+    } catch (e) { lastErr = e; }
+    await new Promise(ok => setTimeout(ok, 1200 * 2 ** i + Math.random() * 1500));
+  }
+  throw lastErr;
+}
+
+// Count every finished round (even when the player never submits). Background only: failures are ignored.
+// device = random id kept on this phone; emp is sent only if this phone already entered one before.
+function playPing(game, score, result) {
+  let dev = store.get('nbmt_dev');
+  if (!dev) { dev = Math.random().toString(36).slice(2, 10) + Date.now().toString(36); store.set('nbmt_dev', dev); }
+  api({ method: 'POST', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ type: 'play', game, score, dev, emp: store.get('nbmt_emp') || '', lang: store.get('nbmt_lang') || 'th', result }) }).catch(() => {});
+}
 const store = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
 const GROUPS = {
   1: ['1-1 : WP Line + Meeting area', '1-2 : MCB #1-3', '1-3 : SB #5-9', '1-4 : SB #1-4', '1-5 : TP & S/R, Pack', '1-6 : NB & CR + Meeting area'],
@@ -708,7 +734,7 @@ function renderBoard() {
   $('bList').innerHTML = html || '<div class="empty">ยังไม่มีใครลงชื่อ — เป็นคนแรกเลย!</div>';
   const meRow = $('bList').querySelector('.br.me'); if (meRow) setTimeout(() => meRow.scrollIntoView({ block: 'center', behavior: 'smooth' }), 200);
 }
-async function loadBoard() { try { const r = await fetch(API + '?game=race'); boardData = await r.json(); renderBoard(); } catch (e) { $('bStat').textContent = 'โหลดกระดานไม่สำเร็จ ลองใหม่อีกครั้ง'; } }
+async function loadBoard() { try { boardData = await api(undefined, '?game=race'); renderBoard(); } catch (e) { $('bStat').textContent = 'โหลดกระดานไม่สำเร็จ ลองใหม่อีกครั้ง'; } }
 function openBoard() { if (me && me.medal) tab = me.medal.useAll ? 'all' : 'today'; $('board').classList.add('on'); $('board').scrollTop = 0; renderBoard(); loadBoard(); }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { tab = b.dataset.t; renderBoard(); });
 $('boardBtn').onclick = openBoard; $('boardBtn2').onclick = openBoard; $('boardClose').onclick = () => $('board').classList.remove('on');
@@ -720,8 +746,7 @@ $('submitBtn').onclick = async () => {
   store.set('nbmt_name', name); store.set('nbmt_dept', dept); store.set('nbmt_group', group); store.set('nbmt_emp', emp);
   const btn = $('submitBtn'); btn.disabled = true; btn.textContent = 'กำลังส่ง...';
   try {
-    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, zone: dept, group, emp, pin: $('pPin').value.trim() || store.get('nbmt_pin') || '', ...last }) });
-    const j = await r.json();
+    const j = await api({ method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ name, zone: dept, group, emp, pin: $('pPin').value.trim() || store.get('nbmt_pin') || '', ...last }) }, '', '?game=race');
     if (!j.ok) { btn.disabled = false; btn.textContent = '📌 ส่งคะแนน';
       if (j.err === 'reserved') { const had = $('pPin').value; $('pinBox').classList.add('on'); store.set('nbmt_pin', ''); $('pPin').value = ''; $('pPin').placeholder = had ? 'PIN ไม่ถูกต้อง ลองอีกครั้ง' : 'PIN 6 หลัก'; $('pPin').focus(); return; }
       alert(j.err === 'word' ? 'ชื่อนี้ใช้ไม่ได้ ลองชื่ออื่นนะ' : j.err === 'emp' ? 'รหัสพนักงานไม่ถูกต้อง' : j.err === 'wait' ? 'เพิ่งส่งคะแนนไป รอสักครู่แล้วลองใหม่นะ' : j.err === 'invalid' ? 'คะแนนรอบนี้ส่งไม่ได้ ลองเล่นใหม่อีกรอบนะ' : 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
