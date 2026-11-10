@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261110091730';
+const BUILD = '20261110101635';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -164,7 +164,7 @@ const BUILD = '20261110091730';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
-<script src="race_i18n.js?b=20261110091730"></script>
+<script src="race_i18n.js?b=20261110101635"></script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
 </head>
 <body class="menu">
@@ -187,7 +187,7 @@ const BUILD = '20261110091730';
 <div class="gate" id="pause"><div class="logo" style="font-size:44px">⏸ พักก่อน</div><button class="go" id="resumeBtn">▶ ขี่ต่อ</button><small>ง่วงก็จอดพักแบบนี้นะ 😴</small></div>
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
 <div class="story" id="story">
-  <video id="storyVid" src="race/story.mp4?b=20261110091730" poster="race/story_poster.jpg?b=20261110091730" playsinline preload="auto"></video>
+  <video id="storyVid" src="race/story.mp4?b=20261110101635" poster="race/story_poster.jpg?b=20261110101635" playsinline preload="auto"></video>
   <button class="st-skip" id="stSkip" disabled><span id="stTxt">ข้ามได้ใน</span> <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
   <div class="st-bar"><i id="stBar"></i></div>
@@ -197,7 +197,7 @@ const BUILD = '20261110091730';
   <div class="langs" id="langs"><button data-l="th">TH</button><button data-l="en">EN</button><button data-l="jp">日本語</button></div>
   <div class="logo">ถนนนรก<br>กลับบ้าน!</div>
   <h1>ทุกเที่ยวไป <b>ต้องมีเที่ยวกลับ</b></h1>
-  <p>เลือกนักบิด เอิร์ท · ปลื้ม · ฟลุ๊ค · ใบเตย แล้วฝ่าถนนสุดป่วนจาก NBMT กลับบ้านให้รอด! ขับปลอดภัยได้คะแนน ประมาทเสียหัวใจ</p>
+  <p>เลือกนักบิด เอิร์ท · ปลื้ม · ฟลุ๊ค · น้องกวาง แล้วฝ่าถนนสุดป่วนจาก NBMT กลับบ้านให้รอด! ขับปลอดภัยได้คะแนน ประมาทเสียหัวใจ</p>
   <div class="cast" id="cast"></div>
   <div class="how">◀ ▶ / ปัดนิ้ว = เปลี่ยนเลน · ✋ ค้าง = เบรก · ขับปลอดภัยแบบไหน เดี๋ยวเกมบอกระหว่างทาง!</div>
   <button class="go" id="goBtn">▶ ออกเดินทาง</button>
@@ -215,7 +215,7 @@ const BUILD = '20261110091730';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261110091730" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261110101635" alt="">
   <div class="big" id="endScore">0</div>
   <p id="endP"></p>
   <div class="drunkbox" id="drunkBox" style="display:none">🚫 รอบที่ดื่มแล้วขับ ไม่นับคะแนน ไม่ขึ้นกระดาน<br><b>เล่นใหม่แบบ "ดื่มไม่ขับ" นะ</b></div>
@@ -324,7 +324,7 @@ function buildScenery() {
 
 // ================= sprites =================
 const SPR = { rider: 2.4, sedan: 2.6, pickup: 2.9, truck: 5.4, wrongway: 2.2, drunk: 2.7, buffalo: 2.4, chicken: 1.2, dog: 1.2, grandma: 2.0, crate: 1.4, pothole: .8, coffee: 1.1, helmet: 1.0, shield: 1.1, reststop: 2.8, shop: 4.2, temple: 5.0, cart: 2.6, phone: 1.0, friends: 2.4, racer: 2.4, hitch: 2.1, shortcut: 2.0 };
-const CHARS = { earth: 'เอิร์ท', pleum: 'ปลื้ม', fluke: 'ฟลุ๊ค', bai: 'ใบเตย' };
+const CHARS = { earth: 'เอิร์ท', pleum: 'ปลื้ม', fluke: 'ฟลุ๊ค', bai: 'น้องกวาง' };
 const VEHS = {
   xmax: { name: 'XMAX 300', emo: '🛵', sub: 'สมดุลทุกด้าน', h: 2.4, top: 1, acc: 7, lane: 8, wide: 0, brake: 1, st: [3, 3, 3] },
   wave: { name: 'เวฟ 110', emo: '🏍️', sub: 'คล่องตัว หลบไว', h: 2.2, top: .94, acc: 6, lane: 12, wide: -.3, brake: .95, st: [2, 5, 2] },
