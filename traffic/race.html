@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261028232819';
+const BUILD = '20261110091730';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -69,8 +69,8 @@ const BUILD = '20261028232819';
   .tempt .bad { background: linear-gradient(180deg, #ff6fb1, #d6246e); } .tempt .good { background: linear-gradient(180deg, #33c9ff, #1559b8); }
   .tempt .tm { position: absolute; left: 0; bottom: 0; height: 6px; background: #c81e1e; width: 100%; }
   .tempt.on .tm { animation: tm 4.5s linear forwards; } @keyframes tm { to { width: 0; } }
-  body.drunk canvas#gl { animation: drunk 1.6s infinite ease-in-out; } body.drunk .vig { opacity: .8 !important; background: radial-gradient(ellipse at 50% 55%, transparent 35%, rgba(120,0,90,.55)); }
-  @keyframes drunk { 0%,100% { transform: rotate(-3.5deg) scale(1.08); filter: blur(1px) hue-rotate(0deg); } 50% { transform: rotate(3.5deg) scale(1.12) translateX(10px); filter: blur(1px) hue-rotate(40deg) saturate(1.5) drop-shadow(14px 0 0 rgba(255,80,200,.35)); } }
+  body.drunk canvas#gl { animation: drunk 1.6s infinite ease-in-out; } body.sleepy .vig { background: radial-gradient(ellipse at 50% 55%, transparent 22%, rgba(0,0,0,.85)); } body.dazed .vig { opacity: 1 !important; background: radial-gradient(ellipse at 50% 55%, rgba(0,0,0,.25) 20%, rgba(0,0,0,.9)); transition: none; } body.drunk .vig { opacity: .8 !important; background: radial-gradient(ellipse at 50% 55%, transparent 35%, rgba(120,0,90,.55)); }
+  @keyframes drunk { 0%,100% { transform: rotate(-3.5deg) scale(1.08); } 50% { transform: rotate(3.5deg) scale(1.12) translateX(10px); } }
   .ov { position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 22px; text-align: center; color: #fff;
     background: radial-gradient(ellipse at 50% 30%, rgba(255,140,60,.4), transparent 60%), rgba(8,22,55,.9); overflow-y: auto; }
   .ov.on { display: flex; }
@@ -164,8 +164,8 @@ const BUILD = '20261028232819';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
-<script src="race_i18n.js?b=20261028232819"></script>
-<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
+<script src="race_i18n.js?b=20261110091730"></script>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
 </head>
 <body class="menu">
 <canvas id="gl"></canvas>
@@ -187,7 +187,7 @@ const BUILD = '20261028232819';
 <div class="gate" id="pause"><div class="logo" style="font-size:44px">⏸ พักก่อน</div><button class="go" id="resumeBtn">▶ ขี่ต่อ</button><small>ง่วงก็จอดพักแบบนี้นะ 😴</small></div>
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
 <div class="story" id="story">
-  <video id="storyVid" src="race/story.mp4?b=20261028232819" poster="race/story_poster.jpg?b=20261028232819" playsinline preload="auto"></video>
+  <video id="storyVid" src="race/story.mp4?b=20261110091730" poster="race/story_poster.jpg?b=20261110091730" playsinline preload="auto"></video>
   <button class="st-skip" id="stSkip" disabled><span id="stTxt">ข้ามได้ใน</span> <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
   <div class="st-bar"><i id="stBar"></i></div>
@@ -215,7 +215,7 @@ const BUILD = '20261028232819';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261028232819" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261110091730" alt="">
   <div class="big" id="endScore">0</div>
   <p id="endP"></p>
   <div class="drunkbox" id="drunkBox" style="display:none">🚫 รอบที่ดื่มแล้วขับ ไม่นับคะแนน ไม่ขึ้นกระดาน<br><b>เล่นใหม่แบบ "ดื่มไม่ขับ" นะ</b></div>
@@ -261,13 +261,14 @@ const BUILD = '20261028232819';
 
 <script type="module">
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 const $ = (id) => document.getElementById(id);
 const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const rnd = (a, b) => a + Math.random() * (b - a), pick = (a) => a[Math.floor(Math.random() * a.length)];
 
 // ================= renderer & world =================
 const renderer = new THREE.WebGLRenderer({ canvas: $('gl'), antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+const TOUCH = matchMedia('(pointer: coarse)').matches; renderer.setPixelRatio(Math.min(TOUCH ? 1.5 : 2, devicePixelRatio || 1));
 renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08;
 const scene = new THREE.Scene(); scene.fog = new THREE.Fog('#f0a070', 70, 240);
 const camera = new THREE.PerspectiveCamera(50, 1, .1, 600);
@@ -282,6 +283,8 @@ scene.add(new THREE.HemisphereLight('#ffe0c0', '#405a90', 1.1));
 const sunL = new THREE.DirectionalLight('#ffd0a0', 1.4); sunL.position.set(-30, 40, -20); scene.add(sunL);
 const fillL = new THREE.DirectionalLight('#d8e6ff', 1.0); fillL.position.set(10, 14, 30); scene.add(fillL);
 const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .8, ...o });
+// static scenery: one shared Lambert material per colour (much cheaper than Standard on phones)
+const MLc = {}; const ML = (c, o) => o ? new THREE.MeshLambertMaterial({ color: c, ...o }) : (MLc[c] || (MLc[c] = new THREE.MeshLambertMaterial({ color: c })));
 const LANES = [-3.4, 0, 3.4];
 
 const roadTex = (() => { const cv = document.createElement('canvas'); cv.width = 256; cv.height = 512; const c = cv.getContext('2d');
@@ -291,19 +294,23 @@ const roadTex = (() => { const cv = document.createElement('canvas'); cv.width =
   const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 30); t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace; return t; })();
 const roadMat = M('#ffffff', { map: roadTex, roughness: .7, metalness: 0 });
 const road = new THREE.Mesh(new THREE.PlaneGeometry(11, 600), roadMat); road.rotation.x = -Math.PI / 2; road.position.z = -250; scene.add(road);
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 600), M('#7aa05a')); ground.rotation.x = -Math.PI / 2; ground.position.set(0, -.02, -250); scene.add(ground);
-[-5.8, 5.8].forEach(x => { const m = new THREE.Mesh(new THREE.BoxGeometry(.6, .25, 600), M('#e0d8c8')); m.position.set(x, .12, -250); scene.add(m); });
-[-7.6, 7.6].forEach(x => { const m = new THREE.Mesh(new THREE.PlaneGeometry(3, 600), M('#c9c1b3')); m.rotation.x = -Math.PI / 2; m.position.set(x, .01, -250); scene.add(m); });
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 600), ML('#7aa05a')); ground.rotation.x = -Math.PI / 2; ground.position.set(0, -.02, -250); scene.add(ground);
+[-5.8, 5.8].forEach(x => { const m = new THREE.Mesh(new THREE.BoxGeometry(.6, .25, 600), ML('#e0d8c8')); m.position.set(x, .12, -250); scene.add(m); });
+[-7.6, 7.6].forEach(x => { const m = new THREE.Mesh(new THREE.PlaneGeometry(3, 600), ML('#c9c1b3')); m.rotation.x = -Math.PI / 2; m.position.set(x, .01, -250); scene.add(m); });
 
 const scenery = [];
-function palm() { const g = new THREE.Group(); const t = new THREE.Mesh(new THREE.CylinderGeometry(.22, .32, 6, 6), M('#8a6a45')); t.position.y = 3; g.add(t);
-  for (let i = 0; i < 7; i++) { const l = new THREE.Mesh(new THREE.ConeGeometry(.55, 3.4, 4), M('#2f8a3a')); l.geometry.translate(0, 1.6, 0); l.position.y = 6.1; l.rotation.z = Math.PI / 2.4; l.rotation.y = i / 7 * Math.PI * 2; g.add(l); } return g; }
+let PALM; function palm() { if (!PALM) { const t = new THREE.CylinderGeometry(.22, .32, 6, 6); t.translate(0, 3, 0);
+    const ls = []; for (let i = 0; i < 7; i++) { const l = new THREE.ConeGeometry(.55, 3.4, 4); l.translate(0, 1.6, 0); l.rotateZ(Math.PI / 2.4); l.rotateY(i / 7 * Math.PI * 2); l.translate(0, 6.1, 0); ls.push(l); }
+    PALM = [t, mergeGeometries(ls)]; }
+  const g = new THREE.Group(); g.add(new THREE.Mesh(PALM[0], ML('#8a6a45'))); g.add(new THREE.Mesh(PALM[1], ML('#2f8a3a'))); return g; }
 function building() { const g = new THREE.Group(), h = 6 + Math.random() * 12, w = 8 + Math.random() * 8;
-  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 10), M(pick(['#f4dcc0', '#f2c9a0', '#efe1c8', '#e8c3b0', '#f7e3a8', '#d9e4c6']))); b.position.y = h / 2; g.add(b);
-  const win = M('#4a6a98', { emissive: '#ffb26b', emissiveIntensity: Math.random() < .5 ? .9 : .3 });
-  for (let y = 2; y < h - 1; y += 2.6) for (let x = -w / 2 + 1.5; x < w / 2 - 1; x += 2.4) { const wn = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.2), win); wn.position.set(x, y, 5.01); g.add(wn); } return g; }
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 10), ML(pick(['#f4dcc0', '#f2c9a0', '#efe1c8', '#e8c3b0', '#f7e3a8', '#d9e4c6']))); b.position.y = h / 2; g.add(b);
+  const win = Math.random() < .5 ? WIN_HI : WIN_LO, ws = [];
+  for (let y = 2; y < h - 1; y += 2.6) for (let x = -w / 2 + 1.5; x < w / 2 - 1; x += 2.4) { const wn = new THREE.PlaneGeometry(1.3, 1.2); wn.translate(x, y, 5.01); ws.push(wn); }
+  if (ws.length) g.add(new THREE.Mesh(mergeGeometries(ws), win)); return g; }
+const WIN_HI = ML('#4a6a98', { emissive: '#ffb26b', emissiveIntensity: .9 }), WIN_LO = ML('#4a6a98', { emissive: '#ffb26b', emissiveIntensity: .3 });
 const SLOGANS = ['ทุกเที่ยวไป ต้องมีเที่ยวกลับ', 'ดื่มไม่ขับ', 'หมวกกันน็อก + รัดคาง', 'เว้นระยะ 3 วินาที', 'ง่วงจอดพัก', 'ไม่ใช้มือถือขณะขับ', 'ชะลอทางแยก', 'มีน้ำใจ หยุดให้คนข้าม'];
-function billboard(i) { const g = new THREE.Group(); [-2, 2].forEach(x => { const p = new THREE.Mesh(new THREE.CylinderGeometry(.15, .15, 5, 6), M('#555')); p.position.set(x, 2.5, 0); g.add(p); });
+function billboard(i) { const g = new THREE.Group(); g.add(new THREE.Mesh(mergeGeometries([-2, 2].map(x => new THREE.CylinderGeometry(.15, .15, 5, 6).translate(x, 2.5, 0))), ML('#555')));
   const cv = document.createElement('canvas'); cv.width = 512; cv.height = 192; const c = cv.getContext('2d');
   const gr = c.createLinearGradient(0, 0, 512, 0); gr.addColorStop(0, '#0b2f6b'); gr.addColorStop(1, '#1559b8'); c.fillStyle = gr; c.fillRect(0, 0, 512, 192);
   c.fillStyle = '#ffd36b'; c.fillRect(0, 160, 512, 32); c.fillStyle = '#fff'; c.font = '900 50px Kanit'; c.textAlign = 'center'; c.fillText(SLOGANS[i % SLOGANS.length], 256, 112);
@@ -333,16 +340,19 @@ function sprite(k, flip = false) { const t = tex[k] || tex[FALLBACK[k]]; const h
   const g = new THREE.PlaneGeometry(w, h); g.translate(0, h / 2, 0);
   const m = new THREE.MeshBasicMaterial({ map: t || null, color: t ? '#ffffff' : '#ff00ff', transparent: true, alphaTest: .35, side: THREE.DoubleSide });
   const mesh = new THREE.Mesh(g, m); if (flip) mesh.scale.x = -1; mesh.userData.w = w; return mesh; }
-function shadowBlob(w) { const m = new THREE.Mesh(new THREE.CircleGeometry(.5, 16), new THREE.MeshBasicMaterial({ color: '#000', transparent: true, opacity: .28, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.scale.set(w, w * .45, 1); m.position.y = .02; return m; }
+const BLOB = [new THREE.CircleGeometry(.5, 16), new THREE.MeshBasicMaterial({ color: '#000', transparent: true, opacity: .28, depthWrite: false })];
+function shadowBlob(w) { const m = new THREE.Mesh(BLOB[0], BLOB[1]); m.userData.keep = true; m.rotation.x = -Math.PI / 2; m.scale.set(w, w * .45, 1); m.position.y = .02; return m; }
 
+function drop(o) { scene.remove(o); o.traverse(m => { if (m.isMesh && !m.userData.keep) { m.geometry.dispose(); m.material.dispose(); } }); }
 // ================= state =================
 const S = {}; let ents = [], lights = [];
 const player = new THREE.Group(); scene.add(player);
 function reset() {
   Object.assign(S, { paused: false, gas: false, overT: 0, v: 0, dist: 0, lane: 1, x: 0, hearts: 3, score: 0, combo: 1, brake: false, run: false, inv: 0, sleep: 0, total: 3000, nextSpawn: 70, rain: false, slow: 1, shield: false, truck: false, sleepWarned: false, gapGood: 0,
     stats: { red: 0, coffee: 0, phoneNo: 0, declined: 0, dodge: 0, crash: 0, nope: 0, ppe: false, drank: false, rush: false, speeding: false, redRun: 0, phoneAns: 0, rear: 0, micro: 0, blind: 0, haz: 0, walk: 0, yield: 0, crossSeen: 0, rest: 0 }, zone: 0, zoneSped: false, laneT: -9, callback: 0, cbT: 0, restT: 0, ppeT: 0, drunk: 0, turbo: 0, heavy: 0, tmp: null, tq: shuffle(['friends', 'racer', 'hitch', 'shortcut']).map((k, i) => ({ k, at: [330, 930, 1380, 2230][i] })), call: null, nextCall: rnd(18, 26), t: 0 });
-  ents.forEach(e => scene.remove(e.o)); lights.forEach(l => scene.remove(l.o)); ents = []; lights = [];
-  player.clear(); const r = sprite(`p_${PL.c}_${PL.v}`); player.add(shadowBlob(1.6)); player.add(r); player.userData.spr = r;
+  for (const k in UI) delete UI[k];
+  ents.forEach(e => drop(e.o)); lights.forEach(l => scene.remove(l.o)); ents = []; lights = [];
+  player.children.slice().forEach(c => { player.remove(c); c.traverse(m => { if (m.isMesh && !m.userData.keep) { m.geometry.dispose(); m.material.dispose(); } }); }); const r = sprite(`p_${PL.c}_${PL.v}`); player.add(shadowBlob(1.6)); player.add(r); player.userData.spr = r;
   [520, 1650, 2550].forEach(addLight);
 }
 function addLight(at) { const g = new THREE.Group(); const pole = new THREE.Mesh(new THREE.CylinderGeometry(.14, .14, 6, 8), M('#2b2f36')); pole.position.set(6.3, 3, 0); g.add(pole);
@@ -381,7 +391,7 @@ let tx = null; addEventListener('touchstart', (e) => { if (e.target.tagName !== 
 addEventListener('touchend', (e) => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) laneTo(dx > 0 ? 1 : -1); tx = null; }, { passive: true });
 
 // ================= sound =================
-const snd = (() => { let ac, eng, voices = {}, last = 0;
+const snd = (() => { let ac, eng, voices = {}, last = 0, lastEng = 0;
   const ctx = () => { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (ac && ac.state === 'suspended') ac.resume(); return ac; };
   function tone(f, d, type = 'square', vol = .1, slide = 0, delay = 0) { const a = ctx(); if (!a) return; const t = a.currentTime + delay; const o = a.createOscillator(), g = a.createGain(); o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, f + slide), t + d); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g).connect(a.destination); o.start(t); o.stop(t + d + .02); }
   function noise(d, vol = .2) { const a = ctx(); if (!a) return; const b = a.createBuffer(1, a.sampleRate * d, a.sampleRate), ch = b.getChannelData(0); for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / ch.length, 2); const s = a.createBufferSource(), g = a.createGain(); s.buffer = b; g.gain.value = vol; s.connect(g).connect(a.destination); s.start(); }
@@ -391,7 +401,7 @@ const snd = (() => { let ac, eng, voices = {}, last = 0;
     get ac() { return ctx(); },
     say(k, force) { const now = performance.now(); if (!force && now - last < 1500) return; last = now; const v = voices[k]; if (v) { if (window.Music) Music.duck(1.6); try { v.currentTime = 0; v.play().catch(() => {}); } catch (e) {} } },
     start() { const a = ctx(); if (!a || eng) return; eng = a.createOscillator(); eng.type = 'sawtooth'; const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 700; const g = a.createGain(); g.gain.value = .035; eng.connect(f).connect(g).connect(a.destination); eng.start(); },
-    engine(v) { if (eng) eng.frequency.setTargetAtTime(38 + v * 4.6, ac.currentTime, .1); }, stop() { if (eng) { eng.stop(); eng = null; } },
+    engine(v) { const f = Math.round(38 + v * 4.6); if (eng && Math.abs(f - lastEng) >= 3) { lastEng = f; eng.frequency.setTargetAtTime(f, ac.currentTime, .1); } }, stop() { if (eng) { eng.stop(); eng = null; } },
     whoosh() { tone(260, .16, 'triangle', .06, 420); }, good() { tone(700, .09, 'square', .06); tone(1050, .14, 'square', .06, 0, .08); },
     crash() { noise(.5, .35); tone(120, .4, 'sawtooth', .12, -60); },
     ring() { [0, .25, .5, .75].forEach(d => { tone(1320, .12, 'sine', .07, 0, d); tone(1760, .12, 'sine', .05, 0, d + .06); }); },
@@ -423,7 +433,7 @@ function hearts() { $('hearts').textContent = '❤️'.repeat(Math.max(0, S.hear
 
 const CALLERS = [['แม่โทรมา!', 'ซื้อกับข้าวด้วยนะลูก...'], ['หัวหน้าโทรมา!', 'พรุ่งนี้เข้าเช้านะ'], ['แฟนโทรมา!', 'ถึงไหนแล้ว~'], ['เบอร์แปลก', 'ยินดีด้วย คุณได้รับรางวัล...']];
 function ringPhone() { const c = pick(CALLERS); $('callWho').textContent = c[0]; $('callSub').textContent = c[1] + ' (กำลังขับรถอยู่!)'; $('call').classList.add('on'); S.call = { t: 0 }; snd.ring(); setTimeout(() => snd.say('phone'), 900); }
-$('callYes').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; $('gl').style.filter = 'blur(5px)'; setTimeout(() => $('gl').style.filter = '', 1500); hurt('ห้ามใช้มือถือขณะขับ!', 'ouch', 'phone'); };
+$('callYes').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; document.body.classList.add('dazed'); setTimeout(() => document.body.classList.remove('dazed'), 1500); hurt('ห้ามใช้มือถือขณะขับ!', 'ouch', 'phone'); };
 $('callNo').onclick = () => { if (!S.call) return; $('call').classList.remove('on'); S.call = null; S.stats.declined++; good(10, 'ไม่รับ ขี่ต่อ'); S.callback = S.t + 25; setTimeout(() => S.run && warn('📵 จะโทรกลับ? ชิดซ้าย ⬅ แล้วจอดก่อน'), 900); };
 
 // ================= music: procedural chiptune × Thai pentatonic (adaptive) =================
@@ -476,9 +486,10 @@ const Music = window.Music = (() => {
     if (restart || cur !== t) { if (restart) t.a.currentTime = 0; t.a.playbackRate = 1; t.a.play().catch(() => {}); }
     t.g.gain.setTargetAtTime(1, ac.currentTime, .2); cur = t; mode = 'off'; clearInterval(timer); timer = null; if (bus) bus.gain.setTargetAtTime(0, ac.currentTime, .05);
     return true; }
-  function trackTick(o) { if (!cur || !tgain) return; const now = ac.currentTime; tgain.gain.setTargetAtTime(muted ? 0 : (performance.now() < duckUntil ? .45 : 1), now, .08);
-    if (o.rate !== undefined) { cur.a.preservesPitch = cur.a.mozPreservesPitch = cur.a.webkitPreservesPitch = !o.wobble; cur.a.playbackRate = Math.max(.6, Math.min(1.4, o.rate)); }
-    if (o.lp !== undefined) filt.frequency.setTargetAtTime(o.lp, now, .15); }
+  let lastG = -1, lastLp = -1, lastPP = null;
+  function trackTick(o) { if (!cur || !tgain) return; const now = ac.currentTime; const gv = muted ? 0 : (performance.now() < duckUntil ? .45 : 1); if (gv !== lastG) { lastG = gv; tgain.gain.setTargetAtTime(gv, now, .08); }
+    if (o.rate !== undefined) { const pp = !o.wobble; if (pp !== lastPP) { lastPP = pp; cur.a.preservesPitch = cur.a.mozPreservesPitch = cur.a.webkitPreservesPitch = pp; } const r = Math.round(Math.max(.6, Math.min(1.4, o.rate)) * 100) / 100; if (Math.abs(cur.a.playbackRate - r) > .005) cur.a.playbackRate = r; }
+    if (o.lp !== undefined && o.lp !== lastLp) { lastLp = o.lp; filt.frequency.setTargetAtTime(o.lp, now, .15); } }
   const api = {
     pauseAll() { try { if (cur) cur.a.pause(); } catch (e) {} try { ac && ac.suspend(); } catch (e) {} },
     resumeAll() { try { ac && ac.resume(); } catch (e) {} try { if (cur) cur.a.play().catch(() => {}); } catch (e) {} },
@@ -486,7 +497,7 @@ const Music = window.Music = (() => {
     stopTrack() { if (cur) { const o = cur; o.g.gain.setTargetAtTime(0, ac.currentTime, .3); setTimeout(() => o.a.pause(), 1200); cur = null; } },
     play(m) { if (!ensure()) return; if (mode === 'off') { nextT = ac.currentTime + .05; step = 0; bar = 0; } mode = m; if (!timer) timer = setInterval(tick, 25); },
     stop() { mode = 'off'; clearInterval(timer); timer = null; if (bus) bus.gain.setTargetAtTime(0, ac.currentTime, .05); },
-    set(o) { if (!ac) return; if (o.bpm) bpm = o.bpm; if (o.mode && mode !== 'off') mode = o.mode; if (o.lp !== undefined) filt.frequency.setTargetAtTime(o.lp, ac.currentTime, .15); },
+    set(o) { if (!ac) return; if (o.bpm) bpm = o.bpm; if (o.mode && mode !== 'off') mode = o.mode; if (o.lp !== undefined && o.lp !== lastLp) { lastLp = o.lp; filt.frequency.setTargetAtTime(o.lp, ac.currentTime, .15); } },
     duck(sec) { duckUntil = performance.now() + sec * 1000; },
     // debug: render N seconds offline in a given mode → WAV data URL (used by tests / previews)
     async render(sec, m, b) { const sv = [ac, bus, filt, mode, bpm, bar, step, nb]; const oc = new OfflineAudioContext(2, 44100 * sec, 44100);
@@ -503,7 +514,7 @@ const Music = window.Music = (() => {
 })();
 $('mBtn').classList.toggle('off', Music.muted);
 $('mBtn').onclick = (e) => { e.stopPropagation(); snd.unlock(); const m = Music.toggle(); $('mBtn').classList.toggle('off', m); if (!m && !Music.hasTrack) Music.playTrack(S.run || $('pick').classList.contains('on') ? `${PL.c}_${PL.v}` : 'theme'); };
-function musicTick() { if (!S.run) return; const prog = S.dist / S.total; const hype = S.truck || S.turbo > 0 || prog > .9;
+let mLast = 0; function musicTick() { if (!S.run) return; const nowMs = performance.now(); if (nowMs - mLast < 140) return; mLast = nowMs; const prog = S.dist / S.total; const hype = S.truck || S.turbo > 0 || prog > .9;
   if (Music.hasTrack) { Music.trackTick({ rate: S.tmp ? .78 : S.drunk > 0 ? 1 + Math.sin(S.t * 3) * .12 : 1 + prog * .1 + (hype ? .05 : 0) + (S.turbo > 0 ? .08 : 0), wobble: S.drunk > 0, lp: S.tmp ? 900 : S.rain ? 2600 : S.call ? 1500 : 18000 }); return; }
   Music.set({ bpm: (S.tmp ? 100 : 136 + prog * 26 + (S.turbo > 0 ? 20 : 0)), mode: hype ? 'hype' : 'game', lp: S.tmp ? 900 : S.rain ? 2600 : S.call ? 1500 : 18000 }); }
 
@@ -538,6 +549,7 @@ function temptTick(dt) {
 
 // ================= loop =================
 const clock = new THREE.Clock();
+const UI = {}; function ui(id, k, v) { const key = id + k; if (UI[key] === v) return; UI[key] = v; const el = $(id); if (k === 'text') el.textContent = v; else el.style[k] = v; }
 function update(dt) {
   S.t += dt; musicTick(); const prog = S.dist / S.total;
   const VH = VEHS[PL.v]; const zone = S.dist < 900 ? 0 : S.dist < 2600 ? 1 : 2, LIM = [60, 80, 50][zone];
@@ -552,9 +564,9 @@ function update(dt) {
   player.position.x = S.x; player.rotation.z = -(LANES[S.lane] - S.x) * .18; player.userData.spr.position.y = Math.sin(S.t * 14) * .025 * (S.v / 15);
   if (S.inv > 0) { S.inv -= dt; player.visible = Math.floor(S.inv * 12) % 2 === 0; } else player.visible = true;
   // sleepiness
-  S.sleep = Math.min(1, S.sleep + dt / 60); $('sleepBar').style.width = S.sleep * 100 + '%';
-  $('vig').style.opacity = Math.max(0, (S.sleep - .5) * 2);
-  if (!S.call) $('gl').style.filter = S.sleep > .75 ? `blur(${((S.sleep - .75) * 8).toFixed(1)}px)` : '';
+  S.sleep = Math.min(1, S.sleep + dt / 60); ui('sleepBar', 'width', Math.round(S.sleep * 100) + '%');
+  ui('vig', 'opacity', Math.max(0, (S.sleep - .5) * 2).toFixed(2));
+  document.body.classList.toggle('sleepy', S.sleep > .75);
   if (S.sleep > .7 && !S.sleepWarned) { S.sleepWarned = true; snd.say('sleepy', true); warn('😴 ง่วงแล้ว! ชิดซ้าย ⬅ จอดพักที่ 🅿️'); const rs = spawn('reststop', 110); rs.prop = true; rs.x = -6.9; rs.o.position.x = rs.x; }
   if (S.sleep >= 1) { S.sleep = .55; S.sleepWarned = false; pop('หลับใน!', 'bad'); hurt('ง่วงต้องจอดพัก!', 'ouch', 'sleep'); }
   // phone
@@ -579,14 +591,14 @@ function update(dt) {
     e.o.position.set(e.x, e.item ? .3 + Math.abs(Math.sin(S.t * 4)) * .3 : (e.hit && !e.item ? e.o.position.y : 0), z);
     if (e.hit && !e.item) { e.spr.rotation.z += dt * 6; e.o.position.y = Math.min(2.5, e.o.position.y + dt * 4); }
     if (e.cross && !e.hit) { const rel = e.pos - S.dist; if (Math.abs(e.x) < 7 && rel > -1 && rel < 35) { if (!e.seen) { e.seen = true; S.stats.crossSeen++; } if (S.v < 3) e.yielded = true; } }
-    if (z > 14 || Math.abs(e.x) > 12) { if (e.cross) crossDone(e); e.dead = true; scene.remove(e.o); continue; }
+    if (z > 14 || Math.abs(e.x) > 12) { if (e.cross) crossDone(e); e.dead = true; drop(e.o); continue; }
     if (e.prop) continue;
     const halfW = e.cross ? e.wide / 2 + .4 : (e.kind === 'truck' ? 2.4 : 1.1);
     const overlapX = Math.abs(e.x - S.x) < halfW + .5 + VH.wide, overlapZ = z > -e.len / 2 - 1.2 && z < e.len / 2 + .6;
     if (!e.hit && overlapX && overlapZ) {
       e.hit = true;
-      if (e.kind === 'coffee') { S.sleep = Math.max(0, S.sleep - .3); S.stats.coffee++; good(5, 'กาแฟช่วยแป๊บเดียว ง่วงต้องจอดพัก'); e.dead = true; scene.remove(e.o); continue; }
-      if (e.kind === 'shield') { S.shield = true; hearts(); good(20, 'สมาธิเต็ม! กันชน 1 ครั้ง'); e.dead = true; scene.remove(e.o); continue; }
+      if (e.kind === 'coffee') { S.sleep = Math.max(0, S.sleep - .3); S.stats.coffee++; good(5, 'กาแฟช่วยแป๊บเดียว ง่วงต้องจอดพัก'); e.dead = true; drop(e.o); continue; }
+      if (e.kind === 'shield') { S.shield = true; hearts(); good(20, 'สมาธิเต็ม! กันชน 1 ครั้ง'); e.dead = true; drop(e.o); continue; }
       const why = { sedan: 'ชนท้าย! เว้นระยะ 3 วิ', pickup: 'ชนท้าย! เว้นระยะ 3 วิ', drunk: 'โดนขี้เมาเฉี่ยว!', truck: 'ชนรถพ่วง! อย่าจี้ท้าย', wrongway: 'ชนคนย้อนศร!', buffalo: 'ชนควาย!! 🐃', chicken: 'ไก่กระจาย! 🐔', dog: 'ชนน้องหมา!', grandma: 'ไม่หยุดให้คนข้าม!', pothole: 'ตกหลุม!', crate: 'ชนของหล่น!' }[e.kind] || 'ชน!';
       hurt(why, 'ouch', e.kind); if (e.v > 0) e.pos += 6;
     }
@@ -595,22 +607,22 @@ function update(dt) {
   }
   ents = ents.filter(e => !e.dead);
   if (nearest && S.v > 2) { const sec = Math.max(0, (-nearest.z - nearest.e.len / 2 - 1) / S.v); const k = Math.min(1, sec / 4);
-    $('gapT').textContent = `ระยะ ${sec.toFixed(1)} วิ`; $('gapBar').style.width = k * 100 + '%'; $('gapBar').style.background = sec >= 3 ? '#2bd46a' : sec >= 1.5 ? '#ffcc33' : '#ff4d4d';
+    ui('gapT', 'text', `ระยะ ${sec.toFixed(1)} วิ`); ui('gapBar', 'width', Math.round(k * 100) + '%'); ui('gapBar', 'background', sec >= 3 ? '#2bd46a' : sec >= 1.5 ? '#ffcc33' : '#ff4d4d');
     S.gapGood = sec >= 3 ? S.gapGood + dt : 0; if (S.gapGood > 4) { S.gapGood = 0; good(20, 'เว้นระยะดี!'); } }
-  else { $('gapT').textContent = 'ระยะ —'; $('gapBar').style.width = '0'; }
-  $('gapBar').closest('.meter').style.opacity = nearest && S.v > 2 ? 1 : .35;
+  else { ui('gapT', 'text', 'ระยะ —'); ui('gapBar', 'width', '0'); }
+  { const o = nearest && S.v > 2 ? '1' : '.35'; if (UI.meterO !== o) { UI.meterO = o; $('gapBar').closest('.meter').style.opacity = o; } }
   for (const L of lights) { const z = -(L.at - S.dist); L.o.position.z = z; if (L.done) continue;
     if (L.state === 'green' && L.at - S.dist < 110) { setL(L, 'yellow'); L.t = 2; warn('🟡 ไฟเหลือง = เตรียมหยุด ไม่ใช่เร่ง'); }
     else if (L.state === 'yellow') { if (S.gas && !S.stats.yellowGo) { S.stats.yellowGo = true; pop('เร่งตอนไฟเหลือง!', 'bad', true); } L.t -= dt; if (L.t <= 0) { setL(L, 'red'); warn('🚦 ไฟแดง! หยุดหลังเส้น'); snd.say('red', true); } }
     else if (L.state === 'red') { const gap = (L.at - 2.5) - S.dist;
       if (S.v < .6 && gap > -.5 && gap < 70) { L.t += dt; if (L.t > 1.5) { setL(L, 'green'); L.done = true; S.stats.red++; good(50, 'หยุดไฟแดง!', 'great'); } }
       if (gap < -1) { L.done = true; setL(L, 'green'); hurt('ฝ่าไฟแดง!', 'ouch', 'red'); } } }
-  S.score += dz * .05; $('score').textContent = Math.floor(S.score); $('spd').textContent = Math.round(S.v * 3.6); $('spd').parentElement.classList.toggle('over', S.v * 3.6 > LIM + 2);
+  S.score += dz * .05; ui('score', 'text', String(Math.floor(S.score))); ui('spd', 'text', String(Math.round(S.v * 3.6))); $('spd').parentElement.classList.toggle('over', S.v * 3.6 > LIM + 2);
   restTick(dt); callbackTick(dt); ppeTick(dt);
   if (S.gas && S.v * 3.6 > LIM + 2) { S.score += dz * .05; S.overT = (S.overT || 0) + dt; if (S.overT > 1) { if (!S.stats.speeding) { S.stats.speeding = true; warn('📸 กล้องจับความเร็ว! เกินกำหนด'); } S.zoneSped = true; S.overT = -2; S.score = Math.max(0, S.score - 10); S.combo = 1; pop('เกินกำหนด! −10', 'bad', true); } } else if (!S.gas) S.overT = 0;
-  $('combo').style.visibility = S.combo > 1 ? 'visible' : 'hidden'; $('combo').textContent = 'x' + S.combo;
-  $('tripBar').style.width = Math.min(100, prog * 100) + '%'; $('tripMe').style.left = `calc(${8 + Math.min(1, prog) * 84}%)`; document.querySelector('.trip .a').style.opacity = 0;
-  $('speed').style.opacity = Math.max(0, (S.v * 3.6 - 60) / 30);
+  ui('combo', 'visibility', S.combo > 1 ? 'visible' : 'hidden'); ui('combo', 'text', 'x' + S.combo);
+  ui('tripBar', 'width', Math.min(100, prog * 100).toFixed(1) + '%'); ui('tripMe', 'left', `calc(${(8 + Math.min(1, prog) * 84).toFixed(1)}%)`); if (!UI.tripA) { UI.tripA = 1; document.querySelector('.trip .a').style.opacity = 0; }
+  ui('speed', 'opacity', Math.min(1, Math.max(0, (S.v * 3.6 - 60) / 30)).toFixed(2));
   snd.engine(S.v * 3.6);
   if (S.dist >= S.total) finish(true);
   const sh = shakeT > 0 ? (shakeT -= dt, (Math.random() - .5) * .5) : 0;
@@ -619,7 +631,7 @@ function update(dt) {
 const TS = +(new URLSearchParams(location.search).get('ts') || 1);
 let fpsN = 0, fpsT = 0, fpsDone = false;
 function loop() { const dt = Math.min(.05, clock.getDelta());
-  if (S.run && !S.paused && !fpsDone) { fpsN++; fpsT += dt; if (fpsT > 4) { fpsDone = true; if (fpsN / fpsT < 40 && renderer.getPixelRatio() > 1) { renderer.setPixelRatio(1); resize(); } } }
+  if (S.run && !S.paused) { fpsN++; fpsT += dt; if (fpsT > 3) { const pr = renderer.getPixelRatio(); if (fpsN / fpsT < 50 && pr > 1) { renderer.setPixelRatio(Math.max(1, pr - .25)); resize(); } fpsN = 0; fpsT = 0; } }
   if (S.run && !S.paused) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
 function start() { snd.unlock(); reset(); S.run = true; document.body.classList.remove('menu'); $('lim').textContent = 60; S.ppeT = 4.5; $('ppeBtn').textContent = PL.v === 'car' ? '👆 แตะเพื่อคาดเข็มขัด 🔒' : '👆 แตะเพื่อรัดคางหมวก ⛑️'; $('ppeBtn').classList.add('on'); setTimeout(() => S.run && warn(pick(TIPS)), 5200); if (!Music.playTrack(`${PL.c}_${PL.v}`, true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
 const MEASURES = [['เตรียมคน เตรียมรถ ก่อนเดินทาง', 'ไม่ดื่ม · ชุดรัดกุม · รัดคาง/เข็มขัด'], ['วางแผนเส้นทาง ก่อนขับขี่', 'ออกเผื่อเวลา ไม่รีบ ไม่ลัด'], ['ปฏิบัติตาม กฎจราจร', 'ไฟแดงหยุด · ไม่ขับเร็ว · ไม่ใช้มือถือ'], ['ขับขี่อย่างมีสติ เว้นระยะปลอดภัย', 'เว้นระยะ ≥ 3 วิ · ง่วงให้จอดพัก'], ['ชะลอทางแยก ให้สัญญาณล่วงหน้า', 'ลดความเร็ว · ไฟเหลืองเตรียมหยุด'], ['ตรวจจุดอับสายตา', 'ก่อนเลี้ยวหรือเปลี่ยนเลน'], ['คาดการณ์ความเสี่ยง', 'พร้อมรับเหตุฉุกเฉิน · พร้อมเบรก'], ['มีน้ำใจและเคารพเพื่อนร่วมทาง', 'หยุดให้คนข้าม']];
@@ -627,7 +639,7 @@ function measures() { const st = S.stats; return [st.ppe && !st.drank && !st.pil
 function reasons() { const st = S.stats, r = (c, t) => c ? t : null, j = (...a) => a.filter(Boolean).join(' · ');
   return [j(r(st.drank, 'ดื่มแล้วขับ'), r(!st.ppe, 'ไม่ได้รัดคาง/คาดเข็มขัดตอนออกรถ'), r(st.pillion, 'ให้ซ้อน/นั่งโดยไม่มี PPE')), j(r(st.rush, 'รับคำท้า/ใช้ทางลัด')), j(r(st.drank, 'ดื่มแล้วขับ ผิดกฎหมาย'), r(st.redRun, `ฝ่าไฟแดง ${st.redRun} ครั้ง`), r(st.phoneAns, `รับสาย ${st.phoneAns} ครั้ง`), r(st.speeding, 'ขับเร็วเกินกำหนด')), j(r(st.drank, 'ดื่มแล้วขับ ขาดสติ'), r(st.rear, `ชนท้าย ${st.rear} ครั้ง`), r(st.micro, `หลับใน ${st.micro} ครั้ง`)), j(r(st.redRun, 'ไม่หยุดที่ทางแยก'), r(st.yellowGo, 'เร่งตอนไฟเหลือง'), r(!st.red && !st.redRun, 'ยังไม่ผ่านทางแยก')), j(r(st.blind, `ชนตอนเปลี่ยนเลน ${st.blind} ครั้ง`)), j(r(st.haz, `ชนสิ่งกีดขวาง ${st.haz} ครั้ง`)), j(r(st.walk, 'ไม่หยุดให้คนข้าม'), r(!st.walk && !st.yield && st.crossSeen, 'ไม่ได้ชะลอให้คน/สัตว์ข้าม'))]; }
 function finish(win) {
-  if (!S.run) return; S.run = false; document.body.classList.add('menu'); snd.stop(); setB(false); setG(false); $('call').classList.remove('on'); S.call = null; $('gl').style.filter = ''; $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
+  if (!S.run) return; S.run = false; document.body.classList.add('menu'); snd.stop(); setB(false); setG(false); $('call').classList.remove('on'); S.call = null; document.body.classList.remove('sleepy', 'dazed'); $('vig').style.opacity = 0; document.body.classList.remove('drunk'); $('tempt').classList.remove('on'); S.tmp = null; $('rain').style.opacity = 0; $('speed').style.opacity = 0;
   Music.stop(); Music.trackTick({ rate: 1, wobble: false, lp: 18000 }); Music.duck(4); if (!win) Music.trackTick({ rate: .85, wobble: true, lp: 1400 });
   const drank = S.stats.drank; if (win && !drank) { S.score += S.hearts * 150; snd.win(); setTimeout(() => snd.say('home', true), 600); if (!S.stats.drank) setTimeout(() => confetti(90), 300); }
   const ms = measures(), mok = ms.filter(Boolean).length, why = reasons(); if (!drank) S.score += mok * 25; else { S.score = 0; snd.crash(); }
@@ -839,7 +851,7 @@ async function showCert() {
   try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], text: `ขี่กลับบ้านผ่านถนนนรกได้ ${last ? last.score : 0} คะแนน! 🛵 ${location.href}` }); return; } } catch (e) { return; }
   const a = document.createElement('a'); a.href = url; a.download = 'NBMT-boarding-pass.jpg'; a.click();
 }
-await document.fonts.ready; await loadAll(); buildScenery(); $('load').style.display = 'none';
+await document.fonts.ready; await loadAll(); for (const k in tex) renderer.initTexture(tex[k]); buildScenery(); $('load').style.display = 'none';
 { const _al = window.alert.bind(window); window.alert = (m) => _al(I18N.T(m)); }
 function setLang(l) { I18N.set(l); document.querySelectorAll('#langs button').forEach(b => b.classList.toggle('on', b.dataset.l === I18N.lang)); }
 document.querySelectorAll('#langs button').forEach(b => b.onclick = () => { snd.whoosh(); setLang(b.dataset.l); });
