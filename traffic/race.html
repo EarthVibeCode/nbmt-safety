@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <script>
-const BUILD = '20261110101635';
+const BUILD = '20261110102456';
 // auto-update: if the server has a newer build than this page, reload once (bypassing cache)
 (function () { try {
   fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -118,7 +118,7 @@ const BUILD = '20261110101635';
   .pk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 420px; flex: none; }
   .pk button { font-family: 'Kanit'; color: #fff; background: rgba(255,255,255,.1); border: 3px solid rgba(255,255,255,.25); border-radius: 16px; padding: 4px 4px 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; transition: transform .15s; }
   .pk button.on { background: rgba(255,211,107,.25); border-color: #ffd36b; transform: translateY(-3px); box-shadow: 0 6px 0 rgba(0,0,0,.3); }
-  .pk img { width: 100%; height: 12dvh; object-fit: contain; } #pkVeh img { height: 9dvh; } .pk b { font-size: min(18px, 2.4dvh); font-weight: 900; line-height: 1.1; } .pk small { font-size: min(11px, 1.6dvh); opacity: .85; line-height: 1.15; }
+  .pk img { width: 100%; height: 12dvh; object-fit: contain; } #pkVeh img { height: 7dvh; } .pk b { font-size: min(18px, 2.4dvh); font-weight: 900; line-height: 1.1; } .pk small { font-size: min(11px, 1.6dvh); opacity: .85; line-height: 1.15; }
   .pk .emo { font-size: 44px; line-height: 1.3; }
   #start { height: 100%; height: 100dvh; overflow: hidden; justify-content: space-evenly; gap: .8dvh; padding: calc(1.5dvh + env(safe-area-inset-top)) 14px calc(1.5dvh + env(safe-area-inset-bottom)); }
   #start .logo { font-size: min(50px, 6.4dvh); flex: none; } #start h1 { font-size: min(28px, 3.5dvh); flex: none; } #start p { font-size: min(15px, 1.95dvh); flex: none; }
@@ -156,7 +156,7 @@ const BUILD = '20261110101635';
   .mbtn { z-index: 32; }
   .ov > * { flex-shrink: 0; }
   .pkbtn { display: flex; gap: 10px; align-items: center; flex: none; } .pkbtn .go { padding: min(15px, 1.8dvh) 40px; } .pkbtn .btn2 { padding: min(10px, 1.4dvh) 18px; font-size: 22px; }
-  #pkChar { grid-template-columns: repeat(4, 1fr); } #pkChar img { height: 11dvh; }
+  #pkChar { grid-template-columns: repeat(4, 1fr); } #pkVeh { grid-template-columns: repeat(3, minmax(0, 1fr)); } #pkVeh b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: min(15px, 2.1dvh); } #pkChar img { height: 11dvh; }
   .pkh { font-weight: 900; font-size: min(18px, 2.4dvh); color: #ffd36b; align-self: center; flex: none; }
   .prev { flex: 1 1 0; min-height: 0; width: 100%; max-width: 300px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); animation: wig .9s infinite alternate ease-in-out; }
   .vstat { flex: none; width: 100%; max-width: 330px; font-size: min(13px, 1.8dvh); font-weight: 700; display: grid; grid-template-columns: 90px 1fr; gap: .5dvh 8px; align-items: center; text-align: left; }
@@ -164,7 +164,7 @@ const BUILD = '20261110101635';
   .load { position: fixed; inset: 0; z-index: 20; background: #0b2f6b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; font-weight: 800; }
   .load .b { width: 220px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.2); overflow: hidden; } .load .b i { display: block; height: 100%; width: 0; background: #ffd36b; }
 </style>
-<script src="race_i18n.js?b=20261110101635"></script>
+<script src="race_i18n.js?b=20261110102456"></script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
 </head>
 <body class="menu">
@@ -187,7 +187,7 @@ const BUILD = '20261110101635';
 <div class="gate" id="pause"><div class="logo" style="font-size:44px">⏸ พักก่อน</div><button class="go" id="resumeBtn">▶ ขี่ต่อ</button><small>ง่วงก็จอดพักแบบนี้นะ 😴</small></div>
 <div class="gate" id="gate"><div class="logo">ถนนนรก<br>กลับบ้าน!</div><button class="go" id="gateBtn">🎵 แตะเพื่อเริ่ม</button><small>เปิดเสียงด้วยนะ 🔊</small></div>
 <div class="story" id="story">
-  <video id="storyVid" src="race/story.mp4?b=20261110101635" poster="race/story_poster.jpg?b=20261110101635" playsinline preload="auto"></video>
+  <video id="storyVid" src="race/story.mp4?b=20261110102456" poster="race/story_poster.jpg?b=20261110102456" playsinline preload="auto"></video>
   <button class="st-skip" id="stSkip" disabled><span id="stTxt">ข้ามได้ใน</span> <b id="stCount">10</b></button>
   <button class="st-play" id="stPlay">▶ แตะเพื่อเล่น</button>
   <div class="st-bar"><i id="stBar"></i></div>
@@ -215,7 +215,7 @@ const BUILD = '20261110101635';
 </div>
 <div class="ov" id="end">
   <h1 id="endT">ถึงบ้านแล้ว!</h1>
-  <img class="fam" id="endImg" src="img/family.webp?b=20261110101635" alt="">
+  <img class="fam" id="endImg" src="img/family.webp?b=20261110102456" alt="">
   <div class="big" id="endScore">0</div>
   <p id="endP"></p>
   <div class="drunkbox" id="drunkBox" style="display:none">🚫 รอบที่ดื่มแล้วขับ ไม่นับคะแนน ไม่ขึ้นกระดาน<br><b>เล่นใหม่แบบ "ดื่มไม่ขับ" นะ</b></div>
@@ -327,11 +327,15 @@ const SPR = { rider: 2.4, sedan: 2.6, pickup: 2.9, truck: 5.4, wrongway: 2.2, dr
 const CHARS = { earth: 'เอิร์ท', pleum: 'ปลื้ม', fluke: 'ฟลุ๊ค', bai: 'น้องกวาง' };
 const VEHS = {
   xmax: { name: 'XMAX 300', emo: '🛵', sub: 'สมดุลทุกด้าน', h: 2.4, top: 1, acc: 7, lane: 8, wide: 0, brake: 1, st: [3, 3, 3] },
-  wave: { name: 'เวฟ 110', emo: '🏍️', sub: 'คล่องตัว หลบไว', h: 2.2, top: .94, acc: 6, lane: 12, wide: -.3, brake: .95, st: [2, 5, 2] },
+  wave: { name: 'เวฟ 1100', emo: '🏍️', sub: 'คล่องตัว หลบไว', h: 2.2, top: .94, acc: 6, lane: 12, wide: -.3, brake: .95, st: [2, 5, 2] },
+  rebel: { name: 'Rebel 500', emo: '🤘', sub: 'แรงสุด แต่ตัวหนัก', h: 2.4, top: 1.05, acc: 9, lane: 6, wide: .2, brake: 1.1, st: [5, 2, 4] },
+  lambretta: { name: 'Lambretta 300', emo: '✨', sub: 'สวยคลาสสิก หลบง่าย', h: 2.3, top: .97, acc: 6.5, lane: 10, wide: -.1, brake: 1, st: [2, 4, 3] },
   car: { name: 'รถเก๋ง', emo: '🚗', sub: 'เบรกดี แต่ตัวใหญ่', h: 2.5, top: 1, acc: 9, lane: 5, wide: .5, brake: 1.3, st: [4, 1, 5] },
 };
 for (const c in CHARS) { SPR[`p_${c}`] = 2.4; for (const v in VEHS) SPR[`p_${c}_${v}`] = VEHS[v].h; }
 const PL = { c: 'earth', v: 'xmax' };
+// Rebel / Lambretta have no songs of their own: each rider+ride gets a random existing ride song (repeats allowed), fixed for this visit
+const SONG_VEHS = ['xmax', 'wave', 'car'], NEW_SONG = {}; function songOf(c = PL.c, v = PL.v) { if (SONG_VEHS.includes(v)) return `${c}_${v}`; const k = c + v; return NEW_SONG[k] || (NEW_SONG[k] = pick(['earth', 'pleum', 'fluke', 'bai']) + '_' + pick(SONG_VEHS)); }
 const tex = {}; const loader = new THREE.TextureLoader();
 async function loadAll() { const ks = Object.keys(SPR); let n = 0;
   await Promise.all(ks.map(k => new Promise(ok => loader.load(`race/${k}.webp?b=${BUILD}`, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; tex[k] = t; $('loadBar').style.width = (++n / ks.length * 100) + '%'; ok(); }, undefined, () => { n++; ok(); })))); }
@@ -513,7 +517,7 @@ const Music = window.Music = (() => {
   return api;
 })();
 $('mBtn').classList.toggle('off', Music.muted);
-$('mBtn').onclick = (e) => { e.stopPropagation(); snd.unlock(); const m = Music.toggle(); $('mBtn').classList.toggle('off', m); if (!m && !Music.hasTrack) Music.playTrack(S.run || $('pick').classList.contains('on') ? `${PL.c}_${PL.v}` : 'theme'); };
+$('mBtn').onclick = (e) => { e.stopPropagation(); snd.unlock(); const m = Music.toggle(); $('mBtn').classList.toggle('off', m); if (!m && !Music.hasTrack) Music.playTrack(S.run || $('pick').classList.contains('on') ? songOf() : 'theme'); };
 let mLast = 0; function musicTick() { if (!S.run) return; const nowMs = performance.now(); if (nowMs - mLast < 140) return; mLast = nowMs; const prog = S.dist / S.total; const hype = S.truck || S.turbo > 0 || prog > .9;
   if (Music.hasTrack) { Music.trackTick({ rate: S.tmp ? .78 : S.drunk > 0 ? 1 + Math.sin(S.t * 3) * .12 : 1 + prog * .1 + (hype ? .05 : 0) + (S.turbo > 0 ? .08 : 0), wobble: S.drunk > 0, lp: S.tmp ? 900 : S.rain ? 2600 : S.call ? 1500 : 18000 }); return; }
   Music.set({ bpm: (S.tmp ? 100 : 136 + prog * 26 + (S.turbo > 0 ? 20 : 0)), mode: hype ? 'hype' : 'game', lp: S.tmp ? 900 : S.rain ? 2600 : S.call ? 1500 : 18000 }); }
@@ -633,7 +637,7 @@ let fpsN = 0, fpsT = 0, fpsDone = false;
 function loop() { const dt = Math.min(.05, clock.getDelta());
   if (S.run && !S.paused) { fpsN++; fpsT += dt; if (fpsT > 3) { const pr = renderer.getPixelRatio(); if (fpsN / fpsT < 50 && pr > 1) { renderer.setPixelRatio(Math.max(1, pr - .25)); resize(); } fpsN = 0; fpsT = 0; } }
   if (S.run && !S.paused) for (let i = 0; i < TS; i++) update(dt * (S.slow || 1) * (S.tmp ? .3 : 1)); renderer.render(scene, camera); requestAnimationFrame(loop); }
-function start() { snd.unlock(); reset(); S.run = true; document.body.classList.remove('menu'); $('lim').textContent = 60; S.ppeT = 4.5; $('ppeBtn').textContent = PL.v === 'car' ? '👆 แตะเพื่อคาดเข็มขัด 🔒' : '👆 แตะเพื่อรัดคางหมวก ⛑️'; $('ppeBtn').classList.add('on'); setTimeout(() => S.run && warn(pick(TIPS)), 5200); if (!Music.playTrack(`${PL.c}_${PL.v}`, true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
+function start() { snd.unlock(); reset(); S.run = true; document.body.classList.remove('menu'); $('lim').textContent = 60; S.ppeT = 4.5; $('ppeBtn').textContent = PL.v === 'car' ? '👆 แตะเพื่อคาดเข็มขัด 🔒' : '👆 แตะเพื่อรัดคางหมวก ⛑️'; $('ppeBtn').classList.add('on'); setTimeout(() => S.run && warn(pick(TIPS)), 5200); if (!Music.playTrack(songOf(), true)) { Music.play('game'); Music.set({ mode: 'game', bpm: 136, lp: 18000 }); } hearts(); $('start').classList.remove('on'); $('end').classList.remove('on'); snd.start(); setTimeout(() => snd.say('go', true), 200); pop('GO!', 'good'); }
 const MEASURES = [['เตรียมคน เตรียมรถ ก่อนเดินทาง', 'ไม่ดื่ม · ชุดรัดกุม · รัดคาง/เข็มขัด'], ['วางแผนเส้นทาง ก่อนขับขี่', 'ออกเผื่อเวลา ไม่รีบ ไม่ลัด'], ['ปฏิบัติตาม กฎจราจร', 'ไฟแดงหยุด · ไม่ขับเร็ว · ไม่ใช้มือถือ'], ['ขับขี่อย่างมีสติ เว้นระยะปลอดภัย', 'เว้นระยะ ≥ 3 วิ · ง่วงให้จอดพัก'], ['ชะลอทางแยก ให้สัญญาณล่วงหน้า', 'ลดความเร็ว · ไฟเหลืองเตรียมหยุด'], ['ตรวจจุดอับสายตา', 'ก่อนเลี้ยวหรือเปลี่ยนเลน'], ['คาดการณ์ความเสี่ยง', 'พร้อมรับเหตุฉุกเฉิน · พร้อมเบรก'], ['มีน้ำใจและเคารพเพื่อนร่วมทาง', 'หยุดให้คนข้าม']];
 function measures() { const st = S.stats; return [st.ppe && !st.drank && !st.pillion, !st.rush, !st.drank && !st.redRun && !st.phoneAns && !st.speeding, !st.drank && !st.rear && !st.micro, !st.redRun && !st.yellowGo && st.red > 0, !st.blind, !st.haz, !st.walk && (st.yield > 0 || !st.crossSeen)]; }
 function reasons() { const st = S.stats, r = (c, t) => c ? t : null, j = (...a) => a.filter(Boolean).join(' · ');
@@ -668,8 +672,8 @@ function renderPick() {
   $('pkVeh').innerHTML = Object.entries(VEHS).map(([k, v]) => `<button data-v="${k}" class="${PL.v === k ? 'on' : ''}"><img src="race/p_${PL.c}_${k}.webp" alt=""><b>${v.emo} ${v.name}</b><small>${v.sub}</small></button>`).join('');
   $('pkPrev').src = `race/p_${PL.c}_${PL.v}.webp`;
   const st = VEHS[PL.v].st; $('pkStat').innerHTML = ['อัตราเร่ง', 'คล่องตัว', 'เบรก'].map((t, i) => `<span>${t}</span><i style="--w:${st[i] * 20}%"></i>`).join('');
-  document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
-  document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); Music.playTrack(`${PL.c}_${PL.v}`); });
+  document.querySelectorAll('#pkChar button').forEach(b => b.onclick = () => { PL.c = b.dataset.c; snd.whoosh(); renderPick(); Music.playTrack(songOf()); });
+  document.querySelectorAll('#pkVeh button').forEach(b => b.onclick = () => { PL.v = b.dataset.v; snd.whoosh(); renderPick(); Music.playTrack(songOf()); });
 }
 let pausedAt = 0;
 document.addEventListener('visibilitychange', () => {
@@ -677,7 +681,7 @@ document.addEventListener('visibilitychange', () => {
   else if (!S.paused && !$('gate').classList.contains('on')) Music.resumeAll();
 });
 $('resumeBtn').onclick = () => { if (S.tmp) S.tmp.t0 += performance.now() - pausedAt; S.paused = false; $('pause').classList.remove('on'); clock.getDelta(); snd.unlock(); Music.resumeAll(); };
-$('goBtn').onclick = () => { snd.unlock(); Music.playTrack(`${PL.c}_${PL.v}`); renderPick(); $('pick').classList.add('on'); $('pick').scrollTop = 0; };
+$('goBtn').onclick = () => { snd.unlock(); Music.playTrack(songOf()); renderPick(); $('pick').classList.add('on'); $('pick').scrollTop = 0; };
 $('pkBack').onclick = () => { $('pick').classList.remove('on'); Music.playTrack('theme'); };
 $('pkGo').onclick = () => { try { localStorage.setItem('nbmt_race_c', PL.c); localStorage.setItem('nbmt_race_v', PL.v); } catch (e) {} $('pick').classList.remove('on'); start(); };
 
